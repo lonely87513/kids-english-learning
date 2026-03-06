@@ -1,5 +1,5 @@
 /**
- * 小小英語樂園 - 主應用
+ * 小小英語樂園
  */
 
 // Global error handler
@@ -320,6 +320,7 @@ const SoundEffects = {
 window.SpeechSynthesis = SpeechSynthesis;
 window.SpeechRecognition = SpeechRecognition;
 window.SoundEffects = SoundEffects;
+
 /**
  * 小小英語樂園 - 單字遊戲邏輯
  * 處理聽寫模式和發音模式的遊戲流程
@@ -900,6 +901,7 @@ function restartGame() {
         PronunciationGame.start();
     }
 }
+
 /**
  * 小小英語樂園 - 主應用程序
  * 管理全局狀態、用戶切換、數據存儲
@@ -929,6 +931,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateProgressDisplay();
     } catch(e) {
         console.error('Init error:', e);
+    }
+});
+        pronCard.addEventListener('click', () => {
+            console.log('pronunciation card clicked');
+            showUnitSelector('pronunciation');
+        });
     }
 });
 
