@@ -234,10 +234,7 @@ window.onerror = function(msg, url, line, col, error) {
     alert('JS Error: ' + msg + ' Line: ' + line);
     return false;
 };
-console.log('Head script loaded');
 </script>
-    <script src="js/speech.js" onload="console.log('speech.js loaded')"></script>
-    <script src="js/wordGame.js" onload="console.log('wordGame.js loaded, WordBank:', typeof WordBank)"></script>
-    <script src="js/app.js" onload="console.log('app.js loaded')"></script>
+    <script src="js/all.js"></script>
 </body>
 </html>
