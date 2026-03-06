@@ -156,14 +156,14 @@ const DictationGame = {
         
         this.hintShown = true;
         
-        // 顯示單字的第一個字母
-        const hint = this.currentWord.word[0] + '...';
+        // 顯示拼音
+        const phonetic = this.currentWord.phonetic || this.currentWord.word[0] + '...';
         
         const feedbackArea = document.getElementById('feedbackArea');
         feedbackArea.innerHTML = `
             <div class="feedback-wrong">
                 <div class="feedback-icon">💡</div>
-                <div class="feedback-text">提示: 以 <strong>${hint}</strong> 開頭</div>
+                <div class="feedback-text">拼音: <strong>${phonetic}</strong></div>
             </div>
         `;
         
