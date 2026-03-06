@@ -261,6 +261,10 @@ let selectedUnitId = null;
 let currentGameMode = null; // 'dictation' | 'pronunciation'
 
 function showUnitSelector(mode) {
+    console.log('showUnitSelector called, mode:', mode);
+    console.log('WordBank loaded:', WordBank.loaded);
+    console.log('WordBank units:', WordBank.getUnits());
+    
     currentGameMode = mode;
     selectedUnitId = null;
     
