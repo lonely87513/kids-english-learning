@@ -1,4 +1,15 @@
 /**
+ * 小小英語樂園 - 主應用
+ */
+
+// Global error handler
+window.onerror = function(msg, url, line, col, error) {
+    console.error('JS Error: ' + msg + ' Line: ' + line);
+    alert('JS Error: ' + msg + ' Line: ' + line);
+    return false;
+};
+
+/**
  * 小小英語樂園 - 語音功能
  * 處理 TTS 文字轉語音和語音識別
  */
