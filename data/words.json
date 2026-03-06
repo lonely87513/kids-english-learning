@@ -171,6 +171,41 @@
         {"word": "honey", "phonetic": "/ˈhʌn.i/", "meaning": "蜜糖"},
         {"word": "zip", "phonetic": "/zɪp/", "meaning": "拉鍊"}
       ]
+    },
+    {
+      "id": "p3-u6",
+      "name": "鮑小P3 下學期Unit 6",
+      "words": [
+        {"word": "a bowl of noodles", "phonetic": "/ə bəʊl əv ˈnuː.dəlz/", "meaning": "一碗麵"},
+        {"word": "a can of cola", "phonetic": "/ə kæn əv ˈkəʊ.lə/", "meaning": "一罐可樂"},
+        {"word": "a glass of juice", "phonetic": "/ə ɡlɑːs əv dʒuːs/", "meaning": "一杯果汁"},
+        {"word": "a carton of milk", "phonetic": "/ə ˈkɑː.tən əv mɪlk/", "meaning": "一盒牛奶"},
+        {"word": "a cup of tea", "phonetic": "/ə kʌp əv tiː/", "meaning": "一杯茶"},
+        {"word": "a piece of cake", "phonetic": "/ə piːs əv keɪk/", "meaning": "一塊蛋糕"},
+        {"word": "a plate of spaghetti", "phonetic": "/ə pleɪt əv spəˈɡet.i/", "meaning": "一碟意粉"},
+        {"word": "a slice of pizza", "phonetic": "/ə slaɪs əv ˈpiːt.sə/", "meaning": "一塊薄餅"},
+        {"word": "strange", "phonetic": "/streɪndʒ/", "meaning": "奇怪"},
+        {"word": "meal", "phonetic": "/miːl/", "meaning": "一餐"},
+        {"word": "character", "phonetic": "/ˈkær.ək.tər/", "meaning": "角色"},
+        {"word": "scene", "phonetic": "/siːn/", "meaning": "場景"},
+        {"word": "wake up", "phonetic": "/weɪk ʌp/", "meaning": "起身"},
+        {"word": "bench", "phonetic": "/bentʃ/", "meaning": "長椅"},
+        {"word": "sounds good", "phonetic": "/saʊndz ɡʊd/", "meaning": "聽落唔錯"},
+        {"word": "how much", "phonetic": "/haʊ mʌtʃ/", "meaning": "幾多錢"},
+        {"word": "expensive", "phonetic": "/ɪkˈspen.sɪv/", "meaning": "貴"},
+        {"word": "share", "phonetic": "/ʃeər/", "meaning": "分享"},
+        {"word": "worm", "phonetic": "/wɜːm/", "meaning": "蟲"},
+        {"word": "grass", "phonetic": "/ɡrɑːs/", "meaning": "草"},
+        {"word": "shocked", "phonetic": "/ʃɒkt/", "meaning": "震驚"},
+        {"word": "station", "phonetic": "/ˈsteɪ.ʃən/", "meaning": "車站"},
+        {"word": "restaurant", "phonetic": "/ˈres.tə.rɒnt/", "meaning": "餐廳"},
+        {"word": "order", "phonetic": "/ˈɔː.dər/", "meaning": "點餐"},
+        {"word": "coupon", "phonetic": "/ˈkuː.pɒn/", "meaning": "優惠券"},
+        {"word": "free", "phonetic": "/friː/", "meaning": "免費"},
+        {"word": "fast-food shop", "phonetic": "/fɑːst fuːd ʃɒp/", "meaning": "快餐店"},
+        {"word": "details", "phonetic": "/ˈdiː.teɪlz/", "meaning": "詳情"},
+        {"word": "expiry date", "phonetic": "/ɪkˈspaɪə.ri deɪt/", "meaning": "有效期"}
+      ]
     }
   ]
 }
