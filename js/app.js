@@ -13,15 +13,12 @@ const AppState = {
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOM loaded, starting init...');
-    alert('JS loaded! Click the cards to start.');
+    console.log('DOM loaded');
     
     try {
         await WordBank.init();
-        console.log('WordBank init done, units:', WordBank.getUnits());
     } catch(e) {
-        console.error('WordBank init error:', e);
-        alert('題庫載入失敗: ' + e);
+        console.error('WordBank error:', e);
     }
     
     try {
@@ -30,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateProgressDisplay();
     } catch(e) {
         console.error('Init error:', e);
-        alert('Init error: ' + e);
     }
 });
         pronCard.addEventListener('click', () => {

@@ -230,10 +230,9 @@
 <!-- Global error handler -->
 <script>
 window.onerror = function(msg, url, line, col, error) {
-    alert('JS Error: ' + msg + '\nLine: ' + line);
+    console.error('JS Error: ' + msg + ' Line: ' + line);
     return false;
 };
-console.log('JS loaded');
 </script>
     <script src="js/speech.js"></script>
     <script src="js/wordGame.js"></script>

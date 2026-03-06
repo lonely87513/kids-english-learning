@@ -266,6 +266,7 @@ const PronunciationGame = {
     },
     
     // 播放發音
+    playPronunciation() {
         if (this.currentWord) {
             SpeechSynthesis.speakWord(this.currentWord.word)
                 .catch(err => console.error('播放失敗:', err));
