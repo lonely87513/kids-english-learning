@@ -423,10 +423,10 @@ const PronunciationGame = {
         
         this.phoneticShown = true;
         
-        // 從單字數據獲取拼音，或使用簡單的生成邏輯
-        const phonetic = this.currentWord.phonetic || this.generatePhonetic(this.currentWord.word);
+        // 顯示中文意思
+        const meaning = this.currentWord.meaning || '無';
         
-        document.getElementById('phoneticText').textContent = phonetic;
+        document.getElementById('phoneticText').textContent = meaning;
         document.getElementById('phoneticHint').classList.remove('hidden');
     },
     
