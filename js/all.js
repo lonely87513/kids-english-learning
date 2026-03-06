@@ -964,12 +964,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Init error:', e);
     }
 });
-        pronCard.addEventListener('click', () => {
-            console.log('pronunciation card clicked');
-            showUnitSelector('pronunciation');
-        });
-    }
-});
+
 
 // ===== 用戶管理 =====
 function loadUsers() {
