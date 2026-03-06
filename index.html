@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱 小小英語樂園</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 背景裝飾 -->
+        <div class="background-decorations">
+            <span class="cloud cloud-1">☁️</span>
+            <span class="cloud cloud-2">☁️</span>
+            <span class="cloud cloud-3">☁️</span>
+            <span class="star star-1">⭐</span>
+            <span class="star star-2">🌟</span>
+            <span class="star star-3">✨</span>
+        </div>
+
+        <!-- 導航欄 -->
+        <nav class="nav-bar">
+            <div class="logo">🐱 小小英語樂園</div>
+            <div class="user-info">
+                <span class="user-name" id="userName">小朋友</span>
+                <button class="btn btn-small" onclick="showUserSelector()">👤 切換用戶</button>
+            </div>
+        </nav>
+
+        <!-- 主選單 -->
+        <main id="mainMenu" class="menu-screen">
+            <h1 class="title">🎮 選擇遊戲模式</h1>
+            
+            <div class="game-cards">
+                <div class="game-card" onclick="startDictationGame()">
+                    <div class="card-icon">✍️</div>
+                    <h2>聽寫模式</h2>
+                    <p>聽發音，拼寫單字</p>
+                    <span class="badge">⭐ 熱門</span>
+                </div>
+                
+                <div class="game-card" onclick="startPronunciationGame()">
+                    <div class="card-icon">🎤</div>
+                    <h2>發音模式</h2>
+                    <p>聽發音，試試看讀出來</p>
+                    <span class="badge new">NEW</span>
+                </div>
+                
+                <div class="game-card disabled">
+                    <div class="card-icon">📖</div>
+                    <h2>文法樂園</h2>
+                    <p>即將推出敬請期待</p>
+                </div>
+                
+                <div class="game-card disabled">
+                    <div class="card-icon">📚</div>
+                    <h2>閱讀理解</h2>
+                    <p>即將推出敬請期待</p>
+                </div>
+            </div>
+
+            <!-- 進度顯示 -->
+            <div class="progress-section">
+                <h3>📊 我的學習進度</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-number" id="totalWordsLearned">0</span>
+                        <span class="stat-label">已學單字</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="accuracyRate">0%</span>
+                        <span class="stat-label">正確率</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="totalPractice">0</span>
+                        <span class="stat-label">練習次數</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部按鈕 -->
+            <div class="bottom-actions">
+                <button class="btn btn-secondary" onclick="exportData()">📥 導出學習報告</button>
+                <button class="btn btn-secondary" onclick="toggleBackgroundMusic()">🎵 背景音樂</button>
+            </div>
+        </main>
+
+        <!-- 遊戲畫面：聽寫模式 -->
+        <section id="dictationGame" class="game-screen hidden">
+            <button class="btn btn-back" onclick="backToMenu()">⬅️ 返回</button>
+            
+            <div class="game-header">
+                <h2>✍️ 聽寫模式</h2>
+                <div class="game-stats">
+                    <span>題目: <strong id="currentQuestion">1</strong>/<strong id="totalQuestions">10</strong></span>
+                    <span>得分: <strong id="score">0</strong></span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="word-display" id="wordDisplay">
+                    <button class="btn-play-sound" onclick="playCurrentWord()">
+                        🔊 播放讀音
+                    </button>
+                    <p class="hint-text">聽一聽，然後拼寫出這個單字吧！</p>
+                </div>
+
+                <div class="answer-section">
+                    <input type="text" 
+                           id="answerInput" 
+                           class="answer-input" 
+                           placeholder="輸入你的答案..."
+                           autocomplete="off"
+                           onkeypress="handleAnswerKeypress(event)">
+                    <button class="btn btn-primary btn-large" onclick="submitAnswer()">
+                        ✅ 提交答案
+                    </button>
+                </div>
+
+                <div class="feedback-area" id="feedbackArea"></div>
+            </div>
+
+            <!-- 鍵盤輔助 -->
+            <div class="keyboard-helper">
+                <button class="key-btn" onclick="playCurrentWord()">🔊 聽發音</button>
+                <button class="key-btn" onclick="showHint()">💡 提示</button>
+                <button class="key-btn" onclick="skipWord()">⏭️ 跳過</button>
+            </div>
+        </section>
+
+        <!-- 遊戲畫面：發音模式 -->
+        <section id="pronunciationGame" class="game-screen hidden">
+            <button class="btn btn-back" onclick="backToMenu()">⬅️ 返回</button>
+            
+            <div class="game-header">
+                <h2>🎤 發音模式</h2>
+                <div class="game-stats">
+                    <span>題目: <strong id="pronCurrentQuestion">1</strong>/<strong id="pronTotalQuestions">10</strong></span>
+                    <span>得分: <strong id="pronScore">0</strong></span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="word-card">
+                    <span class="word-text" id="pronWordText">apple</span>
+                    <button class="btn-play-sound" onclick="playPronunciation()">
+                        🔊 播放標準發音
+                    </button>
+                </div>
+
+                <div class="pronunciation-controls">
+                    <button class="btn btn-record" id="recordBtn" onclick="toggleRecording()">
+                        🎤 按住錄音
+                    </button>
+                    <button class="btn btn-secondary" onclick="showPhonetic()">
+                        📖 顯示拼音
+                    </button>
+                </div>
+
+                <div class="phonetic-hint hidden" id="phoneticHint">
+                    <span class="phonetic-text">/ˈæp.əl/</span>
+                </div>
+
+                <div class="feedback-area" id="pronFeedbackArea"></div>
+            </div>
+        </section>
+
+        <!-- 結果畫面 -->
+        <section id="resultScreen" class="result-screen hidden">
+            <div class="result-content">
+                <h2>🎉 完成練習！</h2>
+                <div class="result-stats">
+                    <div class="result-icon" id="resultEmoji">🌟</div>
+                    <p class="result-message" id="resultMessage">你做得好棒！</p>
+                    
+                    <div class="result-details">
+                        <div class="result-item">
+                            <span>正確題數</span>
+                            <strong id="correctCount">0</strong>
+                        </div>
+                        <div class="result-item">
+                            <span>錯誤題數</span>
+                            <strong id="wrongCount">0</strong>
+                        </div>
+                        <div class="result-item">
+                            <span>正確率</span>
+                            <strong id="resultAccuracy">0%</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-actions">
+                    <button class="btn btn-primary" onclick="restartGame()">🔄 再玩一次</button>
+                    <button class="btn btn-secondary" onclick="backToMenu()">🏠 返回主選單</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 用戶選擇彈窗 -->
+        <div id="userSelectorModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>👤 選擇用戶</h3>
+                <input type="text" id="newUserName" class="input" placeholder="輸入你的名字">
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="createUser()">✅ 確定</button>
+                    <button class="btn btn-secondary" onclick="closeModal('userSelectorModal')">❌ 取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/speech.js"></script>
+    <script src="js/wordGame.js"></script>
+</body>
+</html>

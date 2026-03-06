@@ -1,0 +1,556 @@
+/**
+ * 小小英語樂園 - 單字遊戲邏輯
+ * 處理聽寫模式和發音模式的遊戲流程
+ */
+
+// ===== 遊戲配置 =====
+const GameConfig = {
+    questionsPerGame: 10,
+    hintPenalty: true, // 使用提示是否扣分
+    showAnswerOnWrong: true // 錯誤時是否顯示正確答案
+};
+
+// ===== 聽寫模式遊戲 =====
+const DictationGame = {
+    currentWordIndex: 0,
+    currentWord: null,
+    score: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    usedWords: [],
+    questionCount: 0,
+    
+    // 開始遊戲
+    start() {
+        this.reset();
+        AppState.currentMode = 'dictation';
+        this.loadQuestion();
+        showScreen('dictationGame');
+        
+        // 更新題目計數
+        document.getElementById('totalQuestions').textContent = GameConfig.questionsPerGame;
+        
+        // 自動播放第一個單字的讀音
+        setTimeout(() => this.playCurrentWord(), 500);
+    },
+    
+    // 重置遊戲狀態
+    reset() {
+        this.currentWordIndex = 0;
+        this.currentWord = null;
+        this.score = 0;
+        this.correctCount = 0;
+        this.wrongCount = 0;
+        this.usedWords = [];
+        this.questionCount = 0;
+        
+        // 重置顯示
+        document.getElementById('score').textContent = '0';
+        document.getElementById('currentQuestion').textContent = '1';
+        document.getElementById('answerInput').value = '';
+        document.getElementById('feedbackArea').innerHTML = '';
+    },
+    
+    // 加載題目
+    loadQuestion() {
+        // 獲取隨機單字
+        this.currentWord = WordBank.getRandomWord(this.usedWords);
+        this.usedWords.push(this.currentWord.word);
+        
+        this.questionCount++;
+        document.getElementById('currentQuestion').textContent = this.questionCount;
+        document.getElementById('answerInput').value = '';
+        document.getElementById('answerInput').focus();
+        document.getElementById('feedbackArea').innerHTML = '';
+        
+        // 清空提示狀態
+        this.hintShown = false;
+    },
+    
+    // 播放當前單字讀音
+    playCurrentWord() {
+        if (this.currentWord) {
+            SpeechSynthesis.speakWord(this.currentWord.word)
+                .catch(err => console.error('播放失敗:', err));
+        }
+    },
+    
+    // 提交答案
+    submitAnswer() {
+        const input = document.getElementById('answerInput');
+        const answer = input.value.trim().toLowerCase();
+        
+        if (!answer || !this.currentWord) return;
+        
+        const isCorrect = answer === this.currentWord.word.toLowerCase();
+        
+        // 記錄答案
+        recordAnswer(this.currentWord.word, isCorrect);
+        
+        if (isCorrect) {
+            this.handleCorrect();
+        } else {
+            this.handleWrong(answer);
+        }
+    },
+    
+    // 處理正確答案
+    handleCorrect() {
+        this.correctCount++;
+        this.score += 10;
+        
+        document.getElementById('score').textContent = this.score;
+        
+        // 顯示正確反饋
+        const feedbackArea = document.getElementById('feedbackArea');
+        feedbackArea.innerHTML = `
+            <div class="feedback-correct">
+                <div class="feedback-icon">🎉</div>
+                <div class="feedback-text">太棒了！</div>
+            </div>
+        `;
+        
+        // 播放成功音效
+        SoundEffects.playSuccess();
+        
+        // 延遲進入下一題
+        setTimeout(() => this.nextQuestion(), 1500);
+    },
+    
+    // 處理錯誤答案
+    handleWrong(userAnswer) {
+        this.wrongCount++;
+        
+        // 播放錯誤音效
+        SoundEffects.playError();
+        
+        // 顯示錯誤反饋
+        const feedbackArea = document.getElementById('feedbackArea');
+        let feedbackHTML = `
+            <div class="feedback-wrong">
+                <div class="feedback-icon">😅</div>
+                <div class="feedback-text">
+        `;
+        
+        if (GameConfig.showAnswerOnWrong) {
+            feedbackHTML += `正確答案是: <strong>${this.currentWord.word}</strong>`;
+        } else {
+            feedbackHTML += `再試一次！`;
+        }
+        
+        feedbackHTML += `</div></div>`;
+        feedbackArea.innerHTML = feedbackHTML;
+        
+        // 朗讀正確答案
+        setTimeout(() => {
+            SpeechSynthesis.speakWord(this.currentWord.word);
+        }, 500);
+        
+        // 延遲進入下一題
+        setTimeout(() => this.nextQuestion(), 2500);
+    },
+    
+    // 顯示提示
+    showHint() {
+        if (this.hintShown) return;
+        
+        this.hintShown = true;
+        
+        // 顯示單字的第一個字母
+        const hint = this.currentWord.word[0] + '...';
+        
+        const feedbackArea = document.getElementById('feedbackArea');
+        feedbackArea.innerHTML = `
+            <div class="feedback-wrong">
+                <div class="feedback-icon">💡</div>
+                <div class="feedback-text">提示: 以 <strong>${hint}</strong> 開頭</div>
+            </div>
+        `;
+        
+        // 扣分
+        this.score = Math.max(0, this.score - 2);
+        document.getElementById('score').textContent = this.score;
+    },
+    
+    // 跳過單字
+    skipWord() {
+        this.wrongCount++;
+        recordAnswer(this.currentWord.word, false);
+        
+        const feedbackArea = document.getElementById('feedbackArea');
+        feedbackArea.innerHTML = `
+            <div class="feedback-wrong">
+                <div class="feedback-icon">⏭️</div>
+                <div class="feedback-text">跳過了，正確答案是: <strong>${this.currentWord.word}</strong></div>
+            </div>
+        `;
+        
+        setTimeout(() => this.nextQuestion(), 1500);
+    },
+    
+    // 進入下一題
+    nextQuestion() {
+        if (this.questionCount >= GameConfig.questionsPerGame) {
+            this.endGame();
+        } else {
+            this.loadQuestion();
+        }
+    },
+    
+    // 結束遊戲
+    endGame() {
+        showGameResult(this.correctCount, this.wrongCount);
+    }
+};
+
+// ===== 發音模式遊戲 =====
+const PronunciationGame = {
+    currentWordIndex: 0,
+    currentWord: null,
+    score: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    usedWords: [],
+    questionCount: 0,
+    isRecording: false,
+    phoneticShown: false,
+    
+    // 開始遊戲
+    start() {
+        this.reset();
+        AppState.currentMode = 'pronunciation';
+        this.loadQuestion();
+        showScreen('pronunciationGame');
+        
+        // 更新題目計數
+        document.getElementById('pronTotalQuestions').textContent = GameConfig.questionsPerGame;
+        
+        // 自動播放第一個單字的讀音
+        setTimeout(() => this.playPronunciation(), 500);
+    },
+    
+    // 重置遊戲狀態
+    reset() {
+        this.currentWordIndex = 0;
+        this.currentWord = null;
+        this.score = 0;
+        this.correctCount = 0;
+        this.wrongCount = 0;
+        this.usedWords = [];
+        this.questionCount = 0;
+        this.isRecording = false;
+        this.phoneticShown = false;
+        
+        // 重置顯示
+        document.getElementById('pronScore').textContent = '0';
+        document.getElementById('pronCurrentQuestion').textContent = '1';
+        document.getElementById('pronFeedbackArea').innerHTML = '';
+        document.getElementById('phoneticHint').classList.add('hidden');
+        document.getElementById('recordBtn').classList.remove('recording');
+        this.updateRecordButton();
+    },
+    
+    // 加載題目
+    loadQuestion() {
+        // 獲取隨機單字
+        this.currentWord = WordBank.getRandomWord(this.usedWords);
+        this.usedWords.push(this.currentWord.word);
+        
+        this.questionCount++;
+        this.phoneticShown = false;
+        
+        document.getElementById('pronCurrentQuestion').textContent = this.questionCount;
+        document.getElementById('pronWordText').textContent = this.currentWord.word;
+        document.getElementById('pronFeedbackArea').innerHTML = '';
+        document.getElementById('phoneticHint').classList.add('hidden');
+    },
+    
+    // 播放發音
+        if (this.currentWord) {
+            SpeechSynthesis.speakWord(this.currentWord.word)
+                .catch(err => console.error('播放失敗:', err));
+        }
+    },
+    
+    // 切換錄音狀態
+    toggleRecording() {
+        if (this.isRecording) {
+            this.stopRecording();
+        } else {
+            this.startRecording();
+        }
+    },
+    
+    // 開始錄音
+    startRecording() {
+        if (!SpeechRecognition.isSupported()) {
+            alert('抱歉，您的瀏覽器不支持語音識別功能');
+            return;
+        }
+        
+        this.isRecording = true;
+        this.updateRecordButton();
+        
+        // 開始識別
+        SpeechRecognition.start({
+            onResult: (transcript, isFinal) => {
+                if (isFinal) {
+                    this.processRecordingResult(transcript);
+                }
+            }
+        }).catch(err => {
+            console.error('錄音失敗:', err);
+            this.isRecording = false;
+            this.updateRecordButton();
+        });
+    },
+    
+    // 停止錄音
+    stopRecording() {
+        SpeechRecognition.stop();
+        this.isRecording = false;
+        this.updateRecordButton();
+    },
+    
+    // 更新錄音按鈕
+    updateRecordButton() {
+        const btn = document.getElementById('recordBtn');
+        if (this.isRecording) {
+            btn.textContent = '⏹️ 放開停止';
+            btn.classList.add('recording');
+        } else {
+            btn.textContent = '🎤 按住錄音';
+            btn.classList.remove('recording');
+        }
+    },
+    
+    // 處理錄音結果
+    processRecordingResult(transcript) {
+        if (!this.currentWord) return;
+        
+        const result = SpeechRecognition.comparePronunciation(
+            transcript, 
+            this.currentWord.word
+        );
+        
+        // 記錄答案
+        recordAnswer(this.currentWord.word, result.isCorrect);
+        
+        // 顯示結果
+        const feedbackArea = document.getElementById('pronFeedbackArea');
+        
+        if (result.isCorrect) {
+            this.correctCount++;
+            this.score += 10;
+            document.getElementById('pronScore').textContent = this.score;
+            
+            feedbackArea.innerHTML = `
+                <div class="feedback-correct">
+                    <div class="feedback-icon">🎉</div>
+                    <div class="feedback-text">${result.feedback} 你說的是: "${transcript}"</div>
+                </div>
+            `;
+            
+            SoundEffects.playSuccess();
+        } else {
+            this.wrongCount++;
+            
+            feedbackArea.innerHTML = `
+                <div class="feedback-wrong">
+                    <div class="feedback-icon">😅</div>
+                    <div class="feedback-text">${result.feedback} 你說的是: "${transcript}"</div>
+                </div>
+            `;
+            
+            SoundEffects.playError();
+            
+            // 朗讀正確答案
+            setTimeout(() => {
+                SpeechSynthesis.speakWord(this.currentWord.word);
+            }, 1000);
+        }
+        
+        // 延遲進入下一題
+        setTimeout(() => this.nextQuestion(), 2500);
+    },
+    
+    // 顯示拼音提示
+    showPhonetic() {
+        if (this.phoneticShown) return;
+        
+        this.phoneticShown = true;
+        
+        // 從單字數據獲取拼音，或使用簡單的生成邏輯
+        const phonetic = this.currentWord.phonetic || this.generatePhonetic(this.currentWord.word);
+        
+        document.getElementById('phoneticText').textContent = phonetic;
+        document.getElementById('phoneticHint').classList.remove('hidden');
+    },
+    
+    // 簡單的拼音生成（實際應該從數據庫獲取）
+    generatePhonetic(word) {
+        // 這是一個簡單的實現，實際應該使用 KK 音標數據庫
+        // 這裡返回一個模擬的格式
+        return `/...${word.slice(0, 2)}.../`;
+    },
+    
+    // 進入下一題
+    nextQuestion() {
+        if (this.questionCount >= GameConfig.questionsPerGame) {
+            this.endGame();
+        } else {
+            this.loadQuestion();
+            // 自動播放下一個單字
+            setTimeout(() => this.playPronunciation(), 500);
+        }
+    },
+    
+    // 結束遊戲
+    endGame() {
+        showGameResult(this.correctCount, this.wrongCount);
+    }
+};
+
+// ===== 單字題庫 =====
+const WordBank = {
+    words: [
+        // 基礎單字
+        { word: 'apple', phonetic: '/ˈæp.əl/', category: 'fruit' },
+        { word: 'banana', phonetic: '/bəˈnæn.ə/', category: 'fruit' },
+        { word: 'cat', phonetic: '/kæt/', category: 'animal' },
+        { word: 'dog', phonetic: '/dɔːɡ/', category: 'animal' },
+        { word: 'elephant', phonetic: '/ˈel.ɪ.fənt/', category: 'animal' },
+        { word: 'fish', phonetic: '/fɪʃ/', category: 'animal' },
+        { word: 'grape', phonetic: '/ɡreɪp/', category: 'fruit' },
+        { word: 'house', phonetic: '/haʊs/', category: 'place' },
+        { word: 'ice', phonetic: '/aɪs/', category: 'nature' },
+        { word: 'juice', phonetic: '/dʒuːs/', category: 'drink' },
+        { word: 'kite', phonetic: '/kaɪt/', category: 'toy' },
+        { word: 'lion', phonetic: '/ˈlaɪ.ən/', category: 'animal' },
+        { word: 'moon', phonetic: '/muːn/', category: 'nature' },
+        { word: 'nest', phonetic: '/nest/', category: 'animal' },
+        { word: 'orange', phonetic: '/ˈɔːr.ɪndʒ/', category: 'fruit' },
+        { word: 'pig', phonetic: '/pɪɡ/', category: 'animal' },
+        { word: 'queen', phonetic: '/kwiːn/', category: 'person' },
+        { word: 'rabbit', phonetic: '/ˈræb.ɪt/', category: 'animal' },
+        { word: 'sun', phonetic: '/sʌn/', category: 'nature' },
+        { word: 'tree', phonetic: '/triː/', category: 'nature' },
+        { word: 'umbrella', phonetic: '/ʌmˈbrel.ə/', category: 'object' },
+        { word: 'violin', phonetic: '/ˌvaɪ.əˈlɪn/', category: 'music' },
+        { word: 'water', phonetic: '/ˈwɔː.tər/', category: 'nature' },
+        { word: 'xylophone', phonetic: '/ˈzaɪ.lə.fəʊn/', category: 'music' },
+        { word: 'yellow', phonetic: '/ˈjel.əʊ/', category: 'color' },
+        { word: 'zebra', phonetic: '/ˈziː.brə/', category: 'animal' },
+        // 更多常見單字
+        { word: 'ball', phonetic: '/bɔːl/', category: 'toy' },
+        { word: 'book', phonetic: '/bʊk/', category: 'object' },
+        { word: 'chair', phonetic: '/tʃeər/', category: 'furniture' },
+        { word: 'desk', phonetic: '/desk/', category: 'furniture' },
+        { word: 'egg', phonetic: '/eɡ/', category: 'food' },
+        { word: 'flower', phonetic: '/ˈflaʊ.ər/', category: 'nature' },
+        { word: 'girl', phonetic: '/ɡɜːl/', category: 'person' },
+        { word: 'hand', phonetic: '/hænd/', category: 'body' },
+        { word: 'bird', phonetic: '/bɜːd/', category: 'animal' },
+        { word: 'chair', phonetic: '/tʃeər/', category: 'furniture' },
+        { word: 'duck', phonetic: '/dʌk/', category: 'animal' },
+        { word: 'eye', phonetic: '/aɪ/', category: 'body' },
+        { word: 'foot', phonetic: '/fʊt/', category: 'body' },
+        { word: 'gun', phonetic: '/ɡʌn/', category: 'object' },
+        { word: 'hat', phonetic: '/hæt/', category: 'object' },
+        { word: 'igloo', phonetic: '/ˈɪɡ.luː/', category: 'place' },
+        { word: 'jam', phonetic: '/dʒæm/', category: 'food' },
+        { word: 'key', phonetic: '/kiː/', category: 'object' },
+        { word: 'lamp', phonetic: '/læmp/', category: 'object' },
+        { word: 'milk', phonetic: '/mɪlk/', category: 'drink' }
+    ],
+    
+    // 獲取隨機單字
+    getRandomWord(excludeWords = []) {
+        const availableWords = this.words.filter(w => !excludeWords.includes(w.word));
+        
+        if (availableWords.length === 0) {
+            // 如果所有單字都用過了，重新開始
+            return this.words[Math.floor(Math.random() * this.words.length)];
+        }
+        
+        return availableWords[Math.floor(Math.random() * availableWords.length)];
+    },
+    
+    // 獲取特定類別的單字
+    getWordsByCategory(category) {
+        return this.words.filter(w => w.category === category);
+    }
+};
+
+// ===== 全局函數 =====
+
+// 開始聽寫遊戲
+function startDictationGame() {
+    DictationGame.start();
+}
+
+// 開始發音遊戲
+function startPronunciationGame() {
+    PronunciationGame.start();
+}
+
+// 播放當前單字
+function playCurrentWord() {
+    if (AppState.currentMode === 'dictation') {
+        DictationGame.playCurrentWord();
+    } else if (AppState.currentMode === 'pronunciation') {
+        PronunciationGame.playPronunciation();
+    }
+}
+
+// 提交答案
+function submitAnswer() {
+    if (AppState.currentMode === 'dictation') {
+        DictationGame.submitAnswer();
+    }
+}
+
+// 處理Enter鍵
+function handleAnswerKeypress(event) {
+    if (event.key === 'Enter') {
+        submitAnswer();
+    }
+}
+
+// 顯示提示
+function showHint() {
+    if (AppState.currentMode === 'dictation') {
+        DictationGame.showHint();
+    }
+}
+
+// 跳過
+function skipWord() {
+    if (AppState.currentMode === 'dictation') {
+        DictationGame.skipWord();
+    }
+}
+
+// 朗讀發音
+function playPronunciation() {
+    PronunciationGame.playPronunciation();
+}
+
+// 切換錄音
+function toggleRecording() {
+    PronunciationGame.toggleRecording();
+}
+
+// 顯示拼音
+function showPhonetic() {
+    PronunciationGame.showPhonetic();
+}
+
+// 重新開始遊戲
+function restartGame() {
+    if (AppState.currentMode === 'dictation') {
+        DictationGame.start();
+    } else if (AppState.currentMode === 'pronunciation') {
+        PronunciationGame.start();
+    }
+}
