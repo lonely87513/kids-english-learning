@@ -586,6 +586,15 @@ function skipWord() {
     }
 }
 
+// 下一題
+function nextQuestion() {
+    if (AppState.currentMode === 'dictation') {
+        DictationGame.nextQuestion();
+    } else if (AppState.currentMode === 'pronunciation') {
+        PronunciationGame.nextQuestion();
+    }
+}
+
 // 朗讀發音
 function playPronunciation() {
     PronunciationGame.playPronunciation();
