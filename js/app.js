@@ -18,6 +18,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadCurrentUser();
     updateProgressDisplay();
     initBackgroundMusic();
+    
+    // Mobile touch events
+    document.getElementById('dictationCard').addEventListener('click', () => showUnitSelector('dictation'));
+    document.getElementById('dictationCard').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        showUnitSelector('dictation');
+    });
+    
+    document.getElementById('pronunciationCard').addEventListener('click', () => showUnitSelector('pronunciation'));
+    document.getElementById('pronunciationCard').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        showUnitSelector('pronunciation');
+    });
 });
 
 // ===== 用戶管理 =====
