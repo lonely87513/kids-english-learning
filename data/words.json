@@ -116,7 +116,29 @@
     {
       "id": "p3-u4",
       "name": "鮑小P3 下學期Unit 4",
-      "words": []
+      "words": [
+        {"word": "blow soap bubbles", "phonetic": "/bləʊ səʊp ˈbʌb.əlz/", "meaning": "吹泡泡"},
+        {"word": "chase butterflies", "phonetic": "/tʃeɪs ˈbʌt.ə.flaɪz/", "meaning": "追蝴蝶"},
+        {"word": "eat marshmallows", "phonetic": "/iːt ˈmɑːʃ.mæl.əʊz/", "meaning": "食棉花糖"},
+        {"word": "fly a kite", "phonetic": "/flaɪ ə kaɪt/", "meaning": "放風箏"},
+        {"word": "light a fire", "phonetic": "/laɪt ə ˈfaɪər/", "meaning": "生火"},
+        {"word": "play badminton", "phonetic": "/pleɪ ˈbæd.mɪn.tən/", "meaning": "打羽毛球"},
+        {"word": "play hide-and-seek", "phonetic": "/pleɪ haɪd ənd siːk/", "meaning": "捉迷藏"},
+        {"word": "ride a bicycle", "phonetic": "/raɪd ə ˈbaɪ.sɪ.kəl/", "meaning": "踩單車"},
+        {"word": "weekend", "phonetic": "/ˈwiːk.end/", "meaning": "週末"},
+        {"word": "barbecue pit", "phonetic": "/ˈbɑː.bɪ.kjuː pɪt/", "meaning": "燒烤爐"},
+        {"word": "strange", "phonetic": "/streɪndʒ/", "meaning": "奇怪"},
+        {"word": "land", "phonetic": "/lænd/", "meaning": "登陸"},
+        {"word": "pack", "phonetic": "/pæk/", "meaning": "打包"},
+        {"word": "playground", "phonetic": "/ˈpleɪ.ɡraʊnd/", "meaning": "遊樂場"},
+        {"word": "photo", "phonetic": "/ˈfəʊ.təʊ/", "meaning": "相片"},
+        {"word": "caption", "phonetic": "/ˈkæp.ʃən/", "meaning": "說明"},
+        {"word": "country park", "phonetic": "/ˈkʌn.tri pɑːk/", "meaning": "郊野公園"},
+        {"word": "arrive", "phonetic": "/əˈraɪv/", "meaning": "到達"},
+        {"word": "shouting", "phonetic": "/ˈʃaʊ.tɪŋ/", "meaning": "喊叫"},
+        {"word": "bored", "phonetic": "/bɔːd/", "meaning": "納悶"},
+        {"word": "bee sting", "phonetic": "/biː stɪŋ/", "meaning": "蜜蜂蟄"}
+      ]
     },
     {
       "id": "p3-u5",
