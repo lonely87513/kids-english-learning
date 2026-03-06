@@ -14,9 +14,10 @@ const AppState = {
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM loaded, starting init...');
+    alert('JS loaded! Click the cards to start.');
     
     try {
-        await WordBank.init(); // 載入題庫
+        await WordBank.init();
         console.log('WordBank init done, units:', WordBank.getUnits());
     } catch(e) {
         console.error('WordBank init error:', e);
@@ -27,27 +28,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadUsers();
         loadCurrentUser();
         updateProgressDisplay();
-        initBackgroundMusic();
     } catch(e) {
         console.error('Init error:', e);
         alert('Init error: ' + e);
     }
-    
-    // Mobile touch events - 確保DOM元素存在
-    const dictCard = document.getElementById('dictationCard');
-    const pronCard = document.getElementById('pronunciationCard');
-    
-    console.log('dictCard:', dictCard);
-    console.log('pronCard:', pronCard);
-    
-    if (dictCard) {
-        dictCard.addEventListener('click', () => {
-            console.log('dictation card clicked');
-            showUnitSelector('dictation');
-        });
-    }
-    
-    if (pronCard) {
+});
         pronCard.addEventListener('click', () => {
             console.log('pronunciation card clicked');
             showUnitSelector('pronunciation');
