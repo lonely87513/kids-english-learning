@@ -1,21 +1,42 @@
 /**
- * 小小英語樂園
- */
-
-// Global error handler
-window.onerror = function(msg, url, line, col, error) {
-    console.error('JS Error: ' + msg + ' Line: ' + line);
-    alert('JS Error: ' + msg + ' Line: ' + line);
-    return false;
-};
-
-/**
  * 小小英語樂園 - 語音功能
  * 處理 TTS 文字轉語音和語音識別
  */
 
 // ===== 語音合成 (TTS) =====
 const SpeechSynthesis = {
+    voices: [],
+    voicesLoaded: false,
+    
+    // 初始化聲音
+    init() {
+        if (this.voicesLoaded) return Promise.resolve();
+        
+        return new Promise((resolve) => {
+            const loadVoices = () => {
+                this.voices = window.speechSynthesis.getVoices();
+                this.voicesLoaded = true;
+                console.log('Voices loaded:', this.voices.length);
+                resolve();
+            };
+            
+            // 有時 voices 需要時間加載
+            if (this.voices.length > 0) {
+                loadVoices();
+            } else {
+                window.speechSynthesis.onvoiceschanged = loadVoices;
+                //  超時後就算
+                setTimeout(() => {
+                    if (!this.voicesLoaded) {
+                        this.voices = window.speechSynthesis.getVoices();
+                        this.voicesLoaded = true;
+                        resolve();
+                    }
+                }, 1000);
+            }
+        });
+    },
+    
     // 檢查瀏覽器支持
     isSupported() {
         return 'speechSynthesis' in window;
@@ -23,21 +44,31 @@ const SpeechSynthesis = {
     
     // 獲取可用聲音
     getVoices() {
-        return window.speechSynthesis.getVoices();
+        return this.voices;
     },
     
     // 獲取英語聲音
     getEnglishVoice() {
         const voices = this.getVoices();
+        if (voices.length === 0) {
+            console.warn('No voices available');
+            return null;
+        }
         // 優先選擇美國英語女性聲音
         let voice = voices.find(v => v.lang === 'en-US' && v.name.includes('Female'));
+        if (!voice) voice = voices.find(v => v.lang.startsWith('en-') && v.name.includes('Female'));
         if (!voice) voice = voices.find(v => v.lang.startsWith('en-'));
+        if (!voice) voice = voices.find(v => v.lang === 'en-US');
         if (!voice) voice = voices[0];
+        console.log('Selected voice:', voice?.name, voice?.lang);
         return voice;
     },
     
     // 朗讀文本
-    speak(text, options = {}) {
+    async speak(text, options = {}) {
+        // 确保voices已加载
+        await this.init();
+        
         return new Promise((resolve, reject) => {
             if (!this.isSupported()) {
                 reject(new Error('瀏覽器不支持語音合成'));
