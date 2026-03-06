@@ -13,27 +13,11 @@ const AppState = {
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOM loaded');
-    
-    try {
-        await WordBank.init();
-    } catch(e) {
-        console.error('WordBank error:', e);
-    }
-    
-    try {
-        loadUsers();
-        loadCurrentUser();
-        updateProgressDisplay();
-    } catch(e) {
-        console.error('Init error:', e);
-    }
-});
-        pronCard.addEventListener('click', () => {
-            console.log('pronunciation card clicked');
-            showUnitSelector('pronunciation');
-        });
-    }
+    await WordBank.init(); // 載入題庫
+    loadUsers();
+    loadCurrentUser();
+    updateProgressDisplay();
+    initBackgroundMusic();
 });
 
 // ===== 用戶管理 =====
@@ -277,10 +261,6 @@ let selectedUnitId = null;
 let currentGameMode = null; // 'dictation' | 'pronunciation'
 
 function showUnitSelector(mode) {
-    console.log('showUnitSelector called, mode:', mode);
-    console.log('WordBank loaded:', WordBank.loaded);
-    console.log('WordBank units:', WordBank.getUnits());
-    
     currentGameMode = mode;
     selectedUnitId = null;
     

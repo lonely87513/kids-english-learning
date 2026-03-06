@@ -266,7 +266,6 @@ const PronunciationGame = {
     },
     
     // 播放發音
-    playPronunciation() {
         if (this.currentWord) {
             SpeechSynthesis.speakWord(this.currentWord.word)
                 .catch(err => console.error('播放失敗:', err));
@@ -423,28 +422,21 @@ const WordBank = {
         if (this.loaded) return;
         
         try {
-            console.log('正在載入題庫...');
             const response = await fetch('data/words.json');
             if (response.ok) {
                 const data = await response.json();
                 this.units = data.units || [];
                 this.loaded = true;
                 console.log('題庫已從JSON載入:', this.units.length, '個Unit');
-                if (this.units.length > 0) {
-                    console.log('第一個Unit:', this.units[0].name, '- 單字數:', this.units[0].words?.length || 0);
-                }
                 return;
-            } else {
-                console.log('JSON載入失敗，使用內置題庫');
             }
         } catch (e) {
-            console.log('無法載入JSON，使用內置題庫', e);
+            console.log('無法載入JSON，使用內置題庫');
         }
         
         // 內置題庫（後備）
         this.units = this.getDefaultUnits();
         this.loaded = true;
-        console.log('使用內置題庫:', this.units.length, '個Unit');
     },
     
     // 內置題庫
@@ -460,10 +452,6 @@ const WordBank = {
     
     // 獲取所有Unit列表
     getUnits() {
-        // 如果units為空，使用默認units
-        if (!this.units || this.units.length === 0) {
-            return this.getDefaultUnits();
-        }
         return this.units;
     },
     

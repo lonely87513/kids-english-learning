@@ -139,12 +139,6 @@ body {
     box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-}
-
-.game-card:active {
-    transform: scale(0.98);
 }
 
 .game-card::before {

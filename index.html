@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐱 小小英語樂園</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/all.js" defer></script>
 </head>
 <body>
     <div class="app-container">
@@ -33,14 +32,14 @@
             <h1 class="title">🎮 選擇遊戲模式</h1>
             
             <div class="game-cards">
-                <div class="game-card" onclick="console.log('dictation clicked'); showUnitSelector('dictation');">
+                <div class="game-card" onclick="showUnitSelector('dictation')">
                     <div class="card-icon">✍️</div>
                     <h2>聽寫模式</h2>
                     <p>聽發音，拼寫單字</p>
                     <span class="badge">⭐ 熱門</span>
                 </div>
                 
-                <div class="game-card" onclick="console.log('pronunciation clicked'); showUnitSelector('pronunciation');">
+                <div class="game-card" onclick="showUnitSelector('pronunciation')">
                     <div class="card-icon">🎤</div>
                     <h2>發音模式</h2>
                     <p>聽發音，試試看讀出來</p>
@@ -227,5 +226,9 @@
             </div>
         </div>
     </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/speech.js"></script>
+    <script src="js/wordGame.js"></script>
 </body>
 </html>
