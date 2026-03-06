@@ -7,6 +7,9 @@
     --error-color: #FF8A80;
     --text-color: #2C3E50;
     --bg-color: #E8F6F3;
+    --bg-gradient-start: #E8F6F3;
+    --bg-gradient-mid: #FEF9E7;
+    --bg-gradient-end: #FCE4EC;
     --card-bg: #FFFFFF;
     --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     --border-radius: 20px;
@@ -21,6 +24,9 @@
     --error-color: #EF9A9A;
     --text-color: #ECEFF1;
     --bg-color: #1a1a2e;
+    --bg-gradient-start: #1a1a2e;
+    --bg-gradient-mid: #16213e;
+    --bg-gradient-end: #0f3460;
     --card-bg: #2d2d44;
     --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
@@ -33,10 +39,17 @@
 
 body {
     font-family: 'Comic Sans MS', 'Microsoft YaHei', cursive, sans-serif;
-    background: linear-gradient(135deg, #E8F6F3 0%, #FEF9E7 50%, #FCE4EC 100%);
+    background: linear-gradient(135deg, var(--bg-gradient-start, #E8F6F3) 0%, var(--bg-gradient-mid, #FEF9E7) 50%, var(--bg-gradient-end, #FCE4EC) 100%);
     min-height: 100vh;
     color: var(--text-color);
     overflow-x: hidden;
+    transition: background 0.3s ease;
+}
+
+[data-theme="dark"] {
+    --bg-gradient-start: #1a1a2e;
+    --bg-gradient-mid: #16213e;
+    --bg-gradient-end: #0f3460;
 }
 
 /* ===== 版本號 ===== */
