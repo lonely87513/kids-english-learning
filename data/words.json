@@ -85,7 +85,33 @@
     {
       "id": "p3-u3",
       "name": "鮑小P3 下學期Unit 3",
-      "words": []
+      "words": [
+        {"word": "brave", "phonetic": "/breɪv/", "meaning": "勇敢"},
+        {"word": "evil", "phonetic": "/ˈiː.vəl/", "meaning": "邪惡"},
+        {"word": "safe", "phonetic": "/seɪf/", "meaning": "安全"},
+        {"word": "scary", "phonetic": "/ˈskeə.ri/", "meaning": "可怕"},
+        {"word": "ugly", "phonetic": "/ˈʌɡ.li/", "meaning": "醜"},
+        {"word": "long time ago", "phonetic": "/lɒŋ taɪm əˈɡəʊ/", "meaning": "從前"},
+        {"word": "village", "phonetic": "/ˈvɪl.ɪdʒ/", "meaning": "村莊"},
+        {"word": "mountain", "phonetic": "/ˈmaʊn.tɪn/", "meaning": "山"},
+        {"word": "hunter", "phonetic": "/ˈhʌn.tər/", "meaning": "獵人"},
+        {"word": "cape", "phonetic": "/keɪp/", "meaning": "披風"},
+        {"word": "thankful", "phonetic": "/ˈθæŋk.fəl/", "meaning": "感激"},
+        {"word": "sword", "phonetic": "/sɔːd/", "meaning": "劍"},
+        {"word": "weapon", "phonetic": "/ˈwep.ən/", "meaning": "武器"},
+        {"word": "chase", "phonetic": "/tʃeɪs/", "meaning": "追趕"},
+        {"word": "fairy", "phonetic": "/ˈfeə.ri/", "meaning": "仙子"},
+        {"word": "knight", "phonetic": "/naɪt/", "meaning": "騎士"},
+        {"word": "dragon", "phonetic": "/ˈdræɡ.ən/", "meaning": "龍"},
+        {"word": "online game", "phonetic": "/ˌɒn.laɪn ɡeɪm/", "meaning": "網上遊戲"},
+        {"word": "walk through", "phonetic": "/wɔːk θruː/", "meaning": "走過"},
+        {"word": "wing", "phonetic": "/wɪŋ/", "meaning": "翅膀"},
+        {"word": "smoke", "phonetic": "/sməʊk/", "meaning": "煙"},
+        {"word": "save", "phonetic": "/seɪv/", "meaning": "拯救"},
+        {"word": "all", "phonetic": "/ɔːl/", "meaning": "全部"},
+        {"word": "place", "phonetic": "/pleɪs/", "meaning": "地方"},
+        {"word": "magic", "phonetic": "/ˈmædʒ.ɪk/", "meaning": "魔法"}
+      ]
     },
     {
       "id": "p3-u4",
