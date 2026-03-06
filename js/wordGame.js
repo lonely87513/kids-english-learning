@@ -5,7 +5,7 @@
 
 // ===== 遊戲配置 =====
 const GameConfig = {
-    questionsPerGame: 10,
+    questionsPerGame: 0, // 0 = use all words in the unit
     hintPenalty: true, // 使用提示是否扣分
     showAnswerOnWrong: true // 錯誤時是否顯示正確答案
 };
@@ -19,11 +19,25 @@ const DictationGame = {
     wrongCount: 0,
     usedWords: [],
     questionCount: 0,
+    allWords: [],
     
     // 開始遊戲
     start() {
         this.reset();
         AppState.currentMode = 'dictation';
+        
+        // 獲取該Unit的全部生字並打亂
+        const allWords = WordBank.getCurrentWords();
+        // Fisher-Yates shuffle
+        for (let i = allWords.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
+        }
+        this.allWords = allWords;
+        
+        // 設置題目數量為全部生字
+        GameConfig.questionsPerGame = allWords.length;
+        
         this.loadQuestion();
         showScreen('dictationGame');
         
@@ -43,6 +57,7 @@ const DictationGame = {
         this.wrongCount = 0;
         this.usedWords = [];
         this.questionCount = 0;
+        this.allWords = [];
         
         // 重置顯示
         document.getElementById('score').textContent = '0';
@@ -53,9 +68,15 @@ const DictationGame = {
     
     // 加載題目
     loadQuestion() {
-        // 獲取隨機單字
-        this.currentWord = WordBank.getRandomWord(this.usedWords);
+        // 從已打亂既列表中獲取單字
+        if (this.currentWordIndex >= this.allWords.length) {
+            this.endGame();
+            return;
+        }
+        
+        this.currentWord = this.allWords[this.currentWordIndex];
         this.usedWords.push(this.currentWord.word);
+        this.currentWordIndex++;
         
         this.questionCount++;
         document.getElementById('currentQuestion').textContent = this.questionCount;
@@ -214,11 +235,25 @@ const PronunciationGame = {
     questionCount: 0,
     isRecording: false,
     phoneticShown: false,
+    allWords: [],
     
     // 開始遊戲
     start() {
         this.reset();
         AppState.currentMode = 'pronunciation';
+        
+        // 獲取該Unit的全部生字並打亂
+        const allWords = WordBank.getCurrentWords();
+        // Fisher-Yates shuffle
+        for (let i = allWords.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
+        }
+        this.allWords = allWords;
+        
+        // 設置題目數量為全部生字
+        GameConfig.questionsPerGame = allWords.length;
+        
         this.loadQuestion();
         showScreen('pronunciationGame');
         
@@ -240,6 +275,7 @@ const PronunciationGame = {
         this.questionCount = 0;
         this.isRecording = false;
         this.phoneticShown = false;
+        this.allWords = [];
         
         // 重置顯示
         document.getElementById('pronScore').textContent = '0';
@@ -252,9 +288,15 @@ const PronunciationGame = {
     
     // 加載題目
     loadQuestion() {
-        // 獲取隨機單字
-        this.currentWord = WordBank.getRandomWord(this.usedWords);
+        // 從已打亂既列表中獲取單字
+        if (this.currentWordIndex >= this.allWords.length) {
+            this.endGame();
+            return;
+        }
+        
+        this.currentWord = this.allWords[this.currentWordIndex];
         this.usedWords.push(this.currentWord.word);
+        this.currentWordIndex++;
         
         this.questionCount++;
         this.phoneticShown = false;
