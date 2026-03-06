@@ -413,7 +413,8 @@ const PronunciationGame = {
 
 // ===== 單字題庫 =====
 const WordBank = {
-    words: [],
+    units: [],
+    currentUnit: null,
     loaded: false,
     
     // 初始化：嘗試加載JSON，失敗則使用內置數據
@@ -424,9 +425,9 @@ const WordBank = {
             const response = await fetch('data/words.json');
             if (response.ok) {
                 const data = await response.json();
-                this.words = data.words || [];
+                this.units = data.units || [];
                 this.loaded = true;
-                console.log('題庫已從JSON載入:', this.words.length, '個單字');
+                console.log('題庫已從JSON載入:', this.units.length, '個Unit');
                 return;
             }
         } catch (e) {
@@ -434,71 +435,53 @@ const WordBank = {
         }
         
         // 內置題庫（後備）
-        this.words = this.getDefaultWords();
+        this.units = this.getDefaultUnits();
         this.loaded = true;
     },
     
     // 內置題庫
-    getDefaultWords() {
+    getDefaultUnits() {
         return [
-        // 基礎單字
-        { word: 'apple', phonetic: '/ˈæp.əl/', category: 'fruit' },
-        { word: 'banana', phonetic: '/bəˈnæn.ə/', category: 'fruit' },
-        { word: 'cat', phonetic: '/kæt/', category: 'animal' },
-        { word: 'dog', phonetic: '/dɔːɡ/', category: 'animal' },
-        { word: 'elephant', phonetic: '/ˈel.ɪ.fənt/', category: 'animal' },
-        { word: 'fish', phonetic: '/fɪʃ/', category: 'animal' },
-        { word: 'grape', phonetic: '/ɡreɪp/', category: 'fruit' },
-        { word: 'house', phonetic: '/haʊs/', category: 'place' },
-        { word: 'ice', phonetic: '/aɪs/', category: 'nature' },
-        { word: 'juice', phonetic: '/dʒuːs/', category: 'drink' },
-        { word: 'kite', phonetic: '/kaɪt/', category: 'toy' },
-        { word: 'lion', phonetic: '/ˈlaɪ.ən/', category: 'animal' },
-        { word: 'moon', phonetic: '/muːn/', category: 'nature' },
-        { word: 'nest', phonetic: '/nest/', category: 'animal' },
-        { word: 'orange', phonetic: '/ˈɔːr.ɪndʒ/', category: 'fruit' },
-        { word: 'pig', phonetic: '/pɪɡ/', category: 'animal' },
-        { word: 'queen', phonetic: '/kwiːn/', category: 'person' },
-        { word: 'rabbit', phonetic: '/ˈræb.ɪt/', category: 'animal' },
-        { word: 'sun', phonetic: '/sʌn/', category: 'nature' },
-        { word: 'tree', phonetic: '/triː/', category: 'nature' },
-        { word: 'umbrella', phonetic: '/ʌmˈbrel.ə/', category: 'object' },
-        { word: 'violin', phonetic: '/ˌvaɪ.əˈlɪn/', category: 'music' },
-        { word: 'water', phonetic: '/ˈwɔː.tər/', category: 'nature' },
-        { word: 'xylophone', phonetic: '/ˈzaɪ.lə.fəʊn/', category: 'music' },
-        { word: 'yellow', phonetic: '/ˈjel.əʊ/', category: 'color' },
-        { word: 'zebra', phonetic: '/ˈziː.brə/', category: 'animal' },
-        // 更多常見單字
-        { word: 'ball', phonetic: '/bɔːl/', category: 'toy' },
-        { word: 'book', phonetic: '/bʊk/', category: 'object' },
-        { word: 'chair', phonetic: '/tʃeər/', category: 'furniture' },
-        { word: 'desk', phonetic: '/desk/', category: 'furniture' },
-        { word: 'egg', phonetic: '/eɡ/', category: 'food' },
-        { word: 'flower', phonetic: '/ˈflaʊ.ər/', category: 'nature' },
-        { word: 'girl', phonetic: '/ɡɜːl/', category: 'person' },
-        { word: 'hand', phonetic: '/hænd/', category: 'body' },
-        { word: 'bird', phonetic: '/bɜːd/', category: 'animal' },
-        { word: 'chair', phonetic: '/tʃeər/', category: 'furniture' },
-        { word: 'duck', phonetic: '/dʌk/', category: 'animal' },
-        { word: 'eye', phonetic: '/aɪ/', category: 'body' },
-        { word: 'foot', phonetic: '/fʊt/', category: 'body' },
-        { word: 'gun', phonetic: '/ɡʌn/', category: 'object' },
-        { word: 'hat', phonetic: '/hæt/', category: 'object' },
-        { word: 'igloo', phonetic: '/ˈɪɡ.luː/', category: 'place' },
-        { word: 'jam', phonetic: '/dʒæm/', category: 'food' },
-        { word: 'key', phonetic: '/kiː/', category: 'object' },
-        { word: 'lamp', phonetic: '/læmp/', category: 'object' },
-        { word: 'milk', phonetic: '/mɪlk/', category: 'drink' }
+            { id: 'p3-u1', name: '鮑小P3 下學期Unit 1', words: [] },
+            { id: 'p3-u2', name: '鮑小P3 下學期Unit 2', words: [] },
+            { id: 'p3-u3', name: '鮑小P3 下學期Unit 3', words: [] },
+            { id: 'p3-u4', name: '鮑小P3 下學期Unit 4', words: [] },
+            { id: 'p3-u5', name: '鮑小P3 下學期Unit 5', words: [] }
         ];
+    },
+    
+    // 獲取所有Unit列表
+    getUnits() {
+        return this.units;
+    },
+    
+    // 設置當前Unit
+    setUnit(unitId) {
+        this.currentUnit = this.units.find(u => u.id === unitId);
+        return this.currentUnit;
+    },
+    
+    // 獲取當前Unit的單字
+    getCurrentWords() {
+        if (this.currentUnit) {
+            return this.currentUnit.words || [];
+        }
+        return [];
     },
     
     // 獲取隨機單字
     getRandomWord(excludeWords = []) {
-        const availableWords = this.words.filter(w => !excludeWords.includes(w.word));
+        let words = this.getCurrentWords();
+        
+        // 如果當前Unit無單字，用全部units既單字
+        if (words.length === 0) {
+            words = this.units.flatMap(u => u.words || []).filter(w => w.word);
+        }
+        
+        const availableWords = words.filter(w => !excludeWords.includes(w.word));
         
         if (availableWords.length === 0) {
-            // 如果所有單字都用過了，重新開始
-            return this.words[Math.floor(Math.random() * this.words.length)];
+            return words[Math.floor(Math.random() * words.length)];
         }
         
         return availableWords[Math.floor(Math.random() * availableWords.length)];
@@ -506,7 +489,8 @@ const WordBank = {
     
     // 獲取特定類別的單字
     getWordsByCategory(category) {
-        return this.words.filter(w => w.category === category);
+        const words = this.getCurrentWords();
+        return words.filter(w => w.category === category);
     }
 };
 

@@ -193,6 +193,7 @@ function toggleBackgroundMusic() {
 function showScreen(screenId) {
     // 隱藏所有主要畫面
     document.getElementById('mainMenu').classList.add('hidden');
+    document.getElementById('unitSelector').classList.add('hidden');
     document.getElementById('dictationGame').classList.add('hidden');
     document.getElementById('pronunciationGame').classList.add('hidden');
     document.getElementById('resultScreen').classList.add('hidden');
@@ -254,3 +255,70 @@ window.addEventListener('error', (e) => {
 window.addEventListener('unhandledrejection', (e) => {
     console.error('未處理的Promise錯誤:', e.reason);
 });
+
+// ===== Unit 選擇 =====
+let selectedUnitId = null;
+let currentGameMode = null; // 'dictation' | 'pronunciation'
+
+function showUnitSelector(mode) {
+    currentGameMode = mode;
+    selectedUnitId = null;
+    
+    // 設置標題
+    const title = mode === 'dictation' ? '✍️ 選擇Unit - 聽寫模式' : '🎤 選擇Unit - 發音模式';
+    document.getElementById('modeTitle').textContent = title;
+    
+    // 渲染Unit卡片
+    const unitGrid = document.getElementById('unitGrid');
+    const units = WordBank.getUnits();
+    
+    unitGrid.innerHTML = units.map((unit, index) => `
+        <div class="unit-card" onclick="selectUnit('${unit.id}')" data-unit-id="${unit.id}">
+            <div class="unit-card-icon">📚</div>
+            <div class="unit-card-name">${unit.name}</div>
+            <div class="unit-card-count">${unit.words?.length || 0} 個單字</div>
+        </div>
+    `).join('');
+    
+    // 重置按鈕
+    updateStartButton();
+    
+    showScreen('unitSelector');
+}
+
+function selectUnit(unitId) {
+    // 取消之前的選擇
+    document.querySelectorAll('.unit-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // 選中新的unit
+    selectedUnitId = unitId;
+    document.querySelector(`[data-unit-id="${unitId}"]`).classList.add('selected');
+    
+    updateStartButton();
+}
+
+function updateStartButton() {
+    const btn = document.getElementById('startGameBtn');
+    const info = document.getElementById('selectedInfo');
+    
+    if (selectedUnitId) {
+        const unit = WordBank.setUnit(selectedUnitId);
+        btn.disabled = false;
+        info.textContent = `已選擇: ${unit.name}`;
+    } else {
+        btn.disabled = true;
+        info.textContent = '請選擇一個Unit';
+    }
+}
+
+function startSelectedGame() {
+    if (!selectedUnitId) return;
+    
+    if (currentGameMode === 'dictation') {
+        DictationGame.start();
+    } else if (currentGameMode === 'pronunciation') {
+        PronunciationGame.start();
+    }
+}

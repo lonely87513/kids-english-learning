@@ -32,14 +32,14 @@
             <h1 class="title">🎮 選擇遊戲模式</h1>
             
             <div class="game-cards">
-                <div class="game-card" onclick="startDictationGame()">
+                <div class="game-card" onclick="showUnitSelector('dictation')">
                     <div class="card-icon">✍️</div>
                     <h2>聽寫模式</h2>
                     <p>聽發音，拼寫單字</p>
                     <span class="badge">⭐ 熱門</span>
                 </div>
                 
-                <div class="game-card" onclick="startPronunciationGame()">
+                <div class="game-card" onclick="showUnitSelector('pronunciation')">
                     <div class="card-icon">🎤</div>
                     <h2>發音模式</h2>
                     <p>聽發音，試試看讀出來</p>
@@ -84,6 +84,24 @@
                 <button class="btn btn-secondary" onclick="toggleBackgroundMusic()">🎵 背景音樂</button>
             </div>
         </main>
+
+        <!-- Unit 選擇畫面 -->
+        <section id="unitSelector" class="unit-screen hidden">
+            <button class="btn btn-back" onclick="backToMenu()">⬅️ 返回</button>
+            
+            <h2 class="unit-title" id="modeTitle">✍️ 選擇Unit</h2>
+            
+            <div class="unit-grid" id="unitGrid">
+                <!-- Unit cards will be dynamically generated -->
+            </div>
+            
+            <div class="start-game-section">
+                <button class="btn btn-primary btn-large" onclick="startSelectedGame()" id="startGameBtn" disabled>
+                    🚀 開始遊戲
+                </button>
+                <p class="selected-info" id="selectedInfo">請選擇一個Unit</p>
+            </div>
+        </section>
 
         <!-- 遊戲畫面：聽寫模式 -->
         <section id="dictationGame" class="game-screen hidden">
