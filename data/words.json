@@ -143,7 +143,34 @@
     {
       "id": "p3-u5",
       "name": "鮑小P3 下學期Unit 5",
-      "words": []
+      "words": [
+        {"word": "wonderful", "phonetic": "/ˈwʌn.də.fəl/", "meaning": "厲害"},
+        {"word": "chef", "phonetic": "/ʃef/", "meaning": "廚師"},
+        {"word": "chicken", "phonetic": "/ˈtʃɪk.ɪn/", "meaning": "雞"},
+        {"word": "hotdog", "phonetic": "/ˈhɒt.dɒɡ/", "meaning": "熱狗"},
+        {"word": "sausage", "phonetic": "/ˈsɒs.ɪdʒ/", "meaning": "香腸"},
+        {"word": "tomato", "phonetic": "/təˈmɑː.təʊ/", "meaning": "番茄"},
+        {"word": "bread", "phonetic": "/bred/", "meaning": "麵包"},
+        {"word": "butter", "phonetic": "/ˈbʌt.ər/", "meaning": "牛油"},
+        {"word": "cheese", "phonetic": "/tʃiːz/", "meaning": "芝士"},
+        {"word": "ham", "phonetic": "/hæm/", "meaning": "火腿"},
+        {"word": "ketchup", "phonetic": "/ˈketʃ.əp/", "meaning": "茄汁"},
+        {"word": "salad", "phonetic": "/ˈsæl.əd/", "meaning": "沙律"},
+        {"word": "dish", "phonetic": "/dɪʃ/", "meaning": "碟"},
+        {"word": "item", "phonetic": "/ˈaɪ.təm/", "meaning": "項目"},
+        {"word": "cupboard", "phonetic": "/ˈkʌb.əd/", "meaning": "櫃"},
+        {"word": "fridge", "phonetic": "/frɪdʒ/", "meaning": "雪櫃"},
+        {"word": "sandwiches", "phonetic": "/ˈsæn.wɪtʃ.ɪz/", "meaning": "三文治"},
+        {"word": "crisps", "phonetic": "/krɪsps/", "meaning": "薯片"},
+        {"word": "sweets", "phonetic": "/swiːts/", "meaning": "糖果"},
+        {"word": "juice", "phonetic": "/dʒuːs/", "meaning": "果汁"},
+        {"word": "zip bag", "phonetic": "/zɪp bæɡ/", "meaning": "密實袋"},
+        {"word": "salad dressing", "phonetic": "/ˈsæl.əd ˈdres.ɪŋ/", "meaning": "沙律醬"},
+        {"word": "cheese roll", "phonetic": "/tʃiːz rəʊl/", "meaning": "芝士卷"},
+        {"word": "supermarket", "phonetic": "/ˈsuː.pə.mɑː.kɪt/", "meaning": "超級市場"},
+        {"word": "honey", "phonetic": "/ˈhʌn.i/", "meaning": "蜜糖"},
+        {"word": "zip", "phonetic": "/zɪp/", "meaning": "拉鍊"}
+      ]
     }
   ]
 }
