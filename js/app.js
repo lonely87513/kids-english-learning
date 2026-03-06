@@ -213,7 +213,6 @@ function initTheme() {
         document.getElementById('darkModeBtn').textContent = '☀️';
     }
 }
-}
 
 // ===== 屏幕導航 =====
 function showScreen(screenId) {
