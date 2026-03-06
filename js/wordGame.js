@@ -413,7 +413,34 @@ const PronunciationGame = {
 
 // ===== 單字題庫 =====
 const WordBank = {
-    words: [
+    words: [],
+    loaded: false,
+    
+    // 初始化：嘗試加載JSON，失敗則使用內置數據
+    async init() {
+        if (this.loaded) return;
+        
+        try {
+            const response = await fetch('data/words.json');
+            if (response.ok) {
+                const data = await response.json();
+                this.words = data.words || [];
+                this.loaded = true;
+                console.log('題庫已從JSON載入:', this.words.length, '個單字');
+                return;
+            }
+        } catch (e) {
+            console.log('無法載入JSON，使用內置題庫');
+        }
+        
+        // 內置題庫（後備）
+        this.words = this.getDefaultWords();
+        this.loaded = true;
+    },
+    
+    // 內置題庫
+    getDefaultWords() {
+        return [
         // 基礎單字
         { word: 'apple', phonetic: '/ˈæp.əl/', category: 'fruit' },
         { word: 'banana', phonetic: '/bəˈnæn.ə/', category: 'fruit' },
@@ -462,7 +489,8 @@ const WordBank = {
         { word: 'key', phonetic: '/kiː/', category: 'object' },
         { word: 'lamp', phonetic: '/læmp/', category: 'object' },
         { word: 'milk', phonetic: '/mɪlk/', category: 'drink' }
-    ],
+        ];
+    },
     
     // 獲取隨機單字
     getRandomWord(excludeWords = []) {

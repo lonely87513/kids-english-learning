@@ -12,7 +12,8 @@ const AppState = {
 };
 
 // ===== 初始化 =====
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await WordBank.init(); // 載入題庫
     loadUsers();
     loadCurrentUser();
     updateProgressDisplay();
