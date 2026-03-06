@@ -13,24 +13,46 @@ const AppState = {
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', async () => {
-    await WordBank.init(); // 載入題庫
-    loadUsers();
-    loadCurrentUser();
-    updateProgressDisplay();
-    initBackgroundMusic();
+    console.log('DOM loaded, starting init...');
     
-    // Mobile touch events
-    document.getElementById('dictationCard').addEventListener('click', () => showUnitSelector('dictation'));
-    document.getElementById('dictationCard').addEventListener('touchend', (e) => {
-        e.preventDefault();
-        showUnitSelector('dictation');
-    });
+    try {
+        await WordBank.init(); // 載入題庫
+        console.log('WordBank init done, units:', WordBank.getUnits());
+    } catch(e) {
+        console.error('WordBank init error:', e);
+        alert('題庫載入失敗: ' + e);
+    }
     
-    document.getElementById('pronunciationCard').addEventListener('click', () => showUnitSelector('pronunciation'));
-    document.getElementById('pronunciationCard').addEventListener('touchend', (e) => {
-        e.preventDefault();
-        showUnitSelector('pronunciation');
-    });
+    try {
+        loadUsers();
+        loadCurrentUser();
+        updateProgressDisplay();
+        initBackgroundMusic();
+    } catch(e) {
+        console.error('Init error:', e);
+        alert('Init error: ' + e);
+    }
+    
+    // Mobile touch events - 確保DOM元素存在
+    const dictCard = document.getElementById('dictationCard');
+    const pronCard = document.getElementById('pronunciationCard');
+    
+    console.log('dictCard:', dictCard);
+    console.log('pronCard:', pronCard);
+    
+    if (dictCard) {
+        dictCard.addEventListener('click', () => {
+            console.log('dictation card clicked');
+            showUnitSelector('dictation');
+        });
+    }
+    
+    if (pronCard) {
+        pronCard.addEventListener('click', () => {
+            console.log('pronunciation card clicked');
+            showUnitSelector('pronunciation');
+        });
+    }
 });
 
 // ===== 用戶管理 =====
