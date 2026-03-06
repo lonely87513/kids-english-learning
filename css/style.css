@@ -139,6 +139,14 @@ body {
     box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    text-decoration: none;
+}
+
+.game-card-link {
+    text-decoration: none;
+    display: block;
 }
 
 .game-card::before {
