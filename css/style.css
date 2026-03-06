@@ -26,6 +26,19 @@ body {
     overflow-x: hidden;
 }
 
+/* ===== 版本號 ===== */
+.version-tag {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    z-index: 1000;
+}
+
 /* ===== 背景裝飾 ===== */
 .background-decorations {
     position: fixed;
@@ -134,14 +147,16 @@ body {
     border-radius: var(--border-radius);
     padding: 30px 20px;
     text-align: center;
-    cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
     display: block;
-    text-decoration: none;
+    width: 100%;
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
 }
 
 .game-card-link {

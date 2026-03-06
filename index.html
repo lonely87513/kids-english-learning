@@ -8,6 +8,9 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- 版本號 -->
+        <div class="version-tag">v2026.03.06</div>
+        
         <!-- 背景裝飾 -->
         <div class="background-decorations">
             <span class="cloud cloud-1">☁️</span>
@@ -32,23 +35,19 @@
             <h1 class="title">🎮 選擇遊戲模式</h1>
             
             <div class="game-cards">
-                <a href="javascript:showUnitSelector('dictation')" class="game-card-link">
-                    <div class="game-card">
-                        <div class="card-icon">✍️</div>
-                        <h2>聽寫模式</h2>
-                        <p>聽發音，拼寫單字</p>
-                        <span class="badge">⭐ 熱門</span>
-                    </div>
-                </a>
+                <button type="button" class="game-card" ontouchstart="showUnitSelector('dictation')" onclick="showUnitSelector('dictation')">
+                    <div class="card-icon">✍️</div>
+                    <h2>聽寫模式</h2>
+                    <p>聽發音，拼寫單字</p>
+                    <span class="badge">⭐ 熱門</span>
+                </button>
                 
-                <a href="javascript:showUnitSelector('pronunciation')" class="game-card-link">
-                    <div class="game-card">
-                        <div class="card-icon">🎤</div>
-                        <h2>發音模式</h2>
-                        <p>聽發音，試試看讀出來</p>
-                        <span class="badge new">NEW</span>
-                    </div>
-                </a>
+                <button type="button" class="game-card" ontouchstart="showUnitSelector('pronunciation')" onclick="showUnitSelector('pronunciation')">
+                    <div class="card-icon">🎤</div>
+                    <h2>發音模式</h2>
+                    <p>聽發音，試試看讀出來</p>
+                    <span class="badge new">NEW</span>
+                </button>
                 
                 <div class="game-card disabled">
                     <div class="card-icon">📖</div>
