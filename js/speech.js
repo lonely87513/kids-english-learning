@@ -15,13 +15,36 @@ const SpeechSynthesis = {
         return window.speechSynthesis.getVoices();
     },
     
-    // 獲取英語聲音
+    // 獲取英語聲音 - 優化小朋友發音
     getEnglishVoice() {
         const voices = this.getVoices();
-        // 優先選擇美國英語女性聲音
-        let voice = voices.find(v => v.lang === 'en-US' && v.name.includes('Female'));
-        if (!voice) voice = voices.find(v => v.lang.startsWith('en-'));
-        if (!voice) voice = voices[0];
+        if (!voices || voices.length === 0) return null;
+        
+        // 優先揀清晰既英語 voice
+        // 試 Google / Microsoft / Apple 既英文聲音
+        let voice = voices.find(v => 
+            (v.name.includes('Google US English') || 
+             v.name.includes('Microsoft Zira') ||
+             v.name.includes('Samantha')) && 
+            v.lang.startsWith('en')
+        );
+        
+        // 如果冇既，試 US English 女性聲音
+        if (!voice) {
+            voice = voices.find(v => v.lang === 'en-US' && v.name.includes('Female'));
+        }
+        
+        // 再試任何英文
+        if (!voice) {
+            voice = voices.find(v => v.lang.startsWith('en-'));
+        }
+        
+        // 最尾就用第一個
+        if (!voice) {
+            voice = voices[0];
+        }
+        
+        console.log('Selected voice:', voice?.name, voice?.lang);
         return voice;
     },
     
@@ -45,9 +68,10 @@ const SpeechSynthesis = {
                 utterance.voice = this.getEnglishVoice();
             }
             
-            // 設置參數
-            utterance.rate = options.rate || 0.9; // 速度稍慢，適合小朋友
-            utterance.pitch = options.pitch || 1;
+            // 設置參數 - 慢啲同清晰啲
+            utterance.rate = options.rate || 0.7; // 慢啲，適合小朋友
+            utterance.pitch = options.pitch || 1.1; // 稍微高啲
+            utterance.volume = options.volume || 1;
             utterance.volume = options.volume || 1;
             
             // 事件處理
