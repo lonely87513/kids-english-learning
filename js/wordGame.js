@@ -326,8 +326,9 @@ const PronunciationGame = {
     
     // 開始錄音
     startRecording() {
+        // 檢查是否支持
         if (!SpeechRecognition.isSupported()) {
-            alert('抱歉，您的瀏覽器不支持語音識別功能');
+            alert('iOS Chrome不支持語音識別，請使用Safari或電腦瀏覽器');
             return;
         }
         
@@ -343,6 +344,7 @@ const PronunciationGame = {
             }
         }).catch(err => {
             console.error('錄音失敗:', err);
+            alert('錄音失敗，請確保已授予麥克風權限');
             this.isRecording = false;
             this.updateRecordButton();
         });
