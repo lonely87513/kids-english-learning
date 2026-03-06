@@ -12,6 +12,19 @@
     --border-radius: 20px;
 }
 
+/* Dark Mode */
+[data-theme="dark"] {
+    --primary-color: #FF8A80;
+    --secondary-color: #80CBC4;
+    --accent-color: #FFE082;
+    --success-color: #A5D6A7;
+    --error-color: #EF9A9A;
+    --text-color: #ECEFF1;
+    --bg-color: #1a1a2e;
+    --card-bg: #2d2d44;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
 * {
     margin: 0;
     padding: 0;

@@ -13,6 +13,7 @@ const AppState = {
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', async () => {
+    initTheme(); // 初始化主題
     await WordBank.init(); // 載入題庫
     loadUsers();
     loadCurrentUser();
@@ -187,6 +188,31 @@ function toggleBackgroundMusic() {
     } else {
         bgMusic.pause();
     }
+}
+
+// ===== Dark Mode =====
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const btn = document.getElementById('darkModeBtn');
+    
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        btn.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+function initTheme() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('darkModeBtn').textContent = '☀️';
+    }
+}
 }
 
 // ===== 屏幕導航 =====
