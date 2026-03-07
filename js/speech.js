@@ -138,7 +138,7 @@ const SpeechSynthesis = {
             ',': ' comma ',
             '?': ' question mark ',
             '!': ' exclamation mark ',
-            '.': ' period ',
+            '.': ' full-stop ',
             ';': ' semicolon ',
             ':': ' colon '
         };
@@ -150,7 +150,7 @@ const SpeechSynthesis = {
         }
         
         // 將句子分開，每個標點停頓前後各加停頓
-        const parts = spoken.split(/( comma | question mark | exclamation mark | period | semicolon | colon )/);
+        const parts = spoken.split(/( comma | question mark | exclamation mark | full-stop | semicolon | colon )/);
         
         // 如果簡單既，就直接讀
         if (parts.length === 1) {
