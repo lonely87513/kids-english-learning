@@ -220,13 +220,13 @@ const SpeechRecognition = {
         
         if (similarity >= 90) {
             isCorrect = true;
-            feedback = '非常棒！';
+            feedback = '💩勁呀！送你好大便！';
         } else if (similarity >= 70) {
             isCorrect = false;
-            feedback = '很不錯！再試一次！';
+            feedback = '算唔錯！再試過！';
         } else if (similarity >= 50) {
             isCorrect = false;
-            feedback = '有點接近了喔！';
+            feedback = '接近喇！加油！';
         } else {
             isCorrect = false;
             feedback = '再聽聽看正確的發音吧！';

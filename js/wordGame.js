@@ -127,7 +127,7 @@ const DictationGame = {
         feedbackArea.innerHTML = `
             <div class="feedback-correct">
                 <div class="feedback-icon">🎉</div>
-                <div class="feedback-text">太棒了！</div>
+                <div class="feedback-text">💩 答對！送你大便！</div>
             </div>
         `;
         
