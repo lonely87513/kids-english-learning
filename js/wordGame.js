@@ -596,9 +596,6 @@ const SentenceGame = {
         this.updateDisplay();
         showScreen('sentenceGame');
         
-        // 預先load voices (非同步)
-        SpeechSynthesis.initVoices();
-        
         // 顯示第一句，等用戶撳播放
         if (this.sentences.length > 0) {
             const sentText = document.getElementById('sentText');
@@ -679,12 +676,9 @@ const SentenceGame = {
     },
     
     // 播放當前句子
-    async playCurrentSentence(firstTime = false) {
+    playCurrentSentence(firstTime = false) {
         // 如果已經exit，停止進行
         if (this.isExited) return;
-        
-        // 確保voices loaded
-        await SpeechSynthesis.initVoices();
         
         if (this.currentSentenceIndex >= this.sentences.length) {
             this.endGame();
@@ -743,6 +737,10 @@ const SentenceGame = {
                     }
                 }
             });
+        
+        // 更新顯示
+        document.getElementById('sentText').textContent = sentence.text;
+        this.updateDisplay();
     },
     
     // 跳到下一題（用戶自己撳）
@@ -760,6 +758,8 @@ const SentenceGame = {
             this.endGame();
         } else {
             const sentence = this.sentences[this.currentSentenceIndex];
+            document.getElementById('sentText').textContent = sentence.text;
+            this.updateDisplay();
             document.getElementById('sentFeedbackArea').innerHTML = '';
         }
     },
