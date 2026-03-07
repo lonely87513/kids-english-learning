@@ -7,7 +7,23 @@
 const GameConfig = {
     questionsPerGame: 0, // 0 = use all words in the unit
     hintPenalty: true, // 使用提示是否扣分
-    showAnswerOnWrong: true // 錯誤時是否顯示正確答案
+    showAnswerOnWrong: true, // 錯誤時是否顯示正確答案
+    
+    // 答對既Emoji
+    correctEmojis: ['💩', '🤩', '😎', '🤑', '🎉', '🥳', '🤗', '😻'],
+    
+    // 答錯既Emoji
+    wrongEmojis: ['🤮', '😈', '👿', '💀', '🙈', '😱', '😵', '🤢'],
+    
+    // 隨機獲取答對Emoji
+    getCorrectEmoji() {
+        return this.correctEmojis[Math.floor(Math.random() * this.correctEmojis.length)];
+    },
+    
+    // 隨機獲取答錯Emoji
+    getWrongEmoji() {
+        return this.wrongEmojis[Math.floor(Math.random() * this.wrongEmojis.length)];
+    }
 };
 
 // ===== 聽寫模式遊戲 =====
@@ -126,7 +142,7 @@ const DictationGame = {
         const feedbackArea = document.getElementById('feedbackArea');
         feedbackArea.innerHTML = `
             <div class="feedback-correct">
-                <div class="feedback-icon">🎉</div>
+                <div class="feedback-icon">${GameConfig.getCorrectEmoji()}</div>
                 <div class="feedback-text">💩 答對！送你大便！</div>
             </div>
         `;
@@ -149,7 +165,7 @@ const DictationGame = {
         const feedbackArea = document.getElementById('feedbackArea');
         let feedbackHTML = `
             <div class="feedback-wrong">
-                <div class="feedback-icon">😅</div>
+                <div class="feedback-icon">${GameConfig.getWrongEmoji()}</div>
                 <div class="feedback-text">
         `;
         
@@ -399,7 +415,7 @@ const PronunciationGame = {
             
             feedbackArea.innerHTML = `
                 <div class="feedback-correct">
-                    <div class="feedback-icon">🎉</div>
+                    <div class="feedback-icon">${GameConfig.getCorrectEmoji()}</div>
                     <div class="feedback-text">${result.feedback} 你說的是: "${transcript}"</div>
                 </div>
             `;
@@ -410,7 +426,7 @@ const PronunciationGame = {
             
             feedbackArea.innerHTML = `
                 <div class="feedback-wrong">
-                    <div class="feedback-icon">😅</div>
+                    <div class="feedback-icon">${GameConfig.getWrongEmoji()}</div>
                     <div class="feedback-text">${result.feedback} 你說的是: "${transcript}"</div>
                 </div>
             `;
