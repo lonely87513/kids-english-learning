@@ -673,6 +673,11 @@ const SentenceGame = {
                 this.hideReadingAnimation();
                 
                 // 朗讀完成後，等 pauseSeconds 秒再讀多次
+        }).catch(() => {
+            // 朗讀出錯，都當係完成
+            if (this.isExited) return;
+            this.hideReadingAnimation();
+        });
                 if (this.currentRepeat < this.repeatCount - 1) {
                     this.currentRepeat++;
                     this.updateDisplay();
