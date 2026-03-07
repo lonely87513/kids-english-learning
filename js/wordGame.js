@@ -608,77 +608,6 @@ const SentenceGame = {
         }
     },
     
-    // 顯示倒數
-    showCountdown(count) {
-        const sentText = document.getElementById('sentText');
-        
-        if (count > 0) {
-            sentText.textContent = count.toString();
-            sentText.style.display = 'block';
-            sentText.style.fontSize = '4rem';
-            sentText.style.fontWeight = 'bold';
-            setTimeout(() => this.showCountdown(count - 1), 1000);
-        } else {
-            sentText.textContent = '開始！';
-            sentText.style.display = 'block';
-            sentText.style.fontSize = '4rem';
-            sentText.style.fontWeight = 'bold';
-            setTimeout(() => {
-                sentText.style.display = 'none';
-                sentText.style.fontSize = '';
-                sentText.style.fontWeight = '';
-                this.playCurrentSentence();
-            }, 800);
-        }
-    },
-    
-    // 播放前倒數
-    showPlayCountdown(count, callback) {
-        // 如果已經exit，停止
-        if (this.isExited) return;
-        
-        const sentText = document.getElementById('sentText');
-        
-        if (count > 0) {
-            sentText.classList.remove('hidden');
-            sentText.style.display = 'block';
-            sentText.style.fontSize = '4rem';
-            sentText.style.fontWeight = 'bold';
-            sentText.textContent = count.toString();
-            setTimeout(() => this.showPlayCountdown(count - 1, callback), 1000);
-        } else {
-            sentText.textContent = '開始！';
-            setTimeout(() => {
-                if (!this.isExited) {
-                    callback();
-                }
-            }, 500);
-        }
-    },
-    
-    // 顯示閱讀中動畫
-    showReadingAnimation() {
-        const sentText = document.getElementById('sentText');
-        sentText.classList.remove('hidden');
-        sentText.style.display = 'block';
-        sentText.style.fontSize = '2rem';
-        sentText.style.fontWeight = 'bold';
-        
-        let dots = '';
-        this.readingInterval = setInterval(() => {
-            dots = dots.length >= 3 ? '' : dots + '.';
-            sentText.textContent = '閱讀中' + dots;
-        }, 500);
-    },
-    
-    // 隱藏閱讀中動畫
-    hideReadingAnimation() {
-        if (this.readingInterval) {
-            clearInterval(this.readingInterval);
-            this.readingInterval = null;
-        }
-    },
-    
     // 播放當前句子
     playCurrentSentence(firstTime = false) {
         // 如果已經exit，停止進行
@@ -853,7 +782,6 @@ const SentenceGame = {
         this.isRecording = false;
         this.isPaused = false;
         this.isExited = false;
-        this.hideReadingAnimation();
     }
 };
 

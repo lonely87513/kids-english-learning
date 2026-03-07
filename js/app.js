@@ -303,7 +303,6 @@ function backToMenu() {
     // Cleanup sentence game
     window.speechSynthesis.cancel();
     if (typeof SentenceGame !== 'undefined') {
-        SentenceGame.hideReadingAnimation();
         const sentText = document.getElementById('sentText');
         if (sentText) {
             sentText.textContent = '';
@@ -509,7 +508,6 @@ function exitSentenceGame() {
     // 立即停止所有進行中的野
     if (typeof SentenceGame !== 'undefined') {
         SentenceGame.isExited = true;
-        SentenceGame.hideReadingAnimation();
     }
     
     SpeechRecognition.stop();
