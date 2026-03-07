@@ -717,9 +717,10 @@ body {
     text-align: left;
     max-height: 300px;
     overflow-y: auto;
-    background: #f8f9fa;
+    background: var(--card-bg);
     border-radius: 15px;
     padding: 15px;
+    border: 1px solid var(--shadow);
 }
 
 .study-report h3 {
@@ -737,7 +738,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 8px 10px;
-    border-bottom: 1px dashed #ddd;
+    border-bottom: 1px dashed var(--shadow);
 }
 
 .report-item:last-child {
