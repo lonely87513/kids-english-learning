@@ -568,11 +568,12 @@ const SentenceGame = {
     },
     
     // 初始化
-    init(unit, repeat, pause, speed) {
+    init(unit, repeat, pause, speed, random) {
         this.currentUnit = unit;
         this.repeatCount = parseInt(repeat);
         this.pauseSeconds = parseInt(pause);
         this.speed = parseFloat(speed) || 0.6;
+        this.shouldRandom = random === true || random === 'true';
         this.currentSentenceIndex = 0;
         this.currentRepeat = 0;
         this.isRecording = false;
@@ -605,6 +606,14 @@ const SentenceGame = {
             { text: "I want to give my cats a bath, but I don't know how.", meaning: "我想幫我既貓沖涼，但係唔知點做。" },
             { text: "I can't find any information in the book.", meaning: "我响本書搵唔到任何資料。" }
         ];
+        
+        // 如果隨機，打亂順序
+        if (this.shouldRandom) {
+            for (let i = sampleSentences.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [sampleSentences[i], sampleSentences[j]] = [sampleSentences[j], sampleSentences[i]];
+            }
+        }
         
         this.sentences = sampleSentences;
     },
