@@ -595,10 +595,11 @@ const SentenceGame = {
         this.updateDisplay();
         showScreen('sentenceGame');
         
-        // 倒數5秒 - 先確保元素存在
-        const sentText = document.getElementById('sentText');
-        if (sentText) {
-            this.showCountdown(5);
+        // 顯示第一句，等用戶撳播放
+        if (this.sentences.length > 0) {
+            const sentText = document.getElementById('sentText');
+            sentText.textContent = this.sentences[0].text;
+            sentText.classList.add('hidden');
         }
     },
     
@@ -623,6 +624,25 @@ const SentenceGame = {
                 sentText.style.fontWeight = '';
                 this.playCurrentSentence();
             }, 800);
+        }
+    },
+    
+    // 播放前倒數
+    showPlayCountdown(count, callback) {
+        const sentText = document.getElementById('sentText');
+        
+        if (count > 0) {
+            sentText.classList.remove('hidden');
+            sentText.style.display = 'block';
+            sentText.style.fontSize = '4rem';
+            sentText.style.fontWeight = 'bold';
+            sentText.textContent = count.toString();
+            setTimeout(() => this.showPlayCountdown(count - 1, callback), 1000);
+        } else {
+            sentText.textContent = '開始！';
+            setTimeout(() => {
+                callback();
+            }, 500);
         }
     },
     
@@ -658,31 +678,34 @@ const SentenceGame = {
         
         const sentence = this.sentences[this.currentSentenceIndex];
         
-        // 顯示「閱讀中...」
-        this.showReadingAnimation();
-        
-        // 朗讀句子（包括標點符號停頓）
-        SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
-            // 停止動畫
-            this.hideReadingAnimation();
+        // 倒數3秒後開始閱讀
+        this.showPlayCountdown(3, () => {
+            // 顯示「閱讀中...」
+            this.showReadingAnimation();
             
-            // 朗讀完成後，等 pauseSeconds 秒再讀多次
-            if (this.currentRepeat < this.repeatCount - 1) {
-                this.currentRepeat++;
-                this.updateDisplay();
-                setTimeout(() => this.playCurrentSentence(), this.pauseSeconds * 1000);
-            } else {
-                // 完成呢句既所有次數，去下一句
-                this.currentRepeat = 0;
-                this.currentSentenceIndex++;
+            // 朗讀句子（包括標點符號停頓）
+            SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
+                // 停止動畫
+                this.hideReadingAnimation();
                 
-                if (this.currentSentenceIndex >= this.sentences.length) {
-                    this.endGame();
+                // 朗讀完成後，等 pauseSeconds 秒再讀多次
+                if (this.currentRepeat < this.repeatCount - 1) {
+                    this.currentRepeat++;
+                    this.updateDisplay();
+                    setTimeout(() => this.playCurrentSentence(), this.pauseSeconds * 1000);
                 } else {
-                    // 自動播放下一句
-                    setTimeout(() => this.playCurrentSentence(), 1000);
+                    // 完成呢句既所有次數，去下一句
+                    this.currentRepeat = 0;
+                    this.currentSentenceIndex++;
+                    
+                    if (this.currentSentenceIndex >= this.sentences.length) {
+                        this.endGame();
+                    } else {
+                        // 自動播放下一句
+                        setTimeout(() => this.playCurrentSentence(), 1000);
+                    }
                 }
-            }
+            });
         });
         
         // 更新顯示
@@ -815,6 +838,7 @@ const SentenceGame = {
         this.currentRepeat = 0;
         this.isRecording = false;
         this.isPaused = false;
+        this.hideReadingAnimation();
     }
 };
 
