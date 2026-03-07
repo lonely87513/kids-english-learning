@@ -505,9 +505,16 @@ function toggleSentenceRecording() {
 
 // 退出句子遊戲
 function exitSentenceGame() {
-    // 先停止語音（多次確保停止）
-    window.speechSynthesis.cancel();
-    setTimeout(() => window.speechSynthesis.cancel(), 100);
+    // 先停止語音（更 aggressive 既方式）
+    const stopSpeech = () => {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.stop();
+    };
+    
+    stopSpeech();
+    setTimeout(stopSpeech, 50);
+    setTimeout(stopSpeech, 150);
+    setTimeout(stopSpeech, 300);
     
     // 立即停止所有進行中的野
     if (typeof SentenceGame !== 'undefined') {
