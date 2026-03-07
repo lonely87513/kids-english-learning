@@ -488,6 +488,7 @@ function toggleSentenceRecording() {
 function exitSentenceGame() {
     SpeechRecognition.stop();
     window.speechSynthesis.cancel();
+    SentenceGame.hideReadingAnimation();
     SentenceGame.reset();
     backToMenu();
 }

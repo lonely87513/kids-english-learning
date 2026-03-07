@@ -626,6 +626,28 @@ const SentenceGame = {
         }
     },
     
+    // 顯示閱讀中動畫
+    showReadingAnimation() {
+        const sentText = document.getElementById('sentText');
+        sentText.style.display = 'block';
+        sentText.style.fontSize = '2rem';
+        sentText.style.fontWeight = 'bold';
+        
+        let dots = '';
+        this.readingInterval = setInterval(() => {
+            dots = dots.length >= 3 ? '' : dots + '.';
+            sentText.textContent = '閱讀中' + dots;
+        }, 500);
+    },
+    
+    // 隱藏閱讀中動畫
+    hideReadingAnimation() {
+        if (this.readingInterval) {
+            clearInterval(this.readingInterval);
+            this.readingInterval = null;
+        }
+    },
+    
     // 播放當前句子
     playCurrentSentence() {
         if (this.currentSentenceIndex >= this.sentences.length) {
@@ -635,8 +657,14 @@ const SentenceGame = {
         
         const sentence = this.sentences[this.currentSentenceIndex];
         
+        // 顯示「閱讀中...」
+        this.showReadingAnimation();
+        
         // 朗讀句子（包括標點符號停頓）
         SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
+            // 停止動畫
+            this.hideReadingAnimation();
+            
             // 朗讀完成後，等 pauseSeconds 秒再讀多次
             if (this.currentRepeat < this.repeatCount - 1) {
                 this.currentRepeat++;
