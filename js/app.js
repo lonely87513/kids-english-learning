@@ -535,7 +535,10 @@ function exitSentenceGame() {
         sentText.style.fontWeight = '';
     }
     
-    backToMenu();
+    // 等一陣先返回，等語音停止
+    setTimeout(() => {
+        backToMenu();
+    }, 100);
 }
 
 // 下一題（句子模式）
