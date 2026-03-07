@@ -611,12 +611,10 @@ const SentenceGame = {
         const btn = document.getElementById('playSentBtn');
         if (btn) btn.disabled = false;
         
-        // 顯示第一句，等用戶撳播放
-        if (this.sentences.length > 0) {
-            const sentText = document.getElementById('sentText');
-            sentText.textContent = this.sentences[0].text;
-            sentText.classList.add('hidden');
-        }
+        // 清空句子顯示
+        const sentText = document.getElementById('sentText');
+        sentText.textContent = '';
+        sentText.classList.add('hidden');
     },
     
     // 播放當前句子
