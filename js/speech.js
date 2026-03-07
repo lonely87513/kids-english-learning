@@ -109,7 +109,14 @@ const SpeechSynthesis = {
             
             // 事件處理
             utterance.onend = () => resolve();
-            utterance.onerror = (e) => reject(e);
+            utterance.onerror = (e) => {
+                // 忽略 "canceled" 錯誤，呢個係正常既
+                if (e.error === 'canceled' || e.error === 'interrupted') {
+                    resolve();
+                    return;
+                }
+                reject(e);
+            };
             
             window.speechSynthesis.speak(utterance);
         });
