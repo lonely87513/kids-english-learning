@@ -596,10 +596,6 @@ const SentenceGame = {
         this.updateDisplay();
         showScreen('sentenceGame');
         
-        // Enable button
-        const btn = document.getElementById('playSentBtn');
-        if (btn) btn.disabled = false;
-        
         // 顯示第一句，等用戶撳播放
         if (this.sentences.length > 0) {
             const sentText = document.getElementById('sentText');

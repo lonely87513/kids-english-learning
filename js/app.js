@@ -478,10 +478,6 @@ function startSentenceGame() {
 
 // 播放當前句子
 function playCurrentSentence() {
-    // Disable button during reading
-    const btn = document.getElementById('playSentBtn');
-    if (btn) btn.disabled = true;
-    
     SentenceGame.playCurrentSentence(true);
 }
 
