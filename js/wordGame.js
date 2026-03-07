@@ -662,12 +662,9 @@ const SentenceGame = {
     nextSentence() {
         window.speechSynthesis.cancel();
         
-        this.currentRepeat++;
-        
-        if (this.currentRepeat >= this.repeatCount) {
-            this.currentRepeat = 0;
-            this.currentSentenceIndex++;
-        }
+        // 直接去下一句，唔理讀到第幾次
+        this.currentRepeat = 0;
+        this.currentSentenceIndex++;
         
         if (this.currentSentenceIndex >= this.sentences.length) {
             this.endGame();
