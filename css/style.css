@@ -864,3 +864,37 @@ body {
         width: 100%;
     }
 }
+
+/* ===== 學習記錄 ===== */
+.records-list {
+    max-height: 400px;
+    overflow-y: auto;
+    text-align: left;
+    margin: 15px 0;
+}
+
+.records-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.records-item:last-child {
+    border-bottom: none;
+}
+
+.records-word {
+    font-weight: bold;
+}
+
+.records-meaning {
+    color: #666;
+    margin-left: 8px;
+    font-size: 0.9rem;
+}
+
+.records-stats {
+    text-align: center;
+    font-size: 0.85rem;
+}

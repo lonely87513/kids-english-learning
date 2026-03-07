@@ -9,7 +9,7 @@
 <body>
     <div class="app-container">
         <!-- 版本號 -->
-        <div class="version-tag">v.2026.03.07-006</div>
+        <div class="version-tag">v.2026.03.07-007</div>
         
         <!-- 背景裝飾 -->
         <div class="background-decorations">
@@ -84,7 +84,8 @@
 
             <!-- 底部按鈕 -->
             <div class="bottom-actions">
-                <button class="btn btn-secondary" onclick="exportData()">📥 導出學習報告</button>
+                <button class="btn btn-secondary" onclick="showAllRecords()">📊 查看學習記錄</button>
+                <button class="btn btn-secondary" onclick="exportData()">📥 導出CSV</button>
                 <button class="btn btn-secondary" onclick="resetProgress()">🔄 重置進度</button>
                 <button class="btn btn-secondary" onclick="toggleBackgroundMusic()">🎵 背景音樂</button>
             </div>
@@ -235,6 +236,17 @@
                 <div class="modal-buttons">
                     <button class="btn btn-primary" onclick="createUser()">✅ 確定</button>
                     <button class="btn btn-secondary" onclick="closeModal('userSelectorModal')">❌ 取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 學習記錄彈窗 -->
+        <div id="recordsModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>📊 學習記錄</h3>
+                <div class="records-list" id="recordsList"></div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closeModal('recordsModal')">❌ 關閉</button>
                 </div>
             </div>
         </div>

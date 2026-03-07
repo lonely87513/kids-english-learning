@@ -186,6 +186,55 @@ function resetProgress() {
     }
 }
 
+// 顯示所有學習記錄
+function showAllRecords() {
+    const user = getCurrentUser();
+    if (!user || !user.progress.words) {
+        alert('暫時未有學習記錄');
+        return;
+    }
+    
+    const words = user.progress.words;
+    const recordsList = document.getElementById('recordsList');
+    
+    if (Object.keys(words).length === 0) {
+        recordsList.innerHTML = '<p style="text-align:center;color:#999;">暫時未有學習記錄</p>';
+    } else {
+        let html = '';
+        // 轉為array方便sort
+        const wordArray = Object.entries(words).map(([word, stats]) => ({
+            word,
+            ...stats
+        }));
+        
+        // 按正確率排序（低到高）
+        wordArray.sort((a, b) => {
+            const rateA = a.correct / (a.correct + a.wrong) || 0;
+            const rateB = b.correct / (b.correct + b.wrong) || 0;
+            return rateA - rateB;
+        });
+        
+        wordArray.forEach(item => {
+            const total = item.correct + item.wrong;
+            const rate = total > 0 ? Math.round((item.correct / total) * 100) : 0;
+            const statusColor = rate >= 80 ? '#4CAF50' : rate >= 50 ? '#FF9800' : '#f44336';
+            html += `
+                <div class="records-item">
+                    <div>
+                        <span class="records-word">${item.word}</span>
+                    </div>
+                    <div class="records-stats" style="color:${statusColor}">
+                        ✅${item.correct} ❌${item.wrong} (${rate}%)
+                    </div>
+                </div>
+            `;
+        });
+        recordsList.innerHTML = html;
+    }
+    
+    document.getElementById('recordsModal').classList.remove('hidden');
+}
+
 // ===== 背景音樂 =====
 let bgMusicEnabled = false;
 const bgMusic = new Audio();
