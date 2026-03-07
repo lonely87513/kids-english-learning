@@ -595,8 +595,11 @@ const SentenceGame = {
         this.updateDisplay();
         showScreen('sentenceGame');
         
-        // 倒數5秒
-        this.showCountdown(5);
+        // 倒數5秒 - 先確保元素存在
+        const sentText = document.getElementById('sentText');
+        if (sentText) {
+            this.showCountdown(5);
+        }
     },
     
     // 顯示倒數
@@ -605,16 +608,17 @@ const SentenceGame = {
         
         if (count > 0) {
             sentText.textContent = count.toString();
-            sentText.classList.remove('hidden');
+            sentText.style.display = 'block';
             sentText.style.fontSize = '4rem';
             sentText.style.fontWeight = 'bold';
             setTimeout(() => this.showCountdown(count - 1), 1000);
         } else {
             sentText.textContent = '開始！';
+            sentText.style.display = 'block';
             sentText.style.fontSize = '4rem';
             sentText.style.fontWeight = 'bold';
             setTimeout(() => {
-                sentText.classList.add('hidden');
+                sentText.style.display = 'none';
                 sentText.style.fontSize = '';
                 sentText.style.fontWeight = '';
                 this.playCurrentSentence();
