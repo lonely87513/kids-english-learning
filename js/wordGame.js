@@ -669,8 +669,10 @@ const SentenceGame = {
         if (this.currentSentenceIndex >= this.sentences.length) {
             this.endGame();
         } else {
+            // 開始讀下一句
             const sentence = this.sentences[this.currentSentenceIndex];
             document.getElementById('sentFeedbackArea').innerHTML = '';
+            this.playCurrentSentence();
         }
     },
     
