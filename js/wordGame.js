@@ -700,16 +700,10 @@ const SentenceGame = {
         // 如果已經exit，停止
         if (this.isExited) return;
         
-        // 顯示「閱讀中...」
-        this.showReadingAnimation();
-        
-        // 朗讀句子（包括標點符號停頓）
+        // 朗讀句子
         SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
                 // 如果已經exit，停止
                 if (this.isExited) return;
-                
-                // 停止動畫
-                this.hideReadingAnimation();
                 
                 // 朗讀完成後，等 pauseSeconds 秒再讀多次
                 if (this.currentRepeat < this.repeatCount - 1) {
