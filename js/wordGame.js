@@ -676,12 +676,9 @@ const SentenceGame = {
     },
     
     // 播放當前句子
-    async playCurrentSentence(firstTime = false) {
+    playCurrentSentence(firstTime = false) {
         // 如果已經exit，停止進行
         if (this.isExited) return;
-        
-        // 確保voices loaded先
-        await SpeechSynthesis.initVoices();
         
         if (this.currentSentenceIndex >= this.sentences.length) {
             this.endGame();
