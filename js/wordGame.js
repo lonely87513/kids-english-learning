@@ -23,6 +23,30 @@ const GameConfig = {
     // 隨機獲取答錯Emoji
     getWrongEmoji() {
         return this.wrongEmojis[Math.floor(Math.random() * this.wrongEmojis.length)];
+    },
+    
+    // 答對既訊息
+    correctMessages: [
+        '💩 答對！送你大便！',
+        '🤩 勁呀！食咩大架？',
+        '😎 nice嘢！',
+        '🤑 咁難你都識？',
+        '🎉 太強啦！係咪第一名？',
+        '🥳 果然係最靚既仔！',
+        '🤗 你勁到飛起！',
+        '😻 叻曬你！',
+        '🦄 神童現世！',
+        '🌟 你係MVP！',
+        '💪 勁到痺！',
+        '🏆 冠軍就係你！',
+        '✨ 閃到你眼都花！',
+        '🥇 金牌有你份！',
+        '🤩 完美過跳水選手！'
+    ],
+    
+    // 隨機獲取答對訊息
+    getCorrectMessage() {
+        return this.correctMessages[Math.floor(Math.random() * this.correctMessages.length)];
     }
 };
 
@@ -143,7 +167,7 @@ const DictationGame = {
         feedbackArea.innerHTML = `
             <div class="feedback-correct">
                 <div class="feedback-icon">${GameConfig.getCorrectEmoji()}</div>
-                <div class="feedback-text">💩 答對！送你大便！</div>
+                <div class="feedback-text">${GameConfig.getCorrectMessage()}</div>
             </div>
         `;
         
