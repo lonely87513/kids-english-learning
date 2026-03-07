@@ -137,10 +137,21 @@ const DictationGame = {
     
     // 提交答案
     submitAnswer() {
+        const submitBtn = document.getElementById('submitAnswerBtn');
+        if (submitBtn && submitBtn.disabled) return;
+        
         const input = document.getElementById('answerInput');
         const answer = input.value.trim().toLowerCase();
         
         if (!answer || !this.currentWord) return;
+        
+        // Disable button for 2 seconds
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            setTimeout(() => {
+                submitBtn.disabled = false;
+            }, 2000);
+        }
         
         const isCorrect = answer === this.currentWord.word.toLowerCase();
         
