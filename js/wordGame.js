@@ -60,6 +60,7 @@ const DictationGame = {
     usedWords: [],
     questionCount: 0,
     allWords: [],
+    answers: [], // 記錄每題答案
     
     // 開始遊戲
     start() {
@@ -95,6 +96,7 @@ const DictationGame = {
         this.usedWords = [];
         this.questionCount = 0;
         this.allWords = [];
+        this.answers = [];
         
         // 重置顯示
         document.getElementById('score').textContent = '0';
@@ -157,6 +159,13 @@ const DictationGame = {
         this.correctCount++;
         this.score += 10;
         
+        // 記錄答案
+        this.answers.push({
+            word: this.currentWord.word,
+            meaning: this.currentWord.meaning,
+            correct: true
+        });
+        
         document.getElementById('score').textContent = this.score;
         
         // 顯示正確反饋
@@ -178,6 +187,13 @@ const DictationGame = {
     // 處理錯誤答案
     handleWrong(userAnswer) {
         this.wrongCount++;
+        
+        // 記錄答案
+        this.answers.push({
+            word: this.currentWord.word,
+            meaning: this.currentWord.meaning,
+            correct: false
+        });
         
         // 播放錯誤音效
         SoundEffects.playError();
@@ -235,6 +251,14 @@ const DictationGame = {
         this.wrongCount++;
         recordAnswer(this.currentWord.word, false);
         
+        // 記錄跳過既答案（當錯誤）
+        this.answers.push({
+            word: this.currentWord.word,
+            meaning: this.currentWord.meaning,
+            correct: false,
+            skipped: true
+        });
+        
         const feedbackArea = document.getElementById('feedbackArea');
         feedbackArea.innerHTML = `
             <div class="feedback-wrong">
@@ -257,7 +281,7 @@ const DictationGame = {
     
     // 結束遊戲
     endGame() {
-        showGameResult(this.correctCount, this.wrongCount);
+        showGameResult(this.correctCount, this.wrongCount, this.answers);
     }
 };
 
@@ -273,6 +297,7 @@ const PronunciationGame = {
     isRecording: false,
     phoneticShown: false,
     allWords: [],
+    answers: [], // 記錄每題答案
     
     // 開始遊戲
     start() {
@@ -313,6 +338,7 @@ const PronunciationGame = {
         this.isRecording = false;
         this.phoneticShown = false;
         this.allWords = [];
+        this.answers = [];
         
         // 重置顯示
         document.getElementById('pronScore').textContent = '0';
@@ -426,6 +452,13 @@ const PronunciationGame = {
         // 記錄答案
         recordAnswer(this.currentWord.word, result.isCorrect);
         
+        // 記錄呢題既答案
+        this.answers.push({
+            word: this.currentWord.word,
+            meaning: this.currentWord.meaning,
+            correct: result.isCorrect
+        });
+        
         // 顯示結果
         const feedbackArea = document.getElementById('pronFeedbackArea');
         
@@ -497,7 +530,7 @@ const PronunciationGame = {
     
     // 結束遊戲
     endGame() {
-        showGameResult(this.correctCount, this.wrongCount);
+        showGameResult(this.correctCount, this.wrongCount, this.answers);
     }
 };
 

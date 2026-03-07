@@ -256,7 +256,7 @@ function backToMenu() {
 }
 
 // ===== 遊戲結果 =====
-function showGameResult(correct, wrong) {
+function showGameResult(correct, wrong, wordList = []) {
     const total = correct + wrong;
     const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
     
@@ -280,6 +280,28 @@ function showGameResult(correct, wrong) {
     } else {
         resultEmoji.textContent = '😊';
         resultMessage.textContent = '沒關係！我們一起學更多！';
+    }
+    
+    // 顯示詳細學習報告
+    const reportList = document.getElementById('reportList');
+    if (wordList.length > 0) {
+        let html = '';
+        wordList.forEach(item => {
+            const status = item.correct ? '✅' : '❌';
+            const statusClass = item.correct ? 'correct' : 'wrong';
+            html += `
+                <div class="report-item">
+                    <div>
+                        <span class="report-word">${item.word}</span>
+                        <span class="report-meaning">${item.meaning || ''}</span>
+                    </div>
+                    <span class="report-status ${statusClass}">${status}</span>
+                </div>
+            `;
+        });
+        reportList.innerHTML = html;
+    } else {
+        reportList.innerHTML = '<p style="text-align:center;color:#999;">無詳細記錄</p>';
     }
     
     showScreen('resultScreen');
