@@ -606,13 +606,19 @@ const SentenceGame = {
         if (count > 0) {
             sentText.textContent = count.toString();
             sentText.classList.remove('hidden');
+            sentText.style.fontSize = '4rem';
+            sentText.style.fontWeight = 'bold';
             setTimeout(() => this.showCountdown(count - 1), 1000);
         } else {
             sentText.textContent = '開始！';
+            sentText.style.fontSize = '4rem';
+            sentText.style.fontWeight = 'bold';
             setTimeout(() => {
                 sentText.classList.add('hidden');
+                sentText.style.fontSize = '';
+                sentText.style.fontWeight = '';
                 this.playCurrentSentence();
-            }, 500);
+            }, 800);
         }
     },
     
