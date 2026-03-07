@@ -183,6 +183,7 @@ body {
     border: none;
     font-family: inherit;
     cursor: pointer;
+    touch-action: manipulation;
 }
 
 .game-card-link {
