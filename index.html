@@ -9,7 +9,7 @@
 <body>
     <div class="app-container">
         <!-- 版本號 -->
-        <div class="version-tag">v.2026.03.07-014</div>
+        <div class="version-tag">v.2026.03.07-015</div>
         
         <!-- 背景裝飾 -->
         <div class="background-decorations">
@@ -36,20 +36,20 @@
             <h1 class="title">🎮 選擇遊戲模式</h1>
             
             <div class="game-cards">
-                <button type="button" class="game-card" ontouchstart="showUnitSelector('dictation')" onclick="showUnitSelector('dictation')">
+                <button type="button" class="game-card" onclick="handleGameCardClick(() => showUnitSelector('dictation'))">
                     <div class="card-icon">✍️</div>
                     <h2>聽寫模式</h2>
                     <p>聽發音，拼寫單字</p>
                     <span class="badge">⭐ 熱門</span>
                 </button>
                 
-                <button type="button" class="game-card" ontouchstart="showUnitSelector('pronunciation')" onclick="showUnitSelector('pronunciation')">
+                <button type="button" class="game-card" onclick="handleGameCardClick(() => showUnitSelector('pronunciation'))">
                     <div class="card-icon">🎤</div>
                     <h2>發音模式</h2>
                     <p>聽發音，試試看讀出來</p>
                 </button>
                 
-                <button type="button" class="game-card" ontouchstart="showSentenceSettings()" onclick="showSentenceSettings()">
+                <button type="button" class="game-card" onclick="handleGameCardClick(() => showSentenceSettings())">
                     <div class="card-icon">📝</div>
                     <h2>句子讀默</h2>
                     <p>讀出句子，包括標點符號</p>

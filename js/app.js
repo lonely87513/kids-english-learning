@@ -496,3 +496,28 @@ function exitSentenceGame() {
 function nextSentence() {
     SentenceGame.nextSentence();
 }
+
+// 防止滑動觸發click既問題
+let touchStartY = 0;
+let touchEndY = 0;
+
+document.addEventListener('touchstart', function(e) {
+    touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+    touchEndY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+// 判斷係咪swipe（滑動>50px）
+function isSwipe() {
+    return Math.abs(touchEndY - touchStartY) > 50;
+}
+
+// 改寫game card既click handler
+function handleGameCardClick(callback) {
+    if (isSwipe()) {
+        return; // 如果係swipe，就唔觸發click
+    }
+    callback();
+}
