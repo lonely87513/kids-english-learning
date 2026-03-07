@@ -737,10 +737,6 @@ const SentenceGame = {
                     }
                 }
             });
-        
-        // 更新顯示
-        document.getElementById('sentText').textContent = sentence.text;
-        this.updateDisplay();
     },
     
     // 跳到下一題（用戶自己撳）
@@ -758,8 +754,6 @@ const SentenceGame = {
             this.endGame();
         } else {
             const sentence = this.sentences[this.currentSentenceIndex];
-            document.getElementById('sentText').textContent = sentence.text;
-            this.updateDisplay();
             document.getElementById('sentFeedbackArea').innerHTML = '';
         }
     },
