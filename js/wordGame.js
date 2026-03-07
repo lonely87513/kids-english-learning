@@ -83,9 +83,6 @@ const DictationGame = {
         
         // 更新題目計數
         document.getElementById('totalQuestions').textContent = GameConfig.questionsPerGame;
-        
-        // 自動播放第一個單字的讀音
-        setTimeout(() => this.playCurrentWord(), 500);
     },
     
     // 重置遊戲狀態
