@@ -714,11 +714,18 @@ const SentenceGame = {
                             }, 1000);
                         }
                     } else {
-                        // 非連續模式，等待用戶撳播放
-                        // Enable button for user to continue
-                        const btn = document.getElementById('playSentBtn');
-                        if (btn) btn.disabled = false;
-                        this.updateDisplay();
+                        // 非連續模式，去下一句，等用戶撳播放
+                        this.currentSentenceIndex++;
+                        
+                        if (this.currentSentenceIndex >= this.sentences.length) {
+                            // 已經做完晒，去結束
+                            this.endGame();
+                        } else {
+                            // Enable button for user to continue
+                            const btn = document.getElementById('playSentBtn');
+                            if (btn) btn.disabled = false;
+                            this.updateDisplay();
+                        }
                     }
                 }
             }).catch(() => {
