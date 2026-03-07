@@ -552,8 +552,13 @@ function toggleSentenceText() {
     }
 }
 
-// 重新開始句子遊戲（回到設定畫面）
+// 重新開始句子遊戲（回到第一句）
 function restartSentenceGame() {
     window.speechSynthesis.cancel();
-    showScreen('sentenceSettings');
+    SentenceGame.currentSentenceIndex = 0;
+    SentenceGame.currentRepeat = 0;
+    SentenceGame.updateDisplay();
+    document.getElementById('sentFeedbackArea').innerHTML = '';
+    // 自動播放第一句
+    setTimeout(() => SentenceGame.playCurrentSentence(), 500);
 }
