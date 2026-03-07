@@ -666,39 +666,38 @@ const SentenceGame = {
         
         // 朗讀句子
         SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
-                // 如果已經exit，停止
-                if (this.isExited) return;
+            // 如果已經exit，停止
+            if (this.isExited) return;
+            
+            // 停止動畫
+            this.hideReadingAnimation();
+            
+            // 朗讀完成後，等 pauseSeconds 秒再讀多次
+            if (this.currentRepeat < this.repeatCount - 1) {
+                this.currentRepeat++;
+                this.updateDisplay();
+                setTimeout(() => {
+                    if (!this.isExited) this.playCurrentSentence();
+                }, this.pauseSeconds * 1000);
+            } else {
+                // 完成呢句既所有次數，去下一句
+                this.currentRepeat = 0;
+                this.currentSentenceIndex++;
                 
-                // 停止動畫
-                this.hideReadingAnimation();
-                
-                // 朗讀完成後，等 pauseSeconds 秒再讀多次
+                if (this.currentSentenceIndex >= this.sentences.length) {
+                    this.endGame();
+                } else {
+                    // 自動播放下一句
+                    setTimeout(() => {
+                        if (!this.isExited) this.playCurrentSentence();
+                    }, 1000);
+                }
+            }
         }).catch(() => {
             // 朗讀出錯，都當係完成
             if (this.isExited) return;
             this.hideReadingAnimation();
         });
-                if (this.currentRepeat < this.repeatCount - 1) {
-                    this.currentRepeat++;
-                    this.updateDisplay();
-                    setTimeout(() => {
-                        if (!this.isExited) this.playCurrentSentence();
-                    }, this.pauseSeconds * 1000);
-                } else {
-                    // 完成呢句既所有次數，去下一句
-                    this.currentRepeat = 0;
-                    this.currentSentenceIndex++;
-                    
-                    if (this.currentSentenceIndex >= this.sentences.length) {
-                        this.endGame();
-                    } else {
-                        // 自動播放下一句
-                        setTimeout(() => {
-                            if (!this.isExited) this.playCurrentSentence();
-                        }, 1000);
-                    }
-                }
-            });
     },
     
     // 跳到下一題（用戶自己撳）
