@@ -292,12 +292,28 @@ function showScreen(screenId) {
     document.getElementById('dictationGame').classList.add('hidden');
     document.getElementById('pronunciationGame').classList.add('hidden');
     document.getElementById('resultScreen').classList.add('hidden');
+    document.getElementById('sentenceSettings').classList.add('hidden');
+    document.getElementById('sentenceGame').classList.add('hidden');
     
     // 顯示目標畫面
     document.getElementById(screenId).classList.remove('hidden');
 }
 
 function backToMenu() {
+    // Cleanup sentence game
+    window.speechSynthesis.cancel();
+    if (typeof SentenceGame !== 'undefined') {
+        SentenceGame.hideReadingAnimation();
+        const sentText = document.getElementById('sentText');
+        if (sentText) {
+            sentText.textContent = '';
+            sentText.classList.add('hidden');
+            sentText.style.display = '';
+            sentText.style.fontSize = '';
+            sentText.style.fontWeight = '';
+        }
+    }
+    
     showScreen('mainMenu');
     AppState.currentMode = null;
     AppState.gameState = null;
