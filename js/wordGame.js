@@ -608,7 +608,25 @@ const SentenceGame = {
         const sentence = this.sentences[this.currentSentenceIndex];
         
         // 朗讀句子（包括標點符號停頓）
-        SpeechSynthesis.speakWithPunctuation(sentence.text);
+        SpeechSynthesis.speakWithPunctuation(sentence.text).then(() => {
+            // 朗讀完成後，等 pauseSeconds 秒再讀多次
+            if (this.currentRepeat < this.repeatCount - 1) {
+                this.currentRepeat++;
+                this.updateDisplay();
+                setTimeout(() => this.playCurrentSentence(), this.pauseSeconds * 1000);
+            } else {
+                // 完成呢句既所有次數，去下一句
+                this.currentRepeat = 0;
+                this.currentSentenceIndex++;
+                
+                if (this.currentSentenceIndex >= this.sentences.length) {
+                    this.endGame();
+                } else {
+                    // 自動播放下一句
+                    setTimeout(() => this.playCurrentSentence(), 1000);
+                }
+            }
+        });
         
         // 更新顯示
         document.getElementById('sentText').textContent = sentence.text;
