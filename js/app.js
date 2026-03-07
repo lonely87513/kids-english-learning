@@ -185,7 +185,6 @@ function resetProgress() {
         alert('學習進度已重置！');
     }
 }
-}
 
 // ===== 背景音樂 =====
 let bgMusicEnabled = false;
