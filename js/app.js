@@ -537,3 +537,22 @@ function handleGameCardClick(callback) {
     touchEndY = 0;
     callback();
 }
+
+// 顯示/隱藏句子
+function toggleSentenceText() {
+    const sentText = document.getElementById('sentText');
+    const showBtn = document.getElementById('showSentBtn');
+    
+    if (sentText.classList.contains('hidden')) {
+        sentText.classList.remove('hidden');
+        showBtn.textContent = '🙈 隱藏句子';
+    } else {
+        sentText.classList.add('hidden');
+        showBtn.textContent = '👁️ 顯示句子';
+    }
+}
+
+// 重新開始句子遊戲
+function restartSentenceGame() {
+    SentenceGame.start();
+}

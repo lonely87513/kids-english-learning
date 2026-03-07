@@ -9,7 +9,7 @@
 <body>
     <div class="app-container">
         <!-- 版本號 -->
-        <div class="version-tag">v.2026.03.07-016</div>
+        <div class="version-tag">v.2026.03.07-017</div>
         
         <!-- 背景裝飾 -->
         <div class="background-decorations">
@@ -259,9 +259,12 @@
 
             <div class="game-content">
                 <div class="sentence-card">
-                    <div class="sentence-text" id="sentText">
+                    <div class="sentence-text hidden" id="sentText">
                         Click start to begin...
                     </div>
+                    <button class="btn btn-secondary" id="showSentBtn" onclick="toggleSentenceText()">
+                        👁️ 顯示句子
+                    </button>
                 </div>
 
                 <div class="sentence-controls">
@@ -270,6 +273,9 @@
                     </button>
                     <button class="btn btn-secondary" onclick="nextSentence()">
                         ➡️ 下一題
+                    </button>
+                    <button class="btn btn-secondary" onclick="restartSentenceGame()">
+                        🔄 重新開始
                     </button>
                 </div>
 
