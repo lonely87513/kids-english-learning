@@ -165,6 +165,28 @@ function exportData() {
     link.click();
 }
 
+// 重置學習進度
+function resetProgress() {
+    if (!confirm('確定要重置所有學習進度嗎？呢個操作唔可以復原！')) {
+        return;
+    }
+    
+    const user = getCurrentUser();
+    if (user) {
+        user.progress = {
+            totalWordsLearned: 0,
+            totalPractice: 0,
+            correctCount: 0,
+            wrongCount: 0,
+            words: {}
+        };
+        saveUsers();
+        updateProgressDisplay();
+        alert('學習進度已重置！');
+    }
+}
+}
+
 // ===== 背景音樂 =====
 let bgMusicEnabled = false;
 const bgMusic = new Audio();
