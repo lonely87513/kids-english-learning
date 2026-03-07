@@ -559,6 +559,8 @@ function restartSentenceGame() {
     SentenceGame.currentRepeat = 0;
     SentenceGame.updateDisplay();
     document.getElementById('sentFeedbackArea').innerHTML = '';
-    // 自動播放第一句
-    setTimeout(() => SentenceGame.playCurrentSentence(), 500);
+    // 顯示第一句但唔自動播放
+    if (SentenceGame.sentences.length > 0) {
+        document.getElementById('sentText').textContent = SentenceGame.sentences[0].text;
+    }
 }
