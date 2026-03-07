@@ -595,8 +595,25 @@ const SentenceGame = {
         this.updateDisplay();
         showScreen('sentenceGame');
         
-        // 自動播放第一句
-        setTimeout(() => this.playCurrentSentence(), 500);
+        // 倒數5秒
+        this.showCountdown(5);
+    },
+    
+    // 顯示倒數
+    showCountdown(count) {
+        const sentText = document.getElementById('sentText');
+        
+        if (count > 0) {
+            sentText.textContent = count.toString();
+            sentText.classList.remove('hidden');
+            setTimeout(() => this.showCountdown(count - 1), 1000);
+        } else {
+            sentText.textContent = '開始！';
+            setTimeout(() => {
+                sentText.classList.add('hidden');
+                this.playCurrentSentence();
+            }, 500);
+        }
     },
     
     // 播放當前句子
