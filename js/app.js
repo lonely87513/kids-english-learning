@@ -469,8 +469,9 @@ function startSentenceGame() {
     const pause = document.getElementById('pauseSeconds').value;
     const speed = document.getElementById('sentenceSpeed').value;
     const random = document.getElementById('sentenceRandom').checked;
+    const continuous = document.getElementById('sentenceContinuous').checked;
     
-    SentenceGame.init(unit, repeat, pause, speed, random);
+    SentenceGame.init(unit, repeat, pause, speed, random, continuous);
     SentenceGame.start();
 }
 

@@ -568,12 +568,13 @@ const SentenceGame = {
     },
     
     // 初始化
-    init(unit, repeat, pause, speed, random) {
+    init(unit, repeat, pause, speed, random, continuous) {
         this.currentUnit = unit;
         this.repeatCount = parseInt(repeat);
         this.pauseSeconds = parseInt(pause);
         this.speed = parseFloat(speed) || 0.6;
         this.shouldRandom = random === true || random === 'true';
+        this.shouldContinuous = continuous !== false && continuous !== 'false';
         this.currentSentenceIndex = 0;
         this.currentRepeat = 0;
         this.isRecording = false;
@@ -697,17 +698,27 @@ const SentenceGame = {
                         if (!this.isExited) this.playCurrentSentence();
                     }, this.pauseSeconds * 1000);
                 } else {
-                    // 完成呢句既所有次數，去下一句
+                    // 完成呢句既所有次數
                     this.currentRepeat = 0;
-                    this.currentSentenceIndex++;
                     
-                    if (this.currentSentenceIndex >= this.sentences.length) {
-                        this.endGame();
+                    // 連續模式先會自動去下一句
+                    if (this.shouldContinuous) {
+                        this.currentSentenceIndex++;
+                        
+                        if (this.currentSentenceIndex >= this.sentences.length) {
+                            this.endGame();
+                        } else {
+                            // 自動播放下一句
+                            setTimeout(() => {
+                                if (!this.isExited) this.playCurrentSentence();
+                            }, 1000);
+                        }
                     } else {
-                        // 自動播放下一句
-                        setTimeout(() => {
-                            if (!this.isExited) this.playCurrentSentence();
-                        }, 1000);
+                        // 非連續模式，等待用戶撳播放
+                        // Enable button for user to continue
+                        const btn = document.getElementById('playSentBtn');
+                        if (btn) btn.disabled = false;
+                        this.updateDisplay();
                     }
                 }
             }).catch(() => {
