@@ -9,7 +9,7 @@
 <body>
     <div class="app-container">
         <!-- 版本號 -->
-        <div class="version-tag">v.2026.03.07-007</div>
+        <div class="version-tag">v.2026.03.07-008</div>
         
         <!-- 背景裝飾 -->
         <div class="background-decorations">
@@ -47,6 +47,12 @@
                     <div class="card-icon">🎤</div>
                     <h2>發音模式</h2>
                     <p>聽發音，試試看讀出來</p>
+                </button>
+                
+                <button type="button" class="game-card" ontouchstart="showSentenceSettings()" onclick="showSentenceSettings()">
+                    <div class="card-icon">📝</div>
+                    <h2>句子讀默</h2>
+                    <p>讀出句子，包括標點符號</p>
                     <span class="badge new">NEW</span>
                 </button>
                 
@@ -188,6 +194,82 @@
                 </div>
 
                 <div class="feedback-area" id="pronFeedbackArea"></div>
+            </div>
+        </section>
+
+        <!-- 句子讀默設定畫面 -->
+        <section id="sentenceSettings" class="game-screen hidden">
+            <button class="btn btn-back" onclick="backToMenu()">⬅️ 返回</button>
+            
+            <div class="game-header">
+                <h2>📝 句子讀默設定</h2>
+            </div>
+
+            <div class="game-content">
+                <div class="settings-form">
+                    <div class="setting-item">
+                        <label>選擇Unit:</label>
+                        <select id="sentenceUnitSelect" class="input">
+                            <option value="1">Unit 1</option>
+                            <option value="2">Unit 2</option>
+                            <option value="3">Unit 3</option>
+                            <option value="4">Unit 4</option>
+                            <option value="5">Unit 5</option>
+                            <option value="6">Unit 6</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label>每句讀幾多次?</label>
+                        <input type="number" id="repeatCount" class="input" value="3" min="1" max="10">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label>每次停頓幾秒?</label>
+                        <input type="number" id="pauseSeconds" class="input" value="3" min="1" max="30">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="startSentenceGame()">
+                        ▶️ 開始遊戲
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 句子讀默遊戲畫面 -->
+        <section id="sentenceGame" class="game-screen hidden">
+            <button class="btn btn-back" onclick="exitSentenceGame()">⬅️ 結束</button>
+            
+            <div class="game-header">
+                <h2>📝 句子讀默</h2>
+                <div class="game-stats">
+                    <span>句子: <strong id="sentCurrent">1</strong>/<strong id="sentTotal">10</strong></span>
+                    <span>次數: <strong id="sentRepeat">1</strong>/<strong id="sentRepeatTotal">3</strong></span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="sentence-card">
+                    <div class="sentence-text" id="sentText">
+                        Click start to begin...
+                    </div>
+                </div>
+
+                <div class="sentence-controls">
+                    <button class="btn btn-play-sound" onclick="playCurrentSentence()">
+                        🔊 播放句子
+                    </button>
+                    
+                    <button class="btn btn-record" id="sentRecordBtn" onclick="toggleSentenceRecording()">
+                        🎤 按住錄音
+                    </button>
+                </div>
+
+                <div class="sentence-progress">
+                    <div class="progress-bar" id="sentProgressBar"></div>
+                </div>
+
+                <div class="feedback-area" id="sentFeedbackArea"></div>
             </div>
         </section>
 

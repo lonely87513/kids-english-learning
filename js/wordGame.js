@@ -534,6 +534,194 @@ const PronunciationGame = {
     }
 };
 
+// ===== 句子讀默遊戲 =====
+const SentenceGame = {
+    currentUnit: 1,
+    repeatCount: 3,
+    pauseSeconds: 3,
+    sentences: [],
+    currentSentenceIndex: 0,
+    currentRepeat: 0,
+    isRecording: false,
+    isPaused: false,
+    
+    // 句子題庫（之後會從JSON load）
+    sentenceBanks: {
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+        5: [],
+        6: []
+    },
+    
+    // 初始化
+    init(unit, repeat, pause) {
+        this.currentUnit = unit;
+        this.repeatCount = parseInt(repeat);
+        this.pauseSeconds = parseInt(pause);
+        this.currentSentenceIndex = 0;
+        this.currentRepeat = 0;
+        this.isRecording = false;
+        this.isPaused = false;
+        
+        // 呢度load句子題庫（暫時用範例，等Nathan提供真正題庫）
+        this.loadSentences();
+    },
+    
+    // Load句子（之後會改為從JSON讀取）
+    loadSentences() {
+        // 範例題庫 - 之後會替換為真正既文章
+        const sampleSentences = [
+            { text: "Hello, how are you?", meaning: "你好，你好嗎？" },
+            { text: "I am a student.", meaning: "我是一個學生。" },
+            { text: "She likes to read books.", meaning: "她喜歡看書。" },
+            { text: "They are playing in the park.", meaning: "他們在公園玩耍。" },
+            { text: "What time is it now?", meaning: "現在幾點？" },
+            { text: "I want to eat some ice cream.", meaning: "我想食雪糕。" },
+            { text: "The cat is sleeping on the bed.", meaning: "隻貓係張床上面訓覺。" },
+            { text: "Can you help me, please?", meaning: "請問你可以幫我吗？" },
+            { text: "Today is a sunny day.", meaning: "今日係晴天。" },
+            { text: "I have three apples.", meaning: "我有三個蘋果。" }
+        ];
+        
+        this.sentences = sampleSentences;
+    },
+    
+    // 開始遊戲
+    start() {
+        AppState.currentMode = 'sentence';
+        this.updateDisplay();
+        showScreen('sentenceGame');
+        
+        // 自動播放第一句
+        setTimeout(() => this.playCurrentSentence(), 500);
+    },
+    
+    // 播放當前句子
+    playCurrentSentence() {
+        if (this.currentSentenceIndex >= this.sentences.length) {
+            this.endGame();
+            return;
+        }
+        
+        const sentence = this.sentences[this.currentSentenceIndex];
+        
+        // 朗讀句子（包括標點符號停頓）
+        SpeechSynthesis.speakWithPunctuation(sentence.text);
+        
+        // 更新顯示
+        document.getElementById('sentText').textContent = sentence.text;
+        this.updateDisplay();
+    },
+    
+    // 朗讀完或暫停後開始錄音
+    startRecordingAfterPause() {
+        if (this.isPaused) return;
+        
+        this.isRecording = true;
+        document.getElementById('sentRecordBtn').classList.add('recording');
+        
+        SpeechRecognition.start({
+            continuous: true,
+            interimResults: false
+        });
+    },
+    
+    // 處理錄音結果
+    handleRecording(transcript) {
+        const sentence = this.sentences[this.currentSentenceIndex];
+        const target = sentence.text.toLowerCase().replace(/[.,?!]/g, '').trim();
+        const spoken = transcript.toLowerCase().replace(/[.,?!]/g, '').trim();
+        
+        // 簡單既比較（可以改進）
+        const isCorrect = this.calculateSimilarity(target, spoken) >= 0.7;
+        
+        const feedbackArea = document.getElementById('sentFeedbackArea');
+        
+        if (isCorrect) {
+            this.currentRepeat++;
+            
+            feedbackArea.innerHTML = `
+                <div class="feedback-correct">
+                    <div class="feedback-icon">${GameConfig.getCorrectEmoji()}</div>
+                    <div class="feedback-text">${GameConfig.getCorrectMessage()} 你讀既: "${transcript}"</div>
+                </div>
+            `;
+            
+            SoundEffects.playSuccess();
+            
+            if (this.currentRepeat >= this.repeatCount) {
+                // 完成呢句，去下一句
+                this.currentRepeat = 0;
+                this.currentSentenceIndex++;
+                
+                if (this.currentSentenceIndex >= this.sentences.length) {
+                    setTimeout(() => this.endGame(), 1500);
+                } else {
+                    setTimeout(() => this.playCurrentSentence(), 1500);
+                }
+            } else {
+                // 繼續讀多次
+                setTimeout(() => this.playCurrentSentence(), this.pauseSeconds * 1000);
+            }
+        } else {
+            feedbackArea.innerHTML = `
+                <div class="feedback-wrong">
+                    <div class="feedback-icon">${GameConfig.getWrongEmoji()}</div>
+                    <div class="feedback-text">再試一次！你讀既: "${transcript}"</div>
+                </div>
+            `;
+            
+            SoundEffects.playError();
+            
+            // 繼續讀多次
+            setTimeout(() => this.playCurrentSentence(), this.pauseSeconds * 1000);
+        }
+        
+        this.updateDisplay();
+    },
+    
+    // 計算相似度
+    calculateSimilarity(str1, str2) {
+        const words1 = str1.split(' ');
+        const words2 = str2.split(' ');
+        
+        let match = 0;
+        words1.forEach(w => {
+            if (words2.includes(w)) match++;
+        });
+        
+        return match / Math.max(words1.length, words2.length);
+    },
+    
+    // 更新顯示
+    updateDisplay() {
+        document.getElementById('sentCurrent').textContent = this.currentSentenceIndex + 1;
+        document.getElementById('sentTotal').textContent = this.sentences.length;
+        document.getElementById('sentRepeat').textContent = this.currentRepeat + 1;
+        document.getElementById('sentRepeatTotal').textContent = this.repeatCount;
+        
+        // 更新進度條
+        const progress = ((this.currentSentenceIndex * this.repeatCount + this.currentRepeat) / 
+                        (this.sentences.length * this.repeatCount)) * 100;
+        document.getElementById('sentProgressBar').style.width = progress + '%';
+    },
+    
+    // 結束遊戲
+    endGame() {
+        showGameResult(0, 0, []);
+    },
+    
+    // 重置
+    reset() {
+        this.currentSentenceIndex = 0;
+        this.currentRepeat = 0;
+        this.isRecording = false;
+        this.isPaused = false;
+    }
+};
+
 // ===== 單字題庫 =====
 const WordBank = {
     units: [],

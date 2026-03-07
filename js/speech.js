@@ -131,6 +131,16 @@ const SpeechSynthesis = {
         });
     },
     
+    // 朗讀句子（加強標點停頓）
+    speakWithPunctuation(text) {
+        // 清理text，保留標點符號
+        const cleaned = text.replace(/[.,?!;:] /g, ' $& ');
+        return this.speak(cleaned, {
+            rate: 0.75,
+            pitch: 1
+        });
+    },
+    
     // 停止朗讀
     stop() {
         window.speechSynthesis.cancel();

@@ -439,3 +439,54 @@ function startSelectedGame() {
         PronunciationGame.start();
     }
 }
+
+// ===== 句子讀默 =====
+
+// 顯示句子設定畫面
+function showSentenceSettings() {
+    showScreen('sentenceSettings');
+}
+
+// 開始句子遊戲
+function startSentenceGame() {
+    const unit = document.getElementById('sentenceUnitSelect').value;
+    const repeat = document.getElementById('repeatCount').value;
+    const pause = document.getElementById('pauseSeconds').value;
+    
+    SentenceGame.init(unit, repeat, pause);
+    SentenceGame.start();
+}
+
+// 播放當前句子
+function playCurrentSentence() {
+    SentenceGame.playCurrentSentence();
+}
+
+// 切換錄音（句子模式）
+function toggleSentenceRecording() {
+    if (SentenceGame.isRecording) {
+        SpeechRecognition.stop();
+        SentenceGame.isRecording = false;
+        document.getElementById('sentRecordBtn').classList.remove('recording');
+    } else {
+        // 開始錄音
+        SentenceGame.isRecording = true;
+        document.getElementById('sentRecordBtn').classList.add('recording');
+        
+        SpeechRecognition.start({
+            onResult: (transcript) => {
+                SentenceGame.handleRecording(transcript);
+                SentenceGame.isRecording = false;
+                document.getElementById('sentRecordBtn').classList.remove('recording');
+            }
+        });
+    }
+}
+
+// 退出句子遊戲
+function exitSentenceGame() {
+    SpeechRecognition.stop();
+    window.speechSynthesis.cancel();
+    SentenceGame.reset();
+    backToMenu();
+}

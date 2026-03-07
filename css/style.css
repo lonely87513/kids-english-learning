@@ -898,3 +898,75 @@ body {
     text-align: center;
     font-size: 0.85rem;
 }
+
+/* ===== 句子讀默 ===== */
+.settings-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.setting-item {
+    margin-bottom: 20px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.setting-item .input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+}
+
+.sentence-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.sentence-text {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.sentence-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.sentence-controls .btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
+.sentence-progress {
+    margin: 15px 0;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    display: block;
+    height: 100%;
+    background: var(--success-color);
+    width: 0%;
+    transition: width 0.3s ease;
+}
