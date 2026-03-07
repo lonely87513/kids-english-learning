@@ -89,6 +89,9 @@ const SpeechSynthesis = {
                 return;
             }
             
+            // 停止當前朗讀
+            window.speechSynthesis.cancel();
+            
             const utterance = new SpeechSynthesisUtterance(text);
             
             // 設置聲音
@@ -106,23 +109,9 @@ const SpeechSynthesis = {
             
             // 事件處理
             utterance.onend = () => resolve();
-            utterance.onerror = (e) => {
-                // 忽略 "canceled" 錯誤，呢個係正常既
-                if (e.error === 'canceled' || e.error === 'interrupted') {
-                    resolve();
-                    return;
-                }
-                console.log('Speech error:', e.error);
-                reject(e);
-            };
+            utterance.onerror = (e) => reject(e);
             
-            try {
-                window.speechSynthesis.speak(utterance);
-                console.log('Speak called, pending:', window.speechSynthesis.pending);
-            } catch (e) {
-                console.log('Speak exception:', e);
-                reject(e);
-            }
+            window.speechSynthesis.speak(utterance);
         });
     },
     

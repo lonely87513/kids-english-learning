@@ -505,8 +505,9 @@ function toggleSentenceRecording() {
 
 // 退出句子遊戲
 function exitSentenceGame() {
-    // 停止語音
+    // 先停止語音（多次確保停止）
     window.speechSynthesis.cancel();
+    setTimeout(() => window.speechSynthesis.cancel(), 100);
     
     // 立即停止所有進行中的野
     if (typeof SentenceGame !== 'undefined') {
@@ -527,20 +528,7 @@ function exitSentenceGame() {
         sentText.style.fontWeight = '';
     }
     
-    // 等一陣先返回，等語音停止
-    setTimeout(() => {
-        // 直接返回主目錄
-        document.getElementById('sentenceGame').classList.add('hidden');
-        document.getElementById('sentenceSettings').classList.add('hidden');
-        document.getElementById('mainMenu').classList.remove('hidden');
-        AppState.currentMode = null;
-        AppState.gameState = null;
-        
-        // Reset voices for next game
-        if (typeof SpeechSynthesis !== 'undefined') {
-            SpeechSynthesis.voicesLoaded = false;
-        }
-    }, 100);
+    backToMenu();
 }
 
 // 下一題（句子模式）
