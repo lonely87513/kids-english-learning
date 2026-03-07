@@ -586,16 +586,24 @@ const SentenceGame = {
     loadSentences() {
         // 範例題庫 - 之後會替換為真正既文章
         const sampleSentences = [
-            { text: "Hello, how are you?", meaning: "你好，你好嗎？" },
-            { text: "I am a student.", meaning: "我是一個學生。" },
-            { text: "She likes to read books.", meaning: "她喜歡看書。" },
-            { text: "They are playing in the park.", meaning: "他們在公園玩耍。" },
-            { text: "What time is it now?", meaning: "現在幾點？" },
-            { text: "I want to eat some ice cream.", meaning: "我想食雪糕。" },
-            { text: "The cat is sleeping on the bed.", meaning: "隻貓係張床上面訓覺。" },
-            { text: "Can you help me, please?", meaning: "請問你可以幫我吗？" },
-            { text: "Today is a sunny day.", meaning: "今日係晴天。" },
-            { text: "I have three apples.", meaning: "我有三個蘋果。" }
+            { text: "Dr Turner is a cat lover.", meaning: "Dr Turner係一個愛貓之人。" },
+            { text: "He has nine cats.", meaning: "佢有九隻貓。" },
+            { text: "Five years ago the kittens were all small and naughty.", meaning: "五年前啲小貓都係咁細隻同曳曳地。" },
+            { text: "Now they are big and quiet.", meaning: "依家佢哋大隻咗同安靜咗。" },
+            { text: "Read this book and learn how to look after your cats!", meaning: "讀呢本書學點樣照顧你既貓！" },
+            { text: "This book has many helpful tips on cat food.", meaning: "呢本書有好多關於貓糧既實用貼士。" },
+            { text: "I have a white cat.", meaning: "我有隻白色既貓。" },
+            { text: "It has a long tail.", meaning: "佢有条長尾。" },
+            { text: "It was sick last month.", meaning: "佢上個月唔舒服。" },
+            { text: "It was light and weak.", meaning: "佢好輕同好弱。" },
+            { text: "The book says I need to give it healthy food.", meaning: "本書話我要比健康既食物佢食。" },
+            { text: "Now it's heavy and strong again.", meaning: "依家佢重咗同強壯咗。" },
+            { text: "Two months ago, my cat was very naughty and noisy.", meaning: "兩個月前，我既貓曳到你唔信。" },
+            { text: "The book says I need to play with it more.", meaning: "本書話我要多啲同佢玩。" },
+            { text: "Now it sits still and is quiet.", meaning: "依家佢坐下唔郁同好安靜。" },
+            { text: "I like the cat toys in the book too. They're interesting!", meaning: "我都鐘意本書既貓玩具！好好玩！" },
+            { text: "I want to give my cats a bath, but I don't know how.", meaning: "我想幫我既貓沖涼，但係唔知點做。" },
+            { text: "I can't find any information in the book.", meaning: "我响本書搵唔到任何資料。" }
         ];
         
         this.sentences = sampleSentences;
