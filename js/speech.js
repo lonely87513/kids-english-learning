@@ -133,9 +133,23 @@ const SpeechSynthesis = {
     
     // 朗讀句子（加強標點停頓）
     speakWithPunctuation(text) {
-        // 清理text，保留標點符號
-        const cleaned = text.replace(/[.,?!;:] /g, ' $& ');
-        return this.speak(cleaned, {
+        // 將標點符號轉為文字
+        const punctuationMap = {
+            ',': ' comma ',
+            '?': ' question mark ',
+            '!': ' exclamation mark ',
+            '.': ' period ',
+            ';': ' semicolon ',
+            ':': ' colon '
+        };
+        
+        // 替換標點為文字
+        let spoken = text;
+        for (const [punc, spokenPunc] of Object.entries(punctuationMap)) {
+            spoken = spoken.split(punc).join(spokenPunc);
+        }
+        
+        return this.speak(spoken, {
             rate: 0.75,
             pitch: 1
         });
