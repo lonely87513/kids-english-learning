@@ -150,7 +150,7 @@ const SpeechSynthesis = {
         }
         
         return this.speak(spoken, {
-            rate: 0.75,
+            rate: 0.6,
             pitch: 1
         });
     },

@@ -615,6 +615,27 @@ const SentenceGame = {
         this.updateDisplay();
     },
     
+    // 跳到下一題（用戶自己撳）
+    nextSentence() {
+        window.speechSynthesis.cancel();
+        
+        this.currentRepeat++;
+        
+        if (this.currentRepeat >= this.repeatCount) {
+            this.currentRepeat = 0;
+            this.currentSentenceIndex++;
+        }
+        
+        if (this.currentSentenceIndex >= this.sentences.length) {
+            this.endGame();
+        } else {
+            const sentence = this.sentences[this.currentSentenceIndex];
+            document.getElementById('sentText').textContent = sentence.text;
+            this.updateDisplay();
+            document.getElementById('sentFeedbackArea').innerHTML = '';
+        }
+    },
+    
     // 朗讀完或暫停後開始錄音
     startRecordingAfterPause() {
         if (this.isPaused) return;

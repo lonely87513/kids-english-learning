@@ -490,3 +490,8 @@ function exitSentenceGame() {
     SentenceGame.reset();
     backToMenu();
 }
+
+// 下一題（句子模式）
+function nextSentence() {
+    SentenceGame.nextSentence();
+}
