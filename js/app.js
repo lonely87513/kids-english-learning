@@ -537,7 +537,12 @@ function exitSentenceGame() {
     
     // 等一陣先返回，等語音停止
     setTimeout(() => {
-        backToMenu();
+        // 直接返回主目錄
+        document.getElementById('sentenceGame').classList.add('hidden');
+        document.getElementById('sentenceSettings').classList.add('hidden');
+        document.getElementById('mainMenu').classList.remove('hidden');
+        AppState.currentMode = null;
+        AppState.gameState = null;
     }, 100);
 }
 
