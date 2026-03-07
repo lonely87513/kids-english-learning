@@ -552,7 +552,8 @@ function toggleSentenceText() {
     }
 }
 
-// 重新開始句子遊戲
+// 重新開始句子遊戲（回到設定畫面）
 function restartSentenceGame() {
-    SentenceGame.start();
+    window.speechSynthesis.cancel();
+    showScreen('sentenceSettings');
 }
