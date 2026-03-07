@@ -460,6 +460,12 @@ function startSelectedGame() {
 
 // 顯示句子設定畫面
 function showSentenceSettings() {
+    // Unlock speech synthesis on iOS Safari
+    const unlockAudio = new SpeechSynthesisUtterance(' ');
+    unlockAudio.volume = 0;
+    unlockAudio.rate = 10;
+    window.speechSynthesis.speak(unlockAudio);
+    
     showScreen('sentenceSettings');
 }
 
