@@ -505,6 +505,7 @@ function toggleSentenceRecording() {
 
 // 退出句子遊戲
 function exitSentenceGame() {
+    console.log('exitSentenceGame called');
     // 先停止語音（更 aggressive 既方式）
     const stopSpeech = () => {
         window.speechSynthesis.cancel();
