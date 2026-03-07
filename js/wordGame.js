@@ -676,7 +676,7 @@ const SentenceGame = {
     },
     
     // 播放當前句子
-    playCurrentSentence() {
+    playCurrentSentence(firstTime = false) {
         // 如果已經exit，停止進行
         if (this.isExited) return;
         
@@ -687,16 +687,28 @@ const SentenceGame = {
         
         const sentence = this.sentences[this.currentSentenceIndex];
         
-        // 倒數3秒後開始閱讀
-        this.showPlayCountdown(3, () => {
-            // 如果已經exit，停止
-            if (this.isExited) return;
-            
-            // 顯示「閱讀中...」
-            this.showReadingAnimation();
-            
-            // 朗讀句子（包括標點符號停頓）
-            SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
+        // 只有第一次先倒數
+        if (firstTime) {
+            this.showPlayCountdown(3, () => {
+                if (this.isExited) return;
+                this.doPlaySentence(sentence);
+            });
+        } else {
+            // 之後直接閱讀
+            this.doPlaySentence(sentence);
+        }
+    },
+    
+    // 實際播放句子既function
+    doPlaySentence(sentence) {
+        // 如果已經exit，停止
+        if (this.isExited) return;
+        
+        // 顯示「閱讀中...」
+        this.showReadingAnimation();
+        
+        // 朗讀句子（包括標點符號停頓）
+        SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
                 // 如果已經exit，停止
                 if (this.isExited) return;
                 
@@ -725,7 +737,6 @@ const SentenceGame = {
                     }
                 }
             });
-        });
         
         // 更新顯示
         document.getElementById('sentText').textContent = sentence.text;

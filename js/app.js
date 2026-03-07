@@ -476,7 +476,7 @@ function startSentenceGame() {
 
 // 播放當前句子
 function playCurrentSentence() {
-    SentenceGame.playCurrentSentence();
+    SentenceGame.playCurrentSentence(true);
 }
 
 // 切換錄音（句子模式）
@@ -527,6 +527,7 @@ function exitSentenceGame() {
 
 // 下一題（句子模式）
 function nextSentence() {
+    if (SentenceGame.isExited) return;
     SentenceGame.nextSentence();
 }
 
