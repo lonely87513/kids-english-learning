@@ -132,7 +132,7 @@ const SpeechSynthesis = {
     },
     
     // 朗讀句子（加強標點停頓）
-    speakWithPunctuation(text) {
+    speakWithPunctuation(text, speed = 0.6) {
         // 將標點符號轉為文字
         const punctuationMap = {
             ',': ' comma ',
@@ -150,7 +150,7 @@ const SpeechSynthesis = {
         }
         
         return this.speak(spoken, {
-            rate: 0.6,
+            rate: speed,
             pitch: 1
         });
     },

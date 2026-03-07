@@ -556,10 +556,11 @@ const SentenceGame = {
     },
     
     // 初始化
-    init(unit, repeat, pause) {
+    init(unit, repeat, pause, speed) {
         this.currentUnit = unit;
         this.repeatCount = parseInt(repeat);
         this.pauseSeconds = parseInt(pause);
+        this.speed = parseFloat(speed) || 0.6;
         this.currentSentenceIndex = 0;
         this.currentRepeat = 0;
         this.isRecording = false;
@@ -608,7 +609,7 @@ const SentenceGame = {
         const sentence = this.sentences[this.currentSentenceIndex];
         
         // 朗讀句子（包括標點符號停頓）
-        SpeechSynthesis.speakWithPunctuation(sentence.text).then(() => {
+        SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
             // 朗讀完成後，等 pauseSeconds 秒再讀多次
             if (this.currentRepeat < this.repeatCount - 1) {
                 this.currentRepeat++;

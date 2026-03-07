@@ -452,8 +452,9 @@ function startSentenceGame() {
     const unit = document.getElementById('sentenceUnitSelect').value;
     const repeat = document.getElementById('repeatCount').value;
     const pause = document.getElementById('pauseSeconds').value;
+    const speed = document.getElementById('sentenceSpeed').value;
     
-    SentenceGame.init(unit, repeat, pause);
+    SentenceGame.init(unit, repeat, pause, speed);
     SentenceGame.start();
 }
 
