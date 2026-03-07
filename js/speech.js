@@ -5,6 +5,36 @@
 
 // ===== 語音合成 (TTS) =====
 const SpeechSynthesis = {
+    voicesLoaded: false,
+    
+    // 初始化聲音 - 確保voices loaded
+    async initVoices() {
+        if (this.voicesLoaded) return;
+        
+        // 嘗試獲取voices
+        let voices = window.speechSynthesis.getVoices();
+        
+        // 如果係空既，等一陣再試
+        if (voices.length === 0) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            voices = window.speechSynthesis.getVoices();
+        }
+        
+        // 如果仲係空既，setup event listener
+        if (voices.length === 0) {
+            await new Promise(resolve => {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    resolve();
+                };
+                // timeout after 2 seconds
+                setTimeout(resolve, 2000);
+            });
+        }
+        
+        this.voicesLoaded = true;
+        console.log('Voices loaded:', window.speechSynthesis.getVoices().length);
+    },
+    
     // 檢查瀏覽器支持
     isSupported() {
         return 'speechSynthesis' in window;
@@ -50,7 +80,10 @@ const SpeechSynthesis = {
     
     // 朗讀文本
     speak(text, options = {}) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+            // 先確保voices loaded
+            await this.initVoices();
+            
             if (!this.isSupported()) {
                 reject(new Error('瀏覽器不支持語音合成'));
                 return;
