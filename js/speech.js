@@ -149,9 +149,46 @@ const SpeechSynthesis = {
             spoken = spoken.split(punc).join(spokenPunc);
         }
         
-        return this.speak(spoken, {
-            rate: speed,
-            pitch: 1
+        // 將句子分開，每個標點停頓前後各加停頓
+        const parts = spoken.split(/( comma | question mark | exclamation mark | period | semicolon | colon )/);
+        
+        // 如果簡單既，就直接讀
+        if (parts.length === 1) {
+            return this.speak(spoken, { rate: speed, pitch: 1 });
+        }
+        
+        // 分開讀，每個標點停頓前後各0.5秒
+        return new Promise((resolve, reject) => {
+            let index = 0;
+            
+            const speakPart = () => {
+                if (index >= parts.length) {
+                    resolve();
+                    return;
+                }
+                
+                const part = parts[index].trim();
+                if (!part) {
+                    index++;
+                    speakPart();
+                    return;
+                }
+                
+                // 檢查係咪標點
+                const isPunctuation = Object.values(punctuationMap).some(p => p.trim() === part);
+                
+                this.speak(part, { rate: speed, pitch: 1 }).then(() => {
+                    index++;
+                    // 標點停頓0.5秒
+                    if (isPunctuation) {
+                        setTimeout(speakPart, 500);
+                    } else {
+                        speakPart();
+                    }
+                }).catch(reject);
+            };
+            
+            speakPart();
         });
     },
     
