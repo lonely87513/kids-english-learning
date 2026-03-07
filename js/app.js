@@ -490,6 +490,17 @@ function exitSentenceGame() {
     window.speechSynthesis.cancel();
     SentenceGame.hideReadingAnimation();
     SentenceGame.reset();
+    
+    // Reset sentence text display
+    const sentText = document.getElementById('sentText');
+    if (sentText) {
+        sentText.textContent = '';
+        sentText.classList.add('hidden');
+        sentText.style.display = '';
+        sentText.style.fontSize = '';
+        sentText.style.fontWeight = '';
+    }
+    
     backToMenu();
 }
 
