@@ -544,7 +544,6 @@ const SentenceGame = {
     currentRepeat: 0,
     isRecording: false,
     isPaused: false,
-    isExited: false,
     
     // 句子題庫（之後會從JSON load）
     sentenceBanks: {
@@ -630,9 +629,6 @@ const SentenceGame = {
     
     // 播放前倒數
     showPlayCountdown(count, callback) {
-        // 如果已經exit，停止
-        if (this.isExited) return;
-        
         const sentText = document.getElementById('sentText');
         
         if (count > 0) {
@@ -645,9 +641,7 @@ const SentenceGame = {
         } else {
             sentText.textContent = '開始！';
             setTimeout(() => {
-                if (!this.isExited) {
-                    callback();
-                }
+                callback();
             }, 500);
         }
     },
@@ -676,10 +670,7 @@ const SentenceGame = {
     },
     
     // 播放當前句子
-    playCurrentSentence(firstTime = false) {
-        // 如果已經exit，停止進行
-        if (this.isExited) return;
-        
+    playCurrentSentence() {
         if (this.currentSentenceIndex >= this.sentences.length) {
             this.endGame();
             return;
@@ -687,31 +678,13 @@ const SentenceGame = {
         
         const sentence = this.sentences[this.currentSentenceIndex];
         
-        // 只有第一次先倒數
-        if (firstTime) {
-            this.showPlayCountdown(3, () => {
-                if (this.isExited) return;
-                this.doPlaySentence(sentence);
-            });
-        } else {
-            // 之後直接閱讀
-            this.doPlaySentence(sentence);
-        }
-    },
-    
-    // 實際播放句子既function
-    doPlaySentence(sentence) {
-        // 如果已經exit，停止
-        if (this.isExited) return;
-        
-        // 顯示「閱讀中...」
-        this.showReadingAnimation();
-        
-        // 朗讀句子（包括標點符號停頓）
-        SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
-                // 如果已經exit，停止
-                if (this.isExited) return;
-                
+        // 倒數3秒後開始閱讀
+        this.showPlayCountdown(3, () => {
+            // 顯示「閱讀中...」
+            this.showReadingAnimation();
+            
+            // 朗讀句子（包括標點符號停頓）
+            SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
                 // 停止動畫
                 this.hideReadingAnimation();
                 
@@ -719,9 +692,7 @@ const SentenceGame = {
                 if (this.currentRepeat < this.repeatCount - 1) {
                     this.currentRepeat++;
                     this.updateDisplay();
-                    setTimeout(() => {
-                        if (!this.isExited) this.playCurrentSentence();
-                    }, this.pauseSeconds * 1000);
+                    setTimeout(() => this.playCurrentSentence(), this.pauseSeconds * 1000);
                 } else {
                     // 完成呢句既所有次數，去下一句
                     this.currentRepeat = 0;
@@ -731,12 +702,11 @@ const SentenceGame = {
                         this.endGame();
                     } else {
                         // 自動播放下一句
-                        setTimeout(() => {
-                            if (!this.isExited) this.playCurrentSentence();
-                        }, 1000);
+                        setTimeout(() => this.playCurrentSentence(), 1000);
                     }
                 }
             });
+        });
         
         // 更新顯示
         document.getElementById('sentText').textContent = sentence.text;
@@ -868,7 +838,6 @@ const SentenceGame = {
         this.currentRepeat = 0;
         this.isRecording = false;
         this.isPaused = false;
-        this.isExited = false;
         this.hideReadingAnimation();
     }
 };

@@ -476,7 +476,7 @@ function startSentenceGame() {
 
 // 播放當前句子
 function playCurrentSentence() {
-    SentenceGame.playCurrentSentence(true);
+    SentenceGame.playCurrentSentence();
 }
 
 // 切換錄音（句子模式）
@@ -502,14 +502,9 @@ function toggleSentenceRecording() {
 
 // 退出句子遊戲
 function exitSentenceGame() {
-    // 立即停止所有進行中的野
-    if (typeof SentenceGame !== 'undefined') {
-        SentenceGame.isExited = true;
-        SentenceGame.hideReadingAnimation();
-    }
-    
     SpeechRecognition.stop();
     window.speechSynthesis.cancel();
+    SentenceGame.hideReadingAnimation();
     SentenceGame.reset();
     
     // Reset sentence text display
@@ -527,7 +522,6 @@ function exitSentenceGame() {
 
 // 下一題（句子模式）
 function nextSentence() {
-    if (SentenceGame.isExited) return;
     SentenceGame.nextSentence();
 }
 
