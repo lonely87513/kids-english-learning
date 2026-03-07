@@ -460,8 +460,6 @@ function startSelectedGame() {
 
 // 顯示句子設定畫面
 function showSentenceSettings() {
-    // Pre-load voices for TTS
-    SpeechSynthesis.initVoices();
     showScreen('sentenceSettings');
 }
 

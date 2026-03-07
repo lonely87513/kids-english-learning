@@ -591,10 +591,13 @@ const SentenceGame = {
     },
     
     // 開始遊戲
-    start() {
+    async start() {
         AppState.currentMode = 'sentence';
         this.updateDisplay();
         showScreen('sentenceGame');
+        
+        // 確保voices loaded
+        await SpeechSynthesis.initVoices();
         
         // 顯示第一句，等用戶撳播放
         if (this.sentences.length > 0) {
