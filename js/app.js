@@ -505,6 +505,10 @@ function toggleSentenceRecording() {
 
 // 退出句子遊戲
 function exitSentenceGame() {
+    // 先停止語音（多次確保停止）
+    window.speechSynthesis.cancel();
+    setTimeout(() => window.speechSynthesis.cancel(), 100);
+    
     // 立即停止所有進行中的野
     if (typeof SentenceGame !== 'undefined') {
         SentenceGame.isExited = true;
@@ -512,7 +516,6 @@ function exitSentenceGame() {
     }
     
     SpeechRecognition.stop();
-    window.speechSynthesis.cancel();
     SentenceGame.reset();
     
     // Reset sentence text display

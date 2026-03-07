@@ -814,6 +814,7 @@ const SentenceGame = {
     
     // 重置
     reset() {
+        this.hideReadingAnimation();
         this.currentSentenceIndex = 0;
         this.currentRepeat = 0;
         this.isRecording = false;
