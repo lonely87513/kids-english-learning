@@ -89,10 +89,6 @@ const SpeechSynthesis = {
                 return;
             }
             
-            // 停止當前朗讀，等一陣先播放
-            window.speechSynthesis.cancel();
-            await new Promise(r => setTimeout(r, 50));
-            
             const utterance = new SpeechSynthesisUtterance(text);
             
             // 設置聲音
