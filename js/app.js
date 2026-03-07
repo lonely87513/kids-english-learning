@@ -505,15 +505,8 @@ function toggleSentenceRecording() {
 
 // 退出句子遊戲
 function exitSentenceGame() {
-    // 先停止語音（更 aggressive 既方式）
-    const stopSpeech = () => {
-        window.speechSynthesis.cancel();
-    };
-    
-    stopSpeech();
-    setTimeout(stopSpeech, 50);
-    setTimeout(stopSpeech, 150);
-    setTimeout(stopSpeech, 300);
+    // 停止語音
+    window.speechSynthesis.cancel();
     
     // 立即停止所有進行中的野
     if (typeof SentenceGame !== 'undefined') {
@@ -542,6 +535,11 @@ function exitSentenceGame() {
         document.getElementById('mainMenu').classList.remove('hidden');
         AppState.currentMode = null;
         AppState.gameState = null;
+        
+        // Reset voices for next game
+        if (typeof SpeechSynthesis !== 'undefined') {
+            SpeechSynthesis.voicesLoaded = false;
+        }
     }, 100);
 }
 
