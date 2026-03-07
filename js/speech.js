@@ -116,10 +116,17 @@ const SpeechSynthesis = {
                     resolve();
                     return;
                 }
+                console.log('Speech error:', e.error);
                 reject(e);
             };
             
-            window.speechSynthesis.speak(utterance);
+            try {
+                window.speechSynthesis.speak(utterance);
+                console.log('Speak called, pending:', window.speechSynthesis.pending);
+            } catch (e) {
+                console.log('Speak exception:', e);
+                reject(e);
+            }
         });
     },
     
