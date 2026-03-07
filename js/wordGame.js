@@ -344,9 +344,17 @@ const PronunciationGame = {
             }
         }).catch(err => {
             console.error('錄音失敗:', err);
-            alert('錄音失敗，請確保已授予麥克風權限');
             this.isRecording = false;
             this.updateRecordButton();
+            
+            // 更具體既錯誤提示
+            if (err.message && err.message.includes('permission')) {
+                alert('需要麥克風權限！\n\n請喺瀏覽器設置度允許訪問麥克風，然後再試一次。');
+            } else if (err.message && err.message.includes('no-speech')) {
+                alert('聽唔到聲音，請再試一次！');
+            } else {
+                alert('錄音失敗，請確保已授予麥克風權限，並使用HTTPS連接');
+            }
         });
     },
     
