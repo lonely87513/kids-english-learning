@@ -693,6 +693,9 @@ const SentenceGame = {
                         }, 1000);
                     }
                 }
+            }).catch(() => {
+                // 忽略error，等下一題繼續
+                if (this.isExited) return;
             });
     },
     
