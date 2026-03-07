@@ -591,13 +591,13 @@ const SentenceGame = {
     },
     
     // 開始遊戲
-    async start() {
+    start() {
         AppState.currentMode = 'sentence';
         this.updateDisplay();
         showScreen('sentenceGame');
         
-        // 確保voices loaded
-        await SpeechSynthesis.initVoices();
+        // 預先load voices (非同步)
+        SpeechSynthesis.initVoices();
         
         // 顯示第一句，等用戶撳播放
         if (this.sentences.length > 0) {
@@ -679,9 +679,12 @@ const SentenceGame = {
     },
     
     // 播放當前句子
-    playCurrentSentence(firstTime = false) {
+    async playCurrentSentence(firstTime = false) {
         // 如果已經exit，停止進行
         if (this.isExited) return;
+        
+        // 確保voices loaded
+        await SpeechSynthesis.initVoices();
         
         if (this.currentSentenceIndex >= this.sentences.length) {
             this.endGame();
