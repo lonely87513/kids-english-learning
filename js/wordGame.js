@@ -629,6 +629,7 @@ const SentenceGame = {
     // 顯示閱讀中動畫
     showReadingAnimation() {
         const sentText = document.getElementById('sentText');
+        sentText.classList.remove('hidden');
         sentText.style.display = 'block';
         sentText.style.fontSize = '2rem';
         sentText.style.fontWeight = 'bold';
