@@ -624,15 +624,44 @@ const SentenceGame = {
         this.doPlaySentence(sentence);
     },
     
+    // 顯示閱讀中動畫
+    showReadingAnimation() {
+        const sentText = document.getElementById('sentText');
+        sentText.classList.remove('hidden');
+        sentText.style.display = 'block';
+        sentText.style.fontSize = '2rem';
+        sentText.style.fontWeight = 'bold';
+        
+        let dots = '';
+        this.readingInterval = setInterval(() => {
+            dots = dots.length >= 3 ? '' : dots + '.';
+            sentText.textContent = '閱讀中' + dots;
+        }, 500);
+    },
+    
+    // 隱藏閱讀中動畫
+    hideReadingAnimation() {
+        if (this.readingInterval) {
+            clearInterval(this.readingInterval);
+            this.readingInterval = null;
+        }
+    },
+    
     // 實際播放句子既function
     doPlaySentence(sentence) {
         // 如果已經exit，停止
         if (this.isExited) return;
         
+        // 顯示「閱讀中...」
+        this.showReadingAnimation();
+        
         // 朗讀句子
         SpeechSynthesis.speakWithPunctuation(sentence.text, this.speed).then(() => {
                 // 如果已經exit，停止
                 if (this.isExited) return;
+                
+                // 停止動畫
+                this.hideReadingAnimation();
                 
                 // 朗讀完成後，等 pauseSeconds 秒再讀多次
                 if (this.currentRepeat < this.repeatCount - 1) {
