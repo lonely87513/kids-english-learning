@@ -691,16 +691,8 @@ const SentenceGame = {
         
         const sentence = this.sentences[this.currentSentenceIndex];
         
-        // 只有第一次先倒數
-        if (firstTime) {
-            this.showPlayCountdown(3, () => {
-                if (this.isExited) return;
-                this.doPlaySentence(sentence);
-            });
-        } else {
-            // 之後直接閱讀
-            this.doPlaySentence(sentence);
-        }
+        // 直接閱讀，唔倒數
+        this.doPlaySentence(sentence);
     },
     
     // 實際播放句子既function
