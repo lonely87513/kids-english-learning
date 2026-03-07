@@ -500,8 +500,15 @@ function nextSentence() {
 // 防止滑動觸發click既問題
 let touchStartY = 0;
 let touchEndY = 0;
+let lastTouchTime = 0;
 
 document.addEventListener('touchstart', function(e) {
+    touchStartY = e.changedTouches[0].screenY;
+    lastTouchTime = Date.now();
+}, { passive: true });
+
+document.addEventListener('touchmove', function(e) {
+    // 手指郁動緊，記錄新既位置
     touchStartY = e.changedTouches[0].screenY;
 }, { passive: true });
 
@@ -511,13 +518,22 @@ document.addEventListener('touchend', function(e) {
 
 // 判斷係咪swipe（滑動>50px）
 function isSwipe() {
-    return Math.abs(touchEndY - touchStartY) > 50;
+    const diff = Math.abs(touchEndY - touchStartY);
+    return diff > 50;
 }
 
 // 改寫game card既click handler
 function handleGameCardClick(callback) {
+    // 如果手指郁動超過50px，就當係swipe，唔觸發click
     if (isSwipe()) {
-        return; // 如果係swipe，就唔觸發click
+        // Reset for next time
+        touchStartY = 0;
+        touchEndY = 0;
+        return; 
     }
+    
+    // 正常click
+    touchStartY = 0;
+    touchEndY = 0;
     callback();
 }
