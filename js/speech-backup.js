@@ -1,67 +1,32 @@
 /**
- * 小小英語樂園 - 語音功能 (Google Translate TTS 版)
+ * 小小英語樂園 - 語音功能
  * 處理 TTS 文字轉語音和語音識別
  */
 
-// ===== Google Translate TTS =====
-const GoogleTTS = {
-    // 朗讀文本
-    speak(text, options = {}) {
-        return new Promise((resolve, reject) => {
-            const lang = options.lang || 'en';
-            const speed = options.speed || 1.0;
-            
-            // Google Translate TTS URL
-            const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&q=${encodeURIComponent(text)}&client=tw-ob&speed=${speed}`;
-            
-            const audio = new Audio(url);
-            
-            audio.onended = () => resolve();
-            audio.onerror = (e) => reject(e);
-            
-            audio.play().catch(reject);
-        });
-    },
-    
-    // 朗讀單字（英文）
-    speakWord(word) {
-        return this.speak(word, { lang: 'en', speed: 0.9 });
-    },
-    
-    // 朗讀句子（英文）
-    speakSentence(sentence) {
-        return this.speak(sentence, { lang: 'en', speed: 0.85 });
-    },
-    
-    // 停止朗讀
-    stop() {
-        // Google TTS 無法直接停止，但可以創建新既 audio 覆蓋
-    }
-};
-
-// ===== 語音合成 (TTS) - 兼容舊版本 =====
+// ===== 語音合成 (TTS) =====
 const SpeechSynthesis = {
-    // 切換使用邊個 TTS 引擎
-    useGoogleTTS: true, // true = Google Translate, false = Web Speech API
-    
     voicesLoaded: false,
     
     // 初始化聲音 - 確保voices loaded
     async initVoices() {
         if (this.voicesLoaded) return;
         
+        // 嘗試獲取voices
         let voices = window.speechSynthesis.getVoices();
         
+        // 如果係空既，等一陣再試
         if (voices.length === 0) {
             await new Promise(resolve => setTimeout(resolve, 500));
             voices = window.speechSynthesis.getVoices();
         }
         
+        // 如果仲係空既，setup event listener
         if (voices.length === 0) {
             await new Promise(resolve => {
                 window.speechSynthesis.onvoiceschanged = () => {
                     resolve();
                 };
+                // timeout after 2 seconds
                 setTimeout(resolve, 2000);
             });
         }
@@ -85,6 +50,8 @@ const SpeechSynthesis = {
         const voices = this.getVoices();
         if (!voices || voices.length === 0) return null;
         
+        // 優先揀清晰既英語 voice
+        // 試 Google / Microsoft / Apple 既英文聲音
         let voice = voices.find(v => 
             (v.name.includes('Google US English') || 
              v.name.includes('Microsoft Zira') ||
@@ -92,14 +59,17 @@ const SpeechSynthesis = {
             v.lang.startsWith('en')
         );
         
+        // 如果冇既，試 US English 女性聲音
         if (!voice) {
             voice = voices.find(v => v.lang === 'en-US' && v.name.includes('Female'));
         }
         
+        // 再試任何英文
         if (!voice) {
             voice = voices.find(v => v.lang.startsWith('en-'));
         }
         
+        // 最尾就用第一個
         if (!voice) {
             voice = voices[0];
         }
@@ -110,16 +80,8 @@ const SpeechSynthesis = {
     
     // 朗讀文本
     speak(text, options = {}) {
-        // 如果啟用 Google TTS
-        if (this.useGoogleTTS) {
-            return GoogleTTS.speak(text, {
-                lang: options.lang || 'en',
-                speed: options.rate || 0.9
-            });
-        }
-        
-        // 否則使用 Web Speech API
         return new Promise(async (resolve, reject) => {
+            // 先確保voices loaded
             await this.initVoices();
             
             if (!this.isSupported()) {
@@ -127,20 +89,25 @@ const SpeechSynthesis = {
                 return;
             }
             
+            // 停止當前朗讀
             window.speechSynthesis.cancel();
             
             const utterance = new SpeechSynthesisUtterance(text);
             
+            // 設置聲音
             if (options.voice) {
                 utterance.voice = options.voice;
             } else {
                 utterance.voice = this.getEnglishVoice();
             }
             
-            utterance.rate = options.rate || 0.7;
-            utterance.pitch = options.pitch || 1.1;
+            // 設置參數 - 慢啲同清晰啲
+            utterance.rate = options.rate || 0.7; // 慢啲，適合小朋友
+            utterance.pitch = options.pitch || 1.1; // 稍微高啲
+            utterance.volume = options.volume || 1;
             utterance.volume = options.volume || 1;
             
+            // 事件處理
             utterance.onend = () => resolve();
             utterance.onerror = (e) => reject(e);
             
@@ -150,9 +117,6 @@ const SpeechSynthesis = {
     
     // 朗讀單字（更適合學習）
     speakWord(word) {
-        if (this.useGoogleTTS) {
-            return GoogleTTS.speakWord(word);
-        }
         return this.speak(word, {
             rate: 0.8,
             pitch: 1
@@ -161,9 +125,6 @@ const SpeechSynthesis = {
     
     // 朗讀句子
     speakSentence(sentence) {
-        if (this.useGoogleTTS) {
-            return GoogleTTS.speakSentence(sentence);
-        }
         return this.speak(sentence, {
             rate: 0.85,
             pitch: 1
@@ -172,6 +133,7 @@ const SpeechSynthesis = {
     
     // 朗讀句子（加強標點停頓）
     speakWithPunctuation(text, speed = 0.6) {
+        // 將標點符號轉為文字
         const punctuationMap = {
             ',': ' comma ',
             '?': ' question mark ',
@@ -181,17 +143,21 @@ const SpeechSynthesis = {
             ':': ' colon '
         };
         
+        // 替換標點為文字
         let spoken = text;
         for (const [punc, spokenPunc] of Object.entries(punctuationMap)) {
             spoken = spoken.split(punc).join(spokenPunc);
         }
         
+        // 將句子分開，每個標點停頓前後各加停頓
         const parts = spoken.split(/( comma | question mark | exclamation mark | full-stop | semicolon | colon )/);
         
+        // 如果簡單既，就直接讀
         if (parts.length === 1) {
             return this.speak(spoken, { rate: speed, pitch: 1 });
         }
         
+        // 分開讀，每個標點停頓前後各0.5秒
         return new Promise((resolve, reject) => {
             let index = 0;
             
@@ -208,10 +174,12 @@ const SpeechSynthesis = {
                     return;
                 }
                 
+                // 檢查係咪標點
                 const isPunctuation = Object.values(punctuationMap).some(p => p.trim() === part);
                 
                 this.speak(part, { rate: speed, pitch: 1 }).then(() => {
                     index++;
+                    // 標點停頓0.5秒
                     if (isPunctuation) {
                         setTimeout(speakPart, 500);
                     } else {
@@ -227,22 +195,6 @@ const SpeechSynthesis = {
     // 停止朗讀
     stop() {
         window.speechSynthesis.cancel();
-    },
-    
-    // 切換 TTS 引擎
-    setEngine(engine) {
-        if (engine === 'google') {
-            this.useGoogleTTS = true;
-            console.log('TTS Engine: Google Translate');
-        } else {
-            this.useGoogleTTS = false;
-            console.log('TTS Engine: Web Speech API');
-        }
-    },
-    
-    // 獲取當前引擎
-    getEngine() {
-        return this.useGoogleTTS ? 'Google Translate' : 'Web Speech API';
     }
 };
 
@@ -251,10 +203,12 @@ const SpeechRecognition = {
     recognition: null,
     isListening: false,
     
+    // 檢查瀏覽器支持
     isSupported() {
         return 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
     },
     
+    // 初始化識別器
     init() {
         if (!this.isSupported()) {
             console.warn('瀏覽器不支持語音識別');
@@ -264,6 +218,7 @@ const SpeechRecognition = {
         const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
         this.recognition = new SpeechRecognitionAPI();
         
+        // 設置識別器參數
         this.recognition.continuous = false;
         this.recognition.interimResults = true;
         this.recognition.lang = 'en-US';
@@ -271,6 +226,7 @@ const SpeechRecognition = {
         return true;
     },
     
+    // 開始識別
     start(options = {}) {
         return new Promise((resolve, reject) => {
             if (!this.recognition && !this.init()) {
@@ -283,10 +239,12 @@ const SpeechRecognition = {
                 return;
             }
             
+            // 設置語言
             if (options.lang) {
                 this.recognition.lang = options.lang;
             }
             
+            // 結果處理
             this.recognition.onresult = (event) => {
                 const results = event.results;
                 const lastResult = results[results.length - 1];
@@ -303,20 +261,24 @@ const SpeechRecognition = {
                 }
             };
             
+            // 錯誤處理
             this.recognition.onerror = (event) => {
                 this.isListening = false;
                 reject(new Error(event.error));
             };
             
+            // 結束處理
             this.recognition.onend = () => {
                 this.isListening = false;
             };
             
+            // 開始識別
             this.isListening = true;
             this.recognition.start();
         });
     },
     
+    // 停止識別
     stop() {
         if (this.recognition && this.isListening) {
             this.recognition.stop();
@@ -324,7 +286,9 @@ const SpeechRecognition = {
         }
     },
     
+    // 比較發音（簡單版本）
     comparePronunciation(spoken, target) {
+        // 轉為小寫並去除標點
         const normalize = (text) => {
             return text.toLowerCase()
                 .replace(/[.,!?]/g, '')
@@ -339,10 +303,12 @@ const SpeechRecognition = {
             return { isCorrect: true, score: 100 };
         }
         
+        // 計算相似度（Levenshtein距離）
         const distance = this.levenshteinDistance(spokenNorm, targetNorm);
         const maxLength = Math.max(spokenNorm.length, targetNorm.length);
         const similarity = Math.max(0, (1 - distance / maxLength) * 100);
         
+        // 根據相似度判斷
         let isCorrect = false;
         let feedback = '';
         
@@ -363,6 +329,7 @@ const SpeechRecognition = {
         return { isCorrect, score: Math.round(similarity), feedback };
     },
     
+    // 計算Levenshtein距離
     levenshteinDistance(str1, str2) {
         const m = str1.length;
         const n = str2.length;
@@ -377,9 +344,9 @@ const SpeechRecognition = {
                     dp[i][j] = dp[i - 1][j - 1];
                 } else {
                     dp[i][j] = Math.min(
-                        dp[i - 1][j] + 1,
-                        dp[i][j - 1] + 1,
-                        dp[i - 1][j - 1] + 1
+                        dp[i - 1][j] + 1,     // 刪除
+                        dp[i][j - 1] + 1,     // 插入
+                        dp[i - 1][j - 1] + 1  // 替換
                     );
                 }
             }
@@ -393,6 +360,7 @@ const SpeechRecognition = {
 const SoundEffects = {
     audioContext: null,
     
+    // 初始化 AudioContext
     init() {
         if (!this.audioContext) {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -400,6 +368,7 @@ const SoundEffects = {
         return this.audioContext;
     },
     
+    // 播放音調
     playTone(frequency, duration, type = 'sine') {
         const ctx = this.init();
         const oscillator = ctx.createOscillator();
@@ -418,36 +387,43 @@ const SoundEffects = {
         oscillator.stop(ctx.currentTime + duration);
     },
     
+    // 播放成功音效
     playSuccess() {
-        const notes = [523, 659, 784];
+        // 播放歡快的音階
+        const notes = [523, 659, 784]; // C5, E5, G5
         notes.forEach((note, i) => {
             setTimeout(() => this.playTone(note, 0.3), i * 150);
         });
     },
     
+    // 播放錯誤音效
     playError() {
+        // 播放低沉的音調
         this.playTone(200, 0.3, 'sawtooth');
         setTimeout(() => this.playTone(150, 0.3, 'sawtooth'), 200);
     },
     
+    // 播放按鈕點擊音效
     playClick() {
         this.playTone(800, 0.1);
     },
     
+    // 播放獎勵音效
     playReward() {
-        const notes = [523, 659, 784, 1047];
+        // 播放勝利的音階
+        const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
         notes.forEach((note, i) => {
             setTimeout(() => this.playTone(note, 0.2), i * 100);
         });
     },
     
+    // 播放錄音中音效
     playRecording() {
         this.playTone(440, 0.1);
     }
 };
 
-// ===== 導出模組====
+// ===== 導出模組=====
 window.SpeechSynthesis = SpeechSynthesis;
 window.SpeechRecognition = SpeechRecognition;
 window.SoundEffects = SoundEffects;
-window.GoogleTTS = GoogleTTS;
