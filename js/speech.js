@@ -427,3 +427,25 @@ const SoundEffects = {
 window.SpeechSynthesis = SpeechSynthesis;
 window.SpeechRecognition = SpeechRecognition;
 window.SoundEffects = SoundEffects;
+
+// ===== 測試語音功能 =====
+function testSpeech() {
+    console.log('Testing speech...');
+    
+    // 先確保 Web Speech API 可用
+    if (!window.speechSynthesis) {
+        alert('抱歉，你的瀏覽器不支持語音功能');
+        return;
+    }
+    
+    // 初始化 voices
+    SpeechSynthesis.initVoices().then(() => {
+        // 測試讀一個字
+        SpeechSynthesis.speakWord('Hello').then(() => {
+            console.log('Speech test passed!');
+        }).catch(err => {
+            console.error('Speech test failed:', err);
+            alert('語音測試失敗！請檢查：\n1. 音量是否開啟？\n2. 瀏覽器權限是否允許？');
+        });
+    });
+}
