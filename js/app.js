@@ -660,7 +660,17 @@ function showVerbTableSelector() {
     // Wait for WordBank to load if not ready
     if (!WordBank.data || !WordBank.data.verbTables) {
         console.log('Waiting for WordBank to load...');
-        grid.innerHTML = '<p>載入中...</p>';
+        grid.innerHTML = '<p>載入中... 請稍候</p>';
+        
+        // Wait for WordBank to finish loading
+        const checkAndShow = () => {
+            if (WordBank.data && WordBank.data.verbTables) {
+                showVerbTableSelector(); // Recursively call to show the tables
+            } else {
+                setTimeout(checkAndShow, 100);
+            }
+        };
+        setTimeout(checkAndShow, 100);
         return;
     }
     
@@ -684,11 +694,17 @@ function showVerbTable(tableId) {
     // Wait for WordBank to load if not ready
     if (!WordBank.data || !WordBank.data.verbTables) {
         alert('題庫載入中，請稍後再試！');
+        
+        // Try again after a short delay
+        setTimeout(() => showVerbTable(tableId), 500);
         return;
     }
     
     const table = (WordBank.data.verbTables || []).find(t => t.id === tableId);
-    if (!table) return;
+    if (!table) {
+        alert('找不到動詞表！');
+        return;
+    }
     
     VerbTable.currentTable = table;
     VerbTable.verbList = table.verbs;
