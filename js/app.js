@@ -657,24 +657,13 @@ function showVerbTableSelector() {
     const grid = document.getElementById('verbTableGrid');
     grid.innerHTML = '';
     
-    // Wait for WordBank to load if not ready
-    if (!WordBank.data || !WordBank.data.verbTables) {
-        console.log('Waiting for WordBank to load...');
-        grid.innerHTML = '<p>載入中... 請稍候</p>';
-        
-        // Wait for WordBank to finish loading
-        const checkAndShow = () => {
-            if (WordBank.data && WordBank.data.verbTables) {
-                showVerbTableSelector(); // Recursively call to show the tables
-            } else {
-                setTimeout(checkAndShow, 100);
-            }
-        };
-        setTimeout(checkAndShow, 100);
+    // 直接顯示，題庫應該已經load完成
+    const verbTables = WordBank.data ? WordBank.data.verbTables || [] : [];
+    
+    if (verbTables.length === 0) {
+        grid.innerHTML = '<p>請刷新頁面...</p>';
         return;
     }
-    
-    const verbTables = WordBank.data.verbTables || [];
     
     verbTables.forEach((table, index) => {
         const card = document.createElement('div');
@@ -691,18 +680,9 @@ function showVerbTableSelector() {
 
 // 顯示動詞表內容
 function showVerbTable(tableId) {
-    // Wait for WordBank to load if not ready
-    if (!WordBank.data || !WordBank.data.verbTables) {
-        alert('題庫載入中，請稍後再試！');
-        
-        // Try again after a short delay
-        setTimeout(() => showVerbTable(tableId), 500);
-        return;
-    }
-    
-    const table = (WordBank.data.verbTables || []).find(t => t.id === tableId);
+    const table = WordBank.data ? WordBank.data.verbTables.find(t => t.id === tableId) : null;
     if (!table) {
-        alert('找不到動詞表！');
+        alert('請刷新頁面再試！');
         return;
     }
     
@@ -730,26 +710,9 @@ function showVerbTable(tableId) {
 
 // 開始動詞測驗
 function startVerbQuiz() {
-    console.log('Starting verb quiz...');
-    console.log('VerbTable.verbList:', VerbTable.verbList.length);
-    console.log('WordBank.data:', WordBank.data);
-    
     if (VerbTable.verbList.length === 0) {
-        // Try to get from WordBank.data
-        if (WordBank.data && WordBank.data.verbTables) {
-            const currentTableId = VerbTable.currentTable ? VerbTable.currentTable.id : null;
-            if (currentTableId) {
-                const table = WordBank.data.verbTables.find(t => t.id === currentTableId);
-                if (table) {
-                    VerbTable.verbList = table.verbs;
-                }
-            }
-        }
-        
-        if (VerbTable.verbList.length === 0) {
-            alert('請先選擇一個動詞表！');
-            return;
-        }
+        alert('請先選擇一個動詞表！');
+        return;
     }
     
     // 隨機打亂動詞順序
