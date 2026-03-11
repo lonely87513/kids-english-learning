@@ -258,7 +258,7 @@
         {"base": "hear", "present": "hear", "presentContinuous": "hearing", "past": "heard", "meaning": "聽"},
         {"base": "jump", "present": "jump", "presentContinuous": "jumping", "past": "jumped", "meaning": "跳"},
         {"base": "kill", "present": "kill", "presentContinuous": "killing", "past": "killed", "meaning": "殺"},
-        {"base": "know", "present": "-", "presentContinuous": "-", "past": "knew", "meaning": "知"},
+        {"base": "know", "present": "know", "presentContinuous": "-", "past": "knew", "meaning": "知"},
         {"base": "land", "present": "land", "presentContinuous": "landing", "past": "landed", "meaning": "登陸"},
         {"base": "leave", "present": "leave", "presentContinuous": "leaving", "past": "left", "meaning": "離開"},
         {"base": "like", "present": "like", "presentContinuous": "-", "past": "liked", "meaning": "鍾意"},
