@@ -657,6 +657,13 @@ function showVerbTableSelector() {
     const grid = document.getElementById('verbTableGrid');
     grid.innerHTML = '';
     
+    // Wait for WordBank to load if not ready
+    if (!WordBank.data || !WordBank.data.verbTables) {
+        console.log('Waiting for WordBank to load...');
+        grid.innerHTML = '<p>載入中...</p>';
+        return;
+    }
+    
     const verbTables = WordBank.data.verbTables || [];
     
     verbTables.forEach((table, index) => {
@@ -674,6 +681,12 @@ function showVerbTableSelector() {
 
 // 顯示動詞表內容
 function showVerbTable(tableId) {
+    // Wait for WordBank to load if not ready
+    if (!WordBank.data || !WordBank.data.verbTables) {
+        alert('題庫載入中，請稍後再試！');
+        return;
+    }
+    
     const table = (WordBank.data.verbTables || []).find(t => t.id === tableId);
     if (!table) return;
     
@@ -701,7 +714,27 @@ function showVerbTable(tableId) {
 
 // 開始動詞測驗
 function startVerbQuiz() {
-    if (VerbTable.verbList.length === 0) return;
+    console.log('Starting verb quiz...');
+    console.log('VerbTable.verbList:', VerbTable.verbList.length);
+    console.log('WordBank.data:', WordBank.data);
+    
+    if (VerbTable.verbList.length === 0) {
+        // Try to get from WordBank.data
+        if (WordBank.data && WordBank.data.verbTables) {
+            const currentTableId = VerbTable.currentTable ? VerbTable.currentTable.id : null;
+            if (currentTableId) {
+                const table = WordBank.data.verbTables.find(t => t.id === currentTableId);
+                if (table) {
+                    VerbTable.verbList = table.verbs;
+                }
+            }
+        }
+        
+        if (VerbTable.verbList.length === 0) {
+            alert('請先選擇一個動詞表！');
+            return;
+        }
+    }
     
     // 隨機打亂動詞順序
     VerbTable.quizVerbs = [...VerbTable.verbList].sort(() => Math.random() - 0.5);
