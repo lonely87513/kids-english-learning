@@ -811,9 +811,9 @@ function submitVerbQuizAnswer() {
         VerbTable.quizScore += 1;
     }
     
-    // 顯示 feedbackHTML = '';
-feedback
-    let    if (!hasAnswer) {
+    // 顯示 feedback
+    let feedbackHTML = '';
+    if (!hasAnswer) {
         feedbackHTML = '<div class="feedback wrong">❌ 你冇填答案呀！</div>';
     } else if (correctCount === 3) {
         feedbackHTML = '<div class="feedback correct">✅ 全對！勁揪！</div>';
