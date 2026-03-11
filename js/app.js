@@ -728,15 +728,21 @@ function showVerbQuizQuestion() {
 
 // 提交答案
 function submitVerbQuizAnswer() {
+    console.log('Submit button clicked');
+    
     const verb = VerbTable.quizVerbs[VerbTable.quizIndex];
+    if (!verb) {
+        console.error('No verb found');
+        return;
+    }
     
     const presentInput = document.getElementById('verbPresentInput').value.trim().toLowerCase();
     const presentContInput = document.getElementById('verbPresentContInput').value.trim().toLowerCase();
     const pastInput = document.getElementById('verbPastInput').value.trim().toLowerCase();
     
-    const correctPresent = verb.present.toLowerCase();
-    const correctPresentCont = verb.presentContinuous.toLowerCase();
-    const correctPast = verb.past.toLowerCase();
+    const correctPresent = (verb.present || '-').toLowerCase();
+    const correctPresentCont = (verb.presentContinuous || '-').toLowerCase();
+    const correctPast = (verb.past || '-').toLowerCase();
     
     // 檢查每個答案（支援多種寫法）
     const presentCorrect = normalizeAnswer(presentInput) === normalizeAnswer(correctPresent);
@@ -801,7 +807,8 @@ function submitVerbQuizAnswer() {
 // 標準化答案（去除空格和常見變體）
 function normalizeAnswer(input) {
     if (!input) return '';
-    return input.replace(/\s+/g, '').replace(/[\/\+]/g, ' ').trim().toLowerCase();
+    // 去除所有空格，轉小寫，統一斜槓和加號
+    return input.replace(/\s+/g, '').replace(/\/+/g, '/').replace(/\++/g, '+').toLowerCase();
 }
 
 // 顯示測驗結果
