@@ -725,11 +725,12 @@ function startVerbQuiz() {
     VerbTable.quizScore = 0;
     VerbTable.quizResults = [];
     
-    document.getElementById('verbQuizTotal').textContent = VerbTable.quizVerbs.length;
-    showVerbQuizQuestion();
-    
+    // 先顯示測驗畫面
     hideAllScreens();
     document.getElementById('verbQuiz').classList.remove('hidden');
+    
+    document.getElementById('verbQuizTotal').textContent = VerbTable.quizVerbs.length;
+    showVerbQuizQuestion();
 }
 
 // 顯示測驗題目
