@@ -1129,3 +1129,41 @@ body {
     justify-content: center;
     margin-top: 20px;
 }
+
+/* ===== Quiz Feedback Styles ===== */
+.feedback {
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.feedback.correct {
+    background: var(--success-color);
+    color: #1a1a1a;
+}
+
+.feedback.wrong {
+    background: var(--error-color);
+    color: #1a1a1a;
+}
+
+.feedback.partial {
+    background: var(--accent-color);
+    color: #1a1a1a;
+}
+
+.answer-reveal {
+    margin-top: 15px;
+    padding: 15px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    text-align: left;
+}
+
+.answer-reveal p {
+    margin: 8px 0;
+    color: var(--text-color);
+}
