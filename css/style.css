@@ -1060,3 +1060,27 @@ body {
     font-size: 0.9rem;
     margin-top: 5px;
 }
+
+/* 動詞測驗卡片樣式 */
+.verb-quiz-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.verb-quiz-card .btn-play-sound {
+    margin-top: 10px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.verb-quiz-card .btn-play-sound:hover {
+    opacity: 0.9;
+}

@@ -9,7 +9,7 @@
 <body>
     <div class="app-container">
         <!-- 版本號 -->
-        <div class="version-tag">v.2026.03.11-015</div>
+        <div class="version-tag">v.2026.03.11-016</div>
         
         <!-- 背景裝飾 -->
         <div class="background-decorations">
@@ -363,20 +363,23 @@
                     <p class="quiz-meaning" id="quizMeaning">意思: 跑</p>
                     <p class="quiz-prompt">補全呢個動詞既時式:</p>
                     <p class="quiz-word" id="quizBase">run</p>
+                    <button type="button" class="btn-play-sound" onclick="playCurrentVerb()">
+                        🔊 播放現在式
+                    </button>
                 </div>
 
                 <div class="verb-quiz-form">
                     <div class="verb-input-group">
                         <label>現在式 (Present):</label>
-                        <input type="text" id="verbPresentInput" class="answer-input" placeholder="例如: run/runs">
+                        <input type="text" id="verbPresentInput" class="answer-input" placeholder="例如: run" autocomplete="off">
                     </div>
                     <div class="verb-input-group">
                         <label>現在進行式 (Present Continuous):</label>
-                        <input type="text" id="verbPresentContInput" class="answer-input" placeholder="例如: is/are + running">
+                        <input type="text" id="verbPresentContInput" class="answer-input" placeholder="例如: running" autocomplete="off">
                     </div>
                     <div class="verb-input-group">
                         <label>過去式 (Past):</label>
-                        <input type="text" id="verbPastInput" class="answer-input" placeholder="例如: ran">
+                        <input type="text" id="verbPastInput" class="answer-input" placeholder="例如: ran" autocomplete="off">
                     </div>
                     <button type="button" class="btn btn-primary btn-large" onclick="submitVerbQuizAnswer()">
                         ✅ 提交答案

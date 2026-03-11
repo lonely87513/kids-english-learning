@@ -726,6 +726,17 @@ function showVerbQuizQuestion() {
     document.getElementById('verbPresentInput').focus();
 }
 
+// 播放當前動詞的現在式發音
+function playCurrentVerb() {
+    const verb = VerbTable.quizVerbs[VerbTable.quizIndex];
+    if (!verb) return;
+    
+    // 播放現在式
+    speakText(verb.base, () => {
+        // 然後可以選擇是否繼續播放其他時式
+    });
+}
+
 // 提交答案
 function submitVerbQuizAnswer() {
     console.log('Submit button clicked');
@@ -807,8 +818,8 @@ function submitVerbQuizAnswer() {
 // 標準化答案（去除空格和常見變體）
 function normalizeAnswer(input) {
     if (!input) return '';
-    // 去除所有空格，轉小寫，統一斜槓和加號
-    return input.replace(/\s+/g, '').replace(/\/+/g, '/').replace(/\++/g, '+').toLowerCase();
+    // 去除所有空格，轉小寫
+    return input.replace(/\s+/g, '').toLowerCase();
 }
 
 // 顯示測驗結果
