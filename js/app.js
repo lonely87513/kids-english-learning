@@ -11,6 +11,19 @@ const AppState = {
     gameState: null
 };
 
+// ===== 語音功能 =====
+function speakText(text, callback) {
+    if (typeof SpeechSynthesis !== 'undefined' && SpeechSynthesis.speak) {
+        SpeechSynthesis.speak(text).then(() => {
+            if (callback) callback();
+        }).catch(() => {
+            if (callback) callback();
+        });
+    } else if (callback) {
+        callback();
+    }
+}
+
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', async () => {
     initTheme(); // 初始化主題
@@ -811,8 +824,16 @@ function submitVerbQuizAnswer() {
     
     document.getElementById('verbQuizFeedback').innerHTML = feedbackHTML;
     
-    VerbTable.quizIndex++;
-    setTimeout(showVerbQuizQuestion, 2500);
+    // 顯示「下一題」按鈕，讓用戶確認後才進入下一題
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn btn-primary';
+    nextBtn.style.marginTop = '15px';
+    nextBtn.textContent = '➡️ 下一題';
+    nextBtn.onclick = () => {
+        VerbTable.quizIndex++;
+        showVerbQuizQuestion();
+    };
+    document.getElementById('verbQuizFeedback').appendChild(nextBtn);
 }
 
 // 標準化答案（去除空格和常見變體）
