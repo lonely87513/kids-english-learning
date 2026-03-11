@@ -717,10 +717,6 @@ function startVerbQuiz() {
     
     // 隨機打亂動詞順序
     VerbTable.quizVerbs = [...VerbTable.verbList].sort(() => Math.random() - 0.5);
-    // 限制最多10題
-    if (VerbTable.quizVerbs.length > 10) {
-        VerbTable.quizVerbs = VerbTable.quizVerbs.slice(0, 10);
-    }
     VerbTable.quizIndex = 0;
     VerbTable.quizScore = 0;
     VerbTable.quizResults = [];
