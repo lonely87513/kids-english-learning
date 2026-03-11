@@ -763,8 +763,6 @@ function playCurrentVerb() {
 
 // 提交答案
 function submitVerbQuizAnswer() {
-    console.log('Submit button clicked');
-    
     const verb = VerbTable.quizVerbs[VerbTable.quizIndex];
     if (!verb) {
         console.error('No verb found');
@@ -779,10 +777,11 @@ function submitVerbQuizAnswer() {
     const correctPresentCont = (verb.presentContinuous || '-').toLowerCase();
     const correctPast = (verb.past || '-').toLowerCase();
     
-    // 檢查每個答案（支援多種寫法）
-    const presentCorrect = normalizeAnswer(presentInput) === normalizeAnswer(correctPresent);
-    const presentContCorrect = normalizeAnswer(presentContInput) === normalizeAnswer(correctPresentCont);
-    const pastCorrect = normalizeAnswer(pastInput) === normalizeAnswer(correctPast);
+    // 檢查每個答案（空答案也算錯）
+    const hasAnswer = presentInput || presentContInput || pastInput;
+    const presentCorrect = hasAnswer && normalizeAnswer(presentInput) === normalizeAnswer(correctPresent);
+    const presentContCorrect = hasAnswer && normalizeAnswer(presentContInput) === normalizeAnswer(correctPresentCont);
+    const pastCorrect = hasAnswer && normalizeAnswer(pastInput) === normalizeAnswer(correctPast);
     
     const correctCount = (presentCorrect ? 1 : 0) + (presentContCorrect ? 1 : 0) + (pastCorrect ? 1 : 0);
     
@@ -812,9 +811,11 @@ function submitVerbQuizAnswer() {
         VerbTable.quizScore += 1;
     }
     
-    // 顯示feedback
-    let feedbackHTML = '';
-    if (correctCount === 3) {
+    // 顯示 feedbackHTML = '';
+feedback
+    let    if (!hasAnswer) {
+        feedbackHTML = '<div class="feedback wrong">❌ 你冇填答案呀！</div>';
+    } else if (correctCount === 3) {
         feedbackHTML = '<div class="feedback correct">✅ 全對！勁揪！</div>';
         speakText('Correct!');
     } else if (correctCount === 2) {
@@ -835,16 +836,11 @@ function submitVerbQuizAnswer() {
     
     document.getElementById('verbQuizFeedback').innerHTML = feedbackHTML;
     
-    // 顯示「下一題」按鈕，讓用戶確認後才進入下一題
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'btn btn-primary';
-    nextBtn.style.marginTop = '15px';
-    nextBtn.textContent = '➡️ 下一題';
-    nextBtn.onclick = () => {
+    // 自動跳下一題（1.5秒後）
+    setTimeout(() => {
         VerbTable.quizIndex++;
         showVerbQuizQuestion();
-    };
-    document.getElementById('verbQuizFeedback').appendChild(nextBtn);
+    }, 1500);
 }
 
 // 標準化答案（去除空格和常見變體）
