@@ -735,6 +735,9 @@ function startVerbQuiz() {
 
 // 顯示測驗題目
 function showVerbQuizQuestion() {
+    // 確保測驗畫面係顯示緊
+    document.getElementById('verbQuiz').classList.remove('hidden');
+    
     if (VerbTable.quizIndex >= VerbTable.quizVerbs.length) {
         showVerbQuizResult();
         return;
@@ -744,7 +747,6 @@ function showVerbQuizQuestion() {
     document.getElementById('verbQuizCurrent').textContent = VerbTable.quizIndex + 1;
     document.getElementById('verbQuizScore').textContent = VerbTable.quizScore;
     document.getElementById('quizMeaning').textContent = `意思: ${verb.meaning}`;
-    document.getElementById('quizBase').textContent = verb.base;
     document.getElementById('verbPresentInput').value = '';
     document.getElementById('verbPresentContInput').value = '';
     document.getElementById('verbPastInput').value = '';
