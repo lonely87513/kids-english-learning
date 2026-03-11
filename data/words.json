@@ -207,5 +207,55 @@
         {"word": "expiry date", "phonetic": "/ɪkˈspaɪə.ri deɪt/", "meaning": "有效期"}
       ]
     }
+  ],
+  "verbTables": [
+    {
+      "id": "table-1",
+      "name": "鮑小P3 下學期 Table 1",
+      "verbs": [
+        {"base": "be", "present": "am/is/are", "presentContinuous": "is/are + V-ing", "past": "was/were", "meaning": "是/在"},
+        {"base": "have", "present": "have/has", "presentContinuous": "is/are + having", "past": "had", "meaning": "有"},
+        {"base": "do", "present": "do/does", "presentContinuous": "is/are + doing", "past": "did", "meaning": "做"},
+        {"base": "go", "present": "go/goes", "presentContinuous": "is/are + going", "past": "went", "meaning": "去"},
+        {"base": "come", "present": "come/comes", "presentContinuous": "is/are + coming", "past": "came", "meaning": "來"},
+        {"base": "see", "present": "see/sees", "presentContinuous": "is/are + seeing", "past": "saw", "meaning": "睇"},
+        {"base": "get", "present": "get/gets", "presentContinuous": "is/are + getting", "past": "got", "meaning": "得到"},
+        {"base": "make", "present": "make/makes", "presentContinuous": "is/are + making", "past": "made", "meaning": "製造"},
+        {"base": "say", "present": "say/says", "presentContinuous": "is/are + saying", "past": "said", "meaning": "話"},
+        {"base": "take", "present": "take/takes", "presentContinuous": "is/are + taking", "past": "took", "meaning": "攞"}
+      ]
+    },
+    {
+      "id": "table-2",
+      "name": "鮑小P3 下學期 Table 2",
+      "verbs": [
+        {"base": "put", "present": "put", "presentContinuous": "is/are + putting", "past": "put", "meaning": "放"},
+        {"base": "tell", "present": "tell/tells", "presentContinuous": "is/are + telling", "past": "told", "meaning": "講"},
+        {"base": "keep", "present": "keep/keeps", "presentContinuous": "is/are + keeping", "past": "kept", "meaning": "保存"},
+        {"base": "let", "present": "let", "presentContinuous": "is/are + letting", "past": "let", "meaning": "允許"},
+        {"base": "begin", "present": "begin/begins", "presentContinuous": "is/are + beginning", "past": "began", "meaning": "開始"},
+        {"base": "seem", "present": "seem/seems", "presentContinuous": "is/are + seeming", "past": "seemed", "meaning": "似乎"},
+        {"base": "help", "present": "help/helps", "presentContinuous": "is/are + helping", "past": "helped", "meaning": "幫助"},
+        {"base": "show", "present": "show/shows", "presentContinuous": "is/are + showing", "past": "showed", "meaning": "顯示"},
+        {"base": "hear", "present": "hear/hears", "presentContinuous": "is/are + hearing", "past": "heard", "meaning": "聽"},
+        {"base": "play", "present": "play/plays", "presentContinuous": "is/are + playing", "past": "played", "meaning": "玩"}
+      ]
+    },
+    {
+      "id": "table-3",
+      "name": "鮑小P3 下學期 Table 3",
+      "verbs": [
+        {"base": "run", "present": "run/runs", "presentContinuous": "is/are + running", "past": "ran", "meaning": "跑"},
+        {"base": "move", "present": "move/moves", "presentContinuous": "is/are + moving", "past": "moved", "meaning": "移動"},
+        {"base": "live", "present": "live/lives", "presentContinuous": "is/are + living", "past": "lived", "meaning": "住"},
+        {"base": "believe", "present": "believe/believes", "presentContinuous": "is/are + believing", "past": "believed", "meaning": "相信"},
+        {"base": "bring", "present": "bring/brings", "presentContinuous": "is/are + bringing", "past": "brought", "meaning": "帶"},
+        {"base": "happen", "present": "happen/happens", "presentContinuous": "is/are + happening", "past": "happened", "meaning": "發生"},
+        {"base": "write", "present": "write/writes", "presentContinuous": "is/are + writing", "past": "wrote", "meaning": "寫"},
+        {"base": "provide", "present": "provide/provides", "presentContinuous": "is/are + providing", "past": "provided", "meaning": "提供"},
+        {"base": "sit", "present": "sit/sits", "presentContinuous": "is/are + sitting", "past": "sat", "meaning": "坐"},
+        {"base": "stand", "present": "stand/stands", "presentContinuous": "is/are + standing", "past": "stood", "meaning": "企"}
+      ]
+    }
   ]
 }

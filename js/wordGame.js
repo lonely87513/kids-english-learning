@@ -864,6 +864,8 @@ const SentenceGame = {
 // ===== 單字題庫 =====
 const WordBank = {
     units: [],
+    verbTables: [],
+    data: null,
     currentUnit: null,
     loaded: false,
     
@@ -876,8 +878,10 @@ const WordBank = {
             if (response.ok) {
                 const data = await response.json();
                 this.units = data.units || [];
+                this.verbTables = data.verbTables || [];
+                this.data = data;
                 this.loaded = true;
-                console.log('題庫已從JSON載入:', this.units.length, '個Unit');
+                console.log('題庫已從JSON載入:', this.units.length, '個Unit', this.verbTables.length, '個動詞表');
                 return;
             }
         } catch (e) {

@@ -9,7 +9,7 @@
 <body>
     <div class="app-container">
         <!-- 版本號 -->
-        <div class="version-tag">v.2026.03.07-054</div>
+        <div class="version-tag">v.2026.03.11-011</div>
         
         <!-- 背景裝飾 -->
         <div class="background-decorations">
@@ -57,6 +57,12 @@
                     <div class="card-icon">📝</div>
                     <h2>句子讀默</h2>
                     <p>讀出句子，包括標點符號</p>
+                </button>
+                
+                <button type="button" class="game-card" onclick="handleGameCardClick(() => showVerbTableSelector())">
+                    <div class="card-icon">📋</div>
+                    <h2>動詞表</h2>
+                    <p>學習動詞時式</p>
                     <span class="badge new">NEW</span>
                 </button>
                 
@@ -296,6 +302,125 @@
                 </div>
 
                 <div class="feedback-area" id="sentFeedbackArea"></div>
+            </div>
+        </section>
+
+        <!-- 動詞表選擇畫面 -->
+        <section id="verbTableSelector" class="unit-screen hidden">
+            <button class="btn btn-back" onclick="backToMenu()">⬅️ 返回</button>
+            
+            <h2 class="unit-title">📋 選擇動詞表</h2>
+            
+            <div class="unit-grid" id="verbTableGrid">
+            </div>
+        </section>
+
+        <!-- 動詞表顯示畫面 -->
+        <section id="verbTableDisplay" class="game-screen hidden">
+            <button class="btn btn-back" onclick="showVerbTableSelector()">⬅️ 返回</button>
+            
+            <div class="game-header">
+                <h2 id="verbTableTitle">📋 動詞表</h2>
+            </div>
+
+            <div class="game-content">
+                <div class="verb-table-container">
+                    <table class="verb-table">
+                        <thead>
+                            <tr>
+                                <th>現在式</th>
+                                <th>現在進行式</th>
+                                <th>過去式</th>
+                            </tr>
+                        </thead>
+                        <tbody id="verbTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="verb-table-actions">
+                    <button class="btn btn-primary" onclick="startVerbQuiz()">
+                        🎮 開始測驗
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 動詞測驗畫面 -->
+        <section id="verbQuiz" class="game-screen hidden">
+            <button class="btn btn-back" onclick="exitVerbQuiz()">⬅️ 結束</button>
+            
+            <div class="game-header">
+                <h2>🎮 動詞測驗</h2>
+                <div class="game-stats">
+                    <span>題目: <strong id="verbQuizCurrent">1</strong>/<strong id="verbQuizTotal">10</strong></span>
+                    <span>得分: <strong id="verbQuizScore">0</strong></span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="verb-quiz-card">
+                    <p class="quiz-meaning" id="quizMeaning">意思: 跑</p>
+                    <p class="quiz-prompt">補全呢個動詞既時式:</p>
+                    <p class="quiz-word" id="quizBase">run</p>
+                </div>
+
+                <div class="verb-quiz-form">
+                    <div class="verb-input-group">
+                        <label>現在式 (Present):</label>
+                        <input type="text" id="verbPresentInput" class="answer-input" placeholder="例如: run/runs">
+                    </div>
+                    <div class="verb-input-group">
+                        <label>現在進行式 (Present Continuous):</label>
+                        <input type="text" id="verbPresentContInput" class="answer-input" placeholder="例如: is/are + running">
+                    </div>
+                    <div class="verb-input-group">
+                        <label>過去式 (Past):</label>
+                        <input type="text" id="verbPastInput" class="answer-input" placeholder="例如: ran">
+                    </div>
+                    <button class="btn btn-primary btn-large" onclick="submitVerbQuizAnswer()">
+                        ✅ 提交答案
+                    </button>
+                </div>
+
+                <div class="feedback-area" id="verbQuizFeedback"></div>
+            </div>
+        </section>
+
+        <!-- 動詞測驗結果畫面 -->
+        <section id="verbQuizResult" class="result-screen hidden">
+            <div class="result-content">
+                <h2>🎉 測驗完成！</h2>
+                <div class="result-stats">
+                    <div class="result-icon" id="verbResultEmoji">🌟</div>
+                    <p class="result-message" id="verbResultMessage">你做得好棒！</p>
+                    
+                    <div class="result-details">
+                        <div class="result-item">
+                            <span>全對</span>
+                            <strong id="verbAllCorrect">0</strong>
+                        </div>
+                        <div class="result-item">
+                            <span>錯1個</span>
+                            <strong id="verbOneWrong">0</strong>
+                        </div>
+                        <div class="result-item">
+                            <span>全錯</span>
+                            <strong id="verbAllWrong">0</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="verb-quiz-review" id="verbQuizReview">
+                    <h3>📝 錯題複習</h3>
+                    <div id="verbReviewList"></div>
+                </div>
+                
+                <div class="result-actions">
+                    <button class="btn btn-primary" onclick="restartVerbQuiz()">🔄 再測驗一次</button>
+                    <button class="btn btn-secondary" onclick="backToVerbTableDisplay()">📋 返回動詞表</button>
+                    <button class="btn btn-secondary" onclick="backToMenu()">🏠 返回主選單</button>
+                </div>
             </div>
         </section>
 

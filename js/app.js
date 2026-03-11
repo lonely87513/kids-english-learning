@@ -294,9 +294,28 @@ function showScreen(screenId) {
     document.getElementById('resultScreen').classList.add('hidden');
     document.getElementById('sentenceSettings').classList.add('hidden');
     document.getElementById('sentenceGame').classList.add('hidden');
+    document.getElementById('verbTableSelector').classList.add('hidden');
+    document.getElementById('verbTableDisplay').classList.add('hidden');
+    document.getElementById('verbQuiz').classList.add('hidden');
+    document.getElementById('verbQuizResult').classList.add('hidden');
     
     // 顯示目標畫面
     document.getElementById(screenId).classList.remove('hidden');
+}
+
+// 隱藏所有畫面
+function hideAllScreens() {
+    document.getElementById('mainMenu').classList.add('hidden');
+    document.getElementById('unitSelector').classList.add('hidden');
+    document.getElementById('dictationGame').classList.add('hidden');
+    document.getElementById('pronunciationGame').classList.add('hidden');
+    document.getElementById('resultScreen').classList.add('hidden');
+    document.getElementById('sentenceSettings').classList.add('hidden');
+    document.getElementById('sentenceGame').classList.add('hidden');
+    document.getElementById('verbTableSelector').classList.add('hidden');
+    document.getElementById('verbTableDisplay').classList.add('hidden');
+    document.getElementById('verbQuiz').classList.add('hidden');
+    document.getElementById('verbQuizResult').classList.add('hidden');
 }
 
 function backToMenu() {
@@ -605,4 +624,260 @@ function restartSentenceGame() {
     if (SentenceGame.sentences.length > 0) {
         document.getElementById('sentText').textContent = SentenceGame.sentences[0].text;
     }
+}
+
+// ===== 動詞表功能 (新版) =====
+let VerbTable = {
+    currentTable: null,
+    verbList: [],
+    quizIndex: 0,
+    quizScore: 0,
+    quizVerbs: [],
+    quizResults: [] // 記錄每次答題結果
+};
+
+// 顯示動詞表選擇畫面
+function showVerbTableSelector() {
+    hideAllScreens();
+    document.getElementById('verbTableSelector').classList.remove('hidden');
+    
+    const grid = document.getElementById('verbTableGrid');
+    grid.innerHTML = '';
+    
+    const verbTables = WordBank.data.verbTables || [];
+    
+    verbTables.forEach((table, index) => {
+        const card = document.createElement('div');
+        card.className = 'unit-card';
+        card.onclick = () => showVerbTable(table.id);
+        card.innerHTML = `
+            <div class="unit-icon">📋</div>
+            <h3>${table.name}</h3>
+            <p>${table.verbs.length} 個動詞</p>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// 顯示動詞表內容
+function showVerbTable(tableId) {
+    const table = (WordBank.data.verbTables || []).find(t => t.id === tableId);
+    if (!table) return;
+    
+    VerbTable.currentTable = table;
+    VerbTable.verbList = table.verbs;
+    
+    document.getElementById('verbTableTitle').textContent = `📋 ${table.name}`;
+    
+    const tbody = document.getElementById('verbTableBody');
+    tbody.innerHTML = '';
+    
+    table.verbs.forEach((verb) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${verb.present}</td>
+            <td>${verb.presentContinuous}</td>
+            <td>${verb.past}</td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    hideAllScreens();
+    document.getElementById('verbTableDisplay').classList.remove('hidden');
+}
+
+// 開始動詞測驗
+function startVerbQuiz() {
+    if (VerbTable.verbList.length === 0) return;
+    
+    // 隨機打亂動詞順序
+    VerbTable.quizVerbs = [...VerbTable.verbList].sort(() => Math.random() - 0.5);
+    // 限制最多10題
+    if (VerbTable.quizVerbs.length > 10) {
+        VerbTable.quizVerbs = VerbTable.quizVerbs.slice(0, 10);
+    }
+    VerbTable.quizIndex = 0;
+    VerbTable.quizScore = 0;
+    VerbTable.quizResults = [];
+    
+    document.getElementById('verbQuizTotal').textContent = VerbTable.quizVerbs.length;
+    showVerbQuizQuestion();
+    
+    hideAllScreens();
+    document.getElementById('verbQuiz').classList.remove('hidden');
+}
+
+// 顯示測驗題目
+function showVerbQuizQuestion() {
+    if (VerbTable.quizIndex >= VerbTable.quizVerbs.length) {
+        showVerbQuizResult();
+        return;
+    }
+    
+    const verb = VerbTable.quizVerbs[VerbTable.quizIndex];
+    document.getElementById('verbQuizCurrent').textContent = VerbTable.quizIndex + 1;
+    document.getElementById('verbQuizScore').textContent = VerbTable.quizScore;
+    document.getElementById('quizMeaning').textContent = `意思: ${verb.meaning}`;
+    document.getElementById('quizBase').textContent = verb.base;
+    document.getElementById('verbPresentInput').value = '';
+    document.getElementById('verbPresentContInput').value = '';
+    document.getElementById('verbPastInput').value = '';
+    document.getElementById('verbQuizFeedback').innerHTML = '';
+    document.getElementById('verbPresentInput').focus();
+}
+
+// 提交答案
+function submitVerbQuizAnswer() {
+    const verb = VerbTable.quizVerbs[VerbTable.quizIndex];
+    
+    const presentInput = document.getElementById('verbPresentInput').value.trim().toLowerCase();
+    const presentContInput = document.getElementById('verbPresentContInput').value.trim().toLowerCase();
+    const pastInput = document.getElementById('verbPastInput').value.trim().toLowerCase();
+    
+    const correctPresent = verb.present.toLowerCase();
+    const correctPresentCont = verb.presentContinuous.toLowerCase();
+    const correctPast = verb.past.toLowerCase();
+    
+    // 檢查每個答案（支援多種寫法）
+    const presentCorrect = normalizeAnswer(presentInput) === normalizeAnswer(correctPresent);
+    const presentContCorrect = normalizeAnswer(presentContInput) === normalizeAnswer(correctPresentCont);
+    const pastCorrect = normalizeAnswer(pastInput) === normalizeAnswer(correctPast);
+    
+    const correctCount = (presentCorrect ? 1 : 0) + (presentContCorrect ? 1 : 0) + (pastCorrect ? 1 : 0);
+    
+    // 記錄結果
+    const result = {
+        verb: verb.base,
+        meaning: verb.meaning,
+        userPresent: presentInput || '(無回答)',
+        correctPresent: verb.present,
+        presentCorrect: presentCorrect,
+        userPresentCont: presentContInput || '(無回答)',
+        correctPresentCont: verb.presentContinuous,
+        presentContCorrect: presentContCorrect,
+        userPast: pastInput || '(無回答)',
+        correctPast: verb.past,
+        pastCorrect: pastCorrect,
+        correctCount: correctCount
+    };
+    VerbTable.quizResults.push(result);
+    
+    // 計算得分（全對3分，錯1個2分，錯2個1分，全錯0分）
+    if (correctCount === 3) {
+        VerbTable.quizScore += 3;
+    } else if (correctCount === 2) {
+        VerbTable.quizScore += 2;
+    } else if (correctCount === 1) {
+        VerbTable.quizScore += 1;
+    }
+    
+    // 顯示feedback
+    let feedbackHTML = '';
+    if (correctCount === 3) {
+        feedbackHTML = '<div class="feedback correct">✅ 全對！勁揪！</div>';
+        speakText('Correct!');
+    } else if (correctCount === 2) {
+        feedbackHTML = '<div class="feedback partial">⚠️ 錯1個！再接再厲！</div>';
+    } else if (correctCount === 1) {
+        feedbackHTML = '<div class="feedback partial">⚠️ 錯2個，要加油！</div>';
+    } else {
+        feedbackHTML = '<div class="feedback wrong">❌ 全錯喎，等多次！</div>';
+        speakText('Try again');
+    }
+    
+    // 顯示正確答案
+    feedbackHTML += '<div class="answer-reveal">';
+    feedbackHTML += `<p>現在式: ${presentCorrect ? '✅' : '❌'} ${verb.present}</p>`;
+    feedbackHTML += `<p>現在進行式: ${presentContCorrect ? '✅' : '❌'} ${verb.presentContinuous}</p>`;
+    feedbackHTML += `<p>過去式: ${pastCorrect ? '✅' : '❌'} ${verb.past}</p>`;
+    feedbackHTML += '</div>';
+    
+    document.getElementById('verbQuizFeedback').innerHTML = feedbackHTML;
+    
+    VerbTable.quizIndex++;
+    setTimeout(showVerbQuizQuestion, 2500);
+}
+
+// 標準化答案（去除空格和常見變體）
+function normalizeAnswer(input) {
+    if (!input) return '';
+    return input.replace(/\s+/g, '').replace(/[\/\+]/g, ' ').trim().toLowerCase();
+}
+
+// 顯示測驗結果
+function showVerbQuizResult() {
+    const total = VerbTable.quizVerbs.length;
+    const maxScore = total * 3;
+    const score = VerbTable.quizScore;
+    const percentage = Math.round((score / maxScore) * 100);
+    
+    // 統計
+    let allCorrect = 0, oneWrong = 0, allWrong = 0;
+    VerbTable.quizResults.forEach(r => {
+        if (r.correctCount === 3) allCorrect++;
+        else if (r.correctCount === 2) oneWrong++;
+        else allWrong++;
+    });
+    
+    document.getElementById('verbAllCorrect').textContent = allCorrect;
+    document.getElementById('verbOneWrong').textContent = oneWrong;
+    document.getElementById('verbAllWrong').textContent = allWrong;
+    
+    let emoji = '🌟';
+    let message = '做得好！';
+    
+    if (percentage >= 80) {
+        emoji = '🏆';
+        message = '勁揪！';
+    } else if (percentage >= 60) {
+        emoji = '👍';
+        message = '幾好喎！';
+    } else {
+        emoji = '💪';
+        message = '繼續努力！';
+    }
+    
+    document.getElementById('verbResultEmoji').textContent = emoji;
+    document.getElementById('verbResultMessage').textContent = message;
+    
+    // 顯示錯題複習
+    const reviewList = document.getElementById('verbReviewList');
+    reviewList.innerHTML = '';
+    
+    const wrongResults = VerbTable.quizResults.filter(r => r.correctCount < 3);
+    
+    if (wrongResults.length === 0) {
+        reviewList.innerHTML = '<p style="color: var(--success-color);">🎉 全部答啱！無錯題複習～</p>';
+    } else {
+        wrongResults.forEach(r => {
+            const item = document.createElement('div');
+            item.className = 'verb-review-item';
+            item.innerHTML = `
+                <div class="verb-review-base">${r.verb} (${r.meaning})</div>
+                ${!r.presentCorrect ? `<div class="verb-review-wrong">現在式: ${r.userPresent} → 正確: ${r.correctPresent}</div>` : ''}
+                ${!r.presentContCorrect ? `<div class="verb-review-wrong">現在進行式: ${r.userPresentCont} → 正確: ${r.correctPresentCont}</div>` : ''}
+                ${!r.pastCorrect ? `<div class="verb-review-wrong">過去式: ${r.userPast} → 正確: ${r.correctPast}</div>` : ''}
+            `;
+            reviewList.appendChild(item);
+        });
+    }
+    
+    hideAllScreens();
+    document.getElementById('verbQuizResult').classList.remove('hidden');
+}
+
+// 重新開始測驗
+function restartVerbQuiz() {
+    startVerbQuiz();
+}
+
+// 退出測驗
+function exitVerbQuiz() {
+    showVerbTableSelector();
+}
+
+// 返回動詞表顯示
+function backToVerbTableDisplay() {
+    hideAllScreens();
+    document.getElementById('verbTableDisplay').classList.remove('hidden');
 }
