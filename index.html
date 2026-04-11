@@ -342,9 +342,23 @@
                     <button class="btn btn-primary" onclick="startVerbQuiz()">
                         🎮 開始測驗
                     </button>
+                    <button class="btn btn-secondary" onclick="showVerbQuizHistory()">
+                        📜 查看歷史
+                    </button>
                 </div>
             </div>
         </section>
+
+        <!-- 動詞歷史記錄彈窗 -->
+        <div id="verbHistoryModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>📜 動詞測驗歷史</h3>
+                <div class="records-list" id="verbHistoryList"></div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closeModal('verbHistoryModal')">❌ 關閉</button>
+                </div>
+            </div>
+        </div>
 
         <!-- 動詞測驗畫面 -->
         <section id="verbQuiz" class="game-screen hidden">

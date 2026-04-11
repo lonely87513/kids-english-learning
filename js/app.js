@@ -908,6 +908,9 @@ function showVerbQuizResult() {
         });
     }
     
+    // 保存歷史記錄
+    saveVerbQuizHistory();
+    
     hideAllScreens();
     document.getElementById('verbQuizResult').classList.remove('hidden');
 }
@@ -926,4 +929,134 @@ function exitVerbQuiz() {
 function backToVerbTableDisplay() {
     hideAllScreens();
     document.getElementById('verbTableDisplay').classList.remove('hidden');
+}
+
+// ===== 動詞測驗歷史記錄 =====
+function saveVerbQuizHistory() {
+    const user = getCurrentUser();
+    if (!user) return;
+    
+    const total = VerbTable.quizVerbs.length;
+    const maxScore = total * 3;
+    const score = VerbTable.quizScore;
+    const percentage = Math.round((score / maxScore) * 100);
+    
+    // 統計結果
+    let allCorrect = 0, oneWrong = 0, allWrong = 0;
+    VerbTable.quizResults.forEach(r => {
+        if (r.correctCount === 3) allCorrect++;
+        else if (r.correctCount === 2) oneWrong++;
+        else allWrong++;
+    });
+    
+    // 初始化 verbHistory 數組
+    if (!user.progress.verbHistory) {
+        user.progress.verbHistory = [];
+    }
+    
+    // 添加新記錄
+    const historyEntry = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        tableName: VerbTable.currentTable ? VerbTable.currentTable.name : '未知動詞表',
+        tableId: VerbTable.currentTable ? VerbTable.currentTable.id : '',
+        totalVerbs: total,
+        maxScore: maxScore,
+        score: score,
+        percentage: percentage,
+        allCorrect: allCorrect,
+        oneWrong: oneWrong,
+        allWrong: allWrong,
+        wrongVerbs: VerbTable.quizResults
+            .filter(r => r.correctCount < 3)
+            .map(r => ({
+                verb: r.verb,
+                meaning: r.meaning
+            }))
+    };
+    
+    user.progress.verbHistory.unshift(historyEntry); // 添加到開頭
+    
+    // 最多保存 30 條記錄
+    if (user.progress.verbHistory.length > 30) {
+        user.progress.verbHistory = user.progress.verbHistory.slice(0, 30);
+    }
+    
+    saveUsers();
+}
+
+function getVerbQuizHistory() {
+    const user = getCurrentUser();
+    if (!user || !user.progress.verbHistory) {
+        return [];
+    }
+    return user.progress.verbHistory;
+}
+
+function showVerbQuizHistory() {
+    const history = getVerbQuizHistory();
+    const listEl = document.getElementById('verbHistoryList');
+    
+    if (history.length === 0) {
+        listEl.innerHTML = '<p style="text-align:center;color:#999;">暫時沒有測驗記錄<br>完成測驗後就會自動保存喔！</p>';
+    } else {
+        let html = '';
+        history.forEach((entry, index) => {
+            const date = new Date(entry.date);
+            const dateStr = date.toLocaleDateString('zh-TW', { 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // 根據分數選擇顏色
+            let colorClass = 'var(--error-color)';
+            let emoji = '💪';
+            if (entry.percentage >= 80) {
+                colorClass = 'var(--success-color)';
+                emoji = '🏆';
+            } else if (entry.percentage >= 60) {
+                colorClass = '#FF9800';
+                emoji = '👍';
+            }
+            
+            html += `
+                <div class="records-item" style="margin-bottom:15px;padding:12px;background:#f5f5f5;border-radius:8px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span class="records-word" style="font-size:14px;">${emoji} ${entry.tableName}</span>
+                        <span style="font-size:12px;color:#666;">${dateStr}</span>
+                    </div>
+                    <div style="display:flex;gap:15px;font-size:13px;">
+                        <span style="color:${colorClass};font-weight:bold;">${entry.percentage}%</span>
+                        <span>✅ ${entry.allCorrect}</span>
+                        <span>⚠️ ${entry.oneWrong}</span>
+                        <span>❌ ${entry.allWrong}</span>
+                    </div>
+                    ${entry.wrongVerbs.length > 0 ? `
+                        <div style="margin-top:8px;font-size:12px;color:#666;">
+                            錯題: ${entry.wrongVerbs.map(w => w.verb).join(', ')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+        listEl.innerHTML = html;
+    }
+    
+    document.getElementById('verbHistoryModal').classList.remove('hidden');
+}
+
+function clearVerbQuizHistory() {
+    if (!confirm('確定要清除所有動詞測驗歷史記錄嗎？')) {
+        return;
+    }
+    
+    const user = getCurrentUser();
+    if (user && user.progress.verbHistory) {
+        user.progress.verbHistory = [];
+        saveUsers();
+        showVerbQuizHistory(); // 刷新顯示
+        alert('歷史記錄已清除！');
+    }
 }
