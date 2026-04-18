@@ -619,8 +619,9 @@ const SentenceGame = {
     
     // Load句子（之後會改為從JSON讀取）
     loadSentences() {
-        // 從 sentenceBanks 拎句子
-        const bank = this.sentenceBanks[this.currentUnit] || [];
+        // 從 sentenceBanks 拎句子（注意：currentUnit係string，要轉為number）
+        const unitNum = parseInt(this.currentUnit);
+        const bank = this.sentenceBanks[unitNum] || [];
         
         // 如果 Bank 無數據，先用舊範例（之後 Nathan 會提供真正題庫）
         let sampleSentences = bank.length > 0 ? bank : [
