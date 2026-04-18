@@ -559,8 +559,41 @@ const SentenceGame = {
     
     // 句子題庫（之後會從JSON load）
     sentenceBanks: {
-        1: [],
-        2: [],
+        1: [
+            { text: "Dr Turner is a cat lover.", meaning: "Dr Turner係一個愛貓之人。" },
+            { text: "He has nine cats.", meaning: "佢有九隻貓。" },
+            { text: "Five years ago the kittens were all small and naughty.", meaning: "五年前啲小貓都係咁細隻同曳曳地。" },
+            { text: "Now they are big and quiet.", meaning: "依家佢哋大隻咗同安靜咗。" },
+            { text: "Read this book and learn how to look after your cats!", meaning: "讀呢本書學點樣照顧你既貓！" },
+            { text: "This book has many helpful tips on cat food.", meaning: "呢本書有好多關於貓糧既實用貼士。" },
+            { text: "I have a white cat.", meaning: "我有隻白色既貓。" },
+            { text: "It has a long tail.", meaning: "佢有条長尾。" },
+            { text: "It was sick last month.", meaning: "佢上個月唔舒服。" },
+            { text: "It was light and weak.", meaning: "佢好輕同好弱。" },
+            { text: "The book says I need to give it healthy food.", meaning: "本書話我要比健康既食物佢食。" },
+            { text: "Now it's heavy and strong again.", meaning: "依家佢重咗同強壯咗。" },
+            { text: "Two months ago, my cat was very naughty and noisy.", meaning: "兩個月前，我既貓曳到你唔信。" },
+            { text: "The book says I need to play with it more.", meaning: "本書話我要多啲同佢玩。" },
+            { text: "Now it sits still and is quiet.", meaning: "依家佢坐下唔郁同好安靜。" },
+            { text: "I like the cat toys in the book too. They're interesting!", meaning: "我都鐘意本書既貓玩具！好好玩！" },
+            { text: "I want to give my cats a bath, but I don't know how.", meaning: "我想幫我既貓沖涼，但係唔知點做。" },
+            { text: "I can't find any information in the book.", meaning: "我响本書搵唔到任何資料。" }
+        ],
+        2: [
+            { text: "A long time ago, there was an evil and dangerous dragon on a high mountain.", meaning: "从前有一條邪惡又危險的龍在一座高山上面。" },
+            { text: "At night, it went to the villages, burnt them down and hurt the villagers.", meaning: "夜晚既時候，佢走去村莊，燒毀佢哋，傷害村民。" },
+            { text: "Everyone was afraid of it.", meaning: "每個人都怕佢。" },
+            { text: "Carlo was a young hunter.", meaning: "Carlo係一個年輕的獵人。" },
+            { text: "To save the villagers, he had to kill the dragon.", meaning: "為了拯救村民，佢必須殺死嗰條龍。" },
+            { text: "He came to a forest and he walked through the trees.", meaning: "佢來到一片森林，然後穿過啲樹行路。" },
+            { text: "He heard some noises. Soon he saw a beautiful white horse with wings!", meaning: "佢聽到一些聲音。很快，佢見到一匹好靚的白馬有翅膀！" },
+            { text: "He rode on it and went on his way.", meaning: "佢騎上嗰匹白馬繼續上路。" },
+            { text: "Later, Carlo met an old woman in the market.", meaning: "後來，Carlo响市場遇到一個老婆婆。" },
+            { text: "She needed some clothes to keep warm.", meaning: "佢需要啲衣服保暖。" },
+            { text: "Carlo bought her a cape. The old woman was thankful.", meaning: "Carlo幫佢買咗一件披風。老婆婆好感激。" },
+            { text: "She gave Carlo a sword!", meaning: "佢送咗一把劍俾Carlo！" },
+            { text: "It was a good weapon for killing dragons.", meaning: "呢把劍係殺死龍的好武器。" }
+        ],
         3: [],
         4: [],
         5: [],
@@ -586,8 +619,11 @@ const SentenceGame = {
     
     // Load句子（之後會改為從JSON讀取）
     loadSentences() {
-        // 範例題庫 - 之後會替換為真正既文章
-        const sampleSentences = [
+        // 從 sentenceBanks 拎句子
+        const bank = this.sentenceBanks[this.currentUnit] || [];
+        
+        // 如果 Bank 無數據，先用舊範例（之後 Nathan 會提供真正題庫）
+        let sampleSentences = bank.length > 0 ? bank : [
             { text: "Dr Turner is a cat lover.", meaning: "Dr Turner係一個愛貓之人。" },
             { text: "He has nine cats.", meaning: "佢有九隻貓。" },
             { text: "Five years ago the kittens were all small and naughty.", meaning: "五年前啲小貓都係咁細隻同曳曳地。" },
